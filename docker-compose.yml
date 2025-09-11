@@ -1,0 +1,18 @@
+
+services:
+  apiservice:
+    build:
+      context: .
+      dockerfile: AttrectoTest.ApiService/Dockerfile
+    ports:
+      - "5001:8080"
+
+  webfrontend:
+    build:
+      context: .
+      dockerfile: AttrectoTest.Web/Dockerfile
+    ports:
+      - "5002:8080"
+    depends_on:
+      - apiservice
+  
