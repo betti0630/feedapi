@@ -1,3 +1,4 @@
+using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.Persistence.DatabaseContext;
 
 using Microsoft.EntityFrameworkCore;
@@ -20,32 +21,7 @@ builder.Services.AddDbContext<TestDbContext>(options =>
 
 var app = builder.Build();
 
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-
-    var retries = 10;
-    var delay = TimeSpan.FromSeconds(5);
-
-    while (retries > 0)
-    {
-        try
-        {
-            db.Database.Migrate();
-            Console.WriteLine("Migration is successful.");
-            break;
-        }
-        catch (Exception ex)
-        {
-            retries--;
-            Console.WriteLine($"Migration is failed, retry after {delay.TotalSeconds}s... ({ex.Message})");
-            if (retries == 0) throw;
-            Thread.Sleep(delay);
-        }
-    }
-}
-
+app.Services.RunDatabaseMigrations();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
