@@ -6,6 +6,11 @@ services:
       dockerfile: AttrectoTest.ApiService/Dockerfile
     ports:
       - "5001:8080"
+    depends_on:
+      - mariadb
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Database=attrectotest;User=myuser;Password=mypassword;
+
 
   webfrontend:
     build:
@@ -18,3 +23,18 @@ services:
     depends_on:
       - apiservice
   
+  mariadb:
+    image: mariadb:11
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: attrectotest
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:

@@ -1,3 +1,9 @@
+using AttrectoTest.Persistence.DatabaseContext;
+
+using Microsoft.EntityFrameworkCore;
+
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
@@ -5,6 +11,12 @@ builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+
+builder.Services.AddDbContext<TestDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(11, 3, 0)) 
+    ));
 
 var app = builder.Build();
 

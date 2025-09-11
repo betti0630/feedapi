@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AttrectoTest.ServiceDefaults\AttrectoTest.ServiceDefaults.csproj" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />
+    <ProjectReference Include="..\AttrectoTest.ServiceDefaults\AttrectoTest.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
