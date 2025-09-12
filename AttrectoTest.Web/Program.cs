@@ -1,5 +1,14 @@
 using AttrectoTest.Web;
+using AttrectoTest.Web.Auth;
 using AttrectoTest.Web.Components;
+using AttrectoTest.Web.Providers;
+
+using Blazored.LocalStorage;
+
+using HR.LeaveManagement.BlazorUI.Handlers;
+using HR.LeaveManagement.BlazorUI.Providers;
+
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +21,34 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
+builder.Services.AddHttpContextAccessor();
+
+// Cookie alapú auth
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies", options =>
+    {
+        options.LoginPath = "/login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();
+
+// Saját provider regisztrálása
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+builder.Services.AddScoped<TokenHandler>();
+
 var apiBaseUrl = builder.Configuration["ApiBaseUrl"] ?? "http://apiservice";
 
-builder.Services.AddHttpClient<WeatherApiClient>(client =>
+//builder.Services.AddTransient<JwtAuthorizationMessageHandler>();
+builder.Services.AddHttpClient<WeatherApiClient>("api", client =>
     {
         // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
         // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
         client.BaseAddress = new(apiBaseUrl);
-    });
+    })
+    .AddHttpMessageHandler<TokenHandler>();
 
 var app = builder.Build();
 
