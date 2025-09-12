@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Persistence.DatabaseContext;
 
-public class TestDbContext : DbContext
+internal class TestDbContext : DbContext
 {
 	public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
     {

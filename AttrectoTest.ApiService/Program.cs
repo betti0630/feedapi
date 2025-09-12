@@ -43,7 +43,7 @@ app.UseExceptionHandler();
 
 
 
-app.MapPost("/auth/login", async (LoginRequest req, IAuthService authService, TestDbContext db, IPasswordHasher<AppUser> hasher) =>
+app.MapPost("/auth/login", async (LoginRequest req, IAuthService authService) =>
 {
     if (!await authService.ValidateUser(req.UserName, req.Password))
         return Results.Unauthorized();
