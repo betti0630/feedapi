@@ -9,6 +9,12 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+<Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+    <Authorized>
+        @context.User.Identity.Name
+    </Authorized>
+</Microsoft.AspNetCore.Components.Authorization.AuthorizeView>
+
 @code {
     private int currentCount = 0;
 
