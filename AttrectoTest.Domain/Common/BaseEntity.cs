@@ -1,8 +1,7 @@
 ﻿namespace AttrectoTest.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class BaseEntity : AppEntity
 {
-    public int Id { get; set; }
     public DateTime? DateCreated { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime? DateModified { get; set; }

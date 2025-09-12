@@ -1,8 +1,9 @@
-﻿namespace AttrectoTest.Domain;
+﻿using AttrectoTest.Domain.Common;
 
-public class AppUser
+namespace AttrectoTest.Domain;
+
+public class AppUser : AppEntity
 {
-    public int Id { get; set; }
     public string UserName { get; set; } = default!;
     public string PasswordHash { get; set; } = default!;
     public string? RolesCsv { get; set; }
