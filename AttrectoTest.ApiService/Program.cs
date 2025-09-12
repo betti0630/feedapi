@@ -1,30 +1,55 @@
-using AttrectoTest.ApiService.Helpers;
+using AttrectoTest.Application;
+using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Domain;
+using AttrectoTest.Persistence;
 using AttrectoTest.Persistence.DatabaseContext;
 
-using Microsoft.EntityFrameworkCore;
-
-using System;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
+builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
-builder.Services.AddDbContext<TestDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(11, 3, 0)) 
-    ));
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("wasm", p => p
+        .WithOrigins("http://web:8080", "http://localhost:5002")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
+
+builder.Services.AddAppAuthentication(builder.Configuration);
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 app.Services.RunDatabaseMigrations();
 
+app.UseCors("wasm");
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
+
+
+
+app.MapPost("/auth/login", async (LoginRequest req, IAuthService authService, TestDbContext db, IPasswordHasher<AppUser> hasher) =>
+{
+    if (!await authService.ValidateUser(req.UserName, req.Password))
+        return Results.Unauthorized();
+    var tokenResult = await authService.GenerateJwtToken(req.UserName);
+    return Results.Ok(new LoginResponse(tokenResult.token, tokenResult.expires));
+});
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
@@ -40,7 +65,8 @@ app.MapGet("/weatherforecast", () =>
         .ToArray();
     return forecast;
 })
-.WithName("GetWeatherForecast");
+.WithName("GetWeatherForecast")
+.RequireAuthorization();
 
 app.MapDefaultEndpoints();
 
@@ -50,3 +76,6 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+record LoginRequest(string UserName, string Password);
+record LoginResponse(string Token, DateTime ExpiresAt);

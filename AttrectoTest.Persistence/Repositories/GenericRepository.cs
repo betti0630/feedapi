@@ -4,6 +4,8 @@ using AttrectoTest.Persistence.DatabaseContext;
 
 using Microsoft.EntityFrameworkCore;
 
+using System.Linq.Expressions;
+
 namespace AttrectoTest.Persistence.Repositories;
 
 internal class GenericRepository<T> : IGenericRepository<T> where T : AppEntity
@@ -32,14 +34,26 @@ internal class GenericRepository<T> : IGenericRepository<T> where T : AppEntity
         return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
     }
 
+    public IQueryable<T> List()
+    {
+        return _dbContext.Set<T>().AsNoTracking().AsQueryable();
+    }
+
+
     public Task<bool> AnyAsync()     {
         return _dbContext.Set<T>().AnyAsync();
     }
 
+    public async Task<T?> GetByAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate);
+    }
+
     public async Task<T?> GetByIdAsync(int id)
     {
-        return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return await GetByAsync(x => x.Id == id);
     }
+
 
     public async Task UpdateAsync(T entity)
     {
