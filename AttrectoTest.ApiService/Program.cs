@@ -21,7 +21,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("wasm", p => p
-        .WithOrigins("http://web:8080", "http://localhost:5002")
+        .WithOrigins("http://webfrontend:80", "http://localhost:3000")
         .AllowAnyHeader()
         .AllowAnyMethod());
 });
