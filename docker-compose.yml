@@ -26,13 +26,9 @@ services:
 
 
   webfrontend:
-    build:
-      context: .
-      dockerfile: AttrectoTest.Web/Dockerfile
-    environment:
-      - ApiBaseUrl=http://apiservice:8080
+    build: ./WebApp/attrectoweb
     ports:
-      - "5002:8080"
+      - "3001:80"
     depends_on:
       - apiservice
   
