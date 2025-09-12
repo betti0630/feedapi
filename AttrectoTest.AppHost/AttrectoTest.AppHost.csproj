@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AttrectoTest.ApiService\AttrectoTest.ApiService.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Web\AttrectoTest.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

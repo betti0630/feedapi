@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.ServiceDefault
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.ApiService", "AttrectoTest.ApiService\AttrectoTest.ApiService.csproj", "{A917AAC7-81D3-0EBB-6D00-E8791E47ECE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Web", "AttrectoTest.Web\AttrectoTest.Web.csproj", "{8FB13367-716E-C4C8-94B1-9DC1AB5041C8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Tests", "AttrectoTest.Tests\AttrectoTest.Tests.csproj", "{D3D049AD-AAF0-7930-2024-4C9AB0D79FBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Persistence", "AttrectoTest.Persistence\AttrectoTest.Persistence.csproj", "{3CD49EF8-F43A-4254-A0D6-71FE04D9404A}"
@@ -41,10 +39,6 @@ Global
 		{A917AAC7-81D3-0EBB-6D00-E8791E47ECE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A917AAC7-81D3-0EBB-6D00-E8791E47ECE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A917AAC7-81D3-0EBB-6D00-E8791E47ECE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FB13367-716E-C4C8-94B1-9DC1AB5041C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FB13367-716E-C4C8-94B1-9DC1AB5041C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FB13367-716E-C4C8-94B1-9DC1AB5041C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FB13367-716E-C4C8-94B1-9DC1AB5041C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D3D049AD-AAF0-7930-2024-4C9AB0D79FBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D3D049AD-AAF0-7930-2024-4C9AB0D79FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3D049AD-AAF0-7930-2024-4C9AB0D79FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
