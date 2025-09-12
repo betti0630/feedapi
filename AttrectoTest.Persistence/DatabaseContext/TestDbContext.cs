@@ -11,5 +11,6 @@ public class TestDbContext : DbContext
 
 	}
 
+    public DbSet<AppUser> AppUsers => Set<AppUser>();
     public DbSet<Feed> Feeds => Set<Feed>();
 }
