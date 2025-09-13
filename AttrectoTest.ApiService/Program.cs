@@ -1,3 +1,4 @@
+using AttrectoTest.Api.Middleware;
 using AttrectoTest.Application;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
@@ -65,6 +66,8 @@ builder.Services.AddOpenApiDocument(config =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.Services.RunDatabaseMigrations();
 
 app.UseCors("wasm");
@@ -72,7 +75,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
-app.UseExceptionHandler();
+//app.UseExceptionHandler();
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
