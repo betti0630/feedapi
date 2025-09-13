@@ -1,9 +1,11 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Models;
 using AttrectoTest.Domain;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,22 +21,31 @@ internal class AuthService : IAuthService
     private readonly IPasswordHasher<AppUser> _hasher;
     private readonly IGenericRepository<AppUser> _db;
     private readonly JwtSettings _jwtSettings;
+    private readonly IAppLogger<AuthService> _logger;
 
-    public AuthService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db, IOptions<JwtSettings> jwtSettings)
+    public AuthService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db, 
+        IOptions<JwtSettings> jwtSettings, IAppLogger<AuthService> logger)
     {
         _hasher = hasher;
         _db = db;
         _jwtSettings = jwtSettings.Value;
+        _logger = logger;
     }
 
     public async Task<bool> ValidateUser(string userName, string password)
     {
         var user = await _db.GetByAsync(u => u.UserName == userName);
-        if (user is null) return false;
+        if (user is null) { 
+            _logger.LogWarning("User {UserName} not found during login attempt", userName);
+            return false;
+        }
 
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
-        if (result == PasswordVerificationResult.Failed)
+        if (result == PasswordVerificationResult.Failed) { 
+            _logger.LogWarning("Invalid password for user {UserName} during login attempt", userName);
             return false;
+        }
+        _logger.LogInformation("User {UserName} successfully authenticated", userName);
         return true;
     }
 

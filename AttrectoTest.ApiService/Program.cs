@@ -1,16 +1,21 @@
 using AttrectoTest.Application;
 using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Domain;
 using AttrectoTest.Persistence;
-using AttrectoTest.Persistence.DatabaseContext;
+using AttrectoTest.Infrastructure;
 
-using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
+    .WriteTo.Console()
+    .ReadFrom.Configuration(context.Configuration));
+
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
