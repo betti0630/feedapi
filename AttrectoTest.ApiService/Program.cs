@@ -1,7 +1,10 @@
 using AttrectoTest.Application;
 using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Persistence;
 using AttrectoTest.Infrastructure;
+using AttrectoTest.Persistence;
+
+using FastEndpoints;
+using FastEndpoints.Swagger;
 
 using Serilog;
 
@@ -15,7 +18,7 @@ builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 
@@ -35,7 +38,7 @@ builder.Services.AddAppAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.AddFastEndpoints();
 
 builder.Services.AddOpenApiDocument(config =>
 {
@@ -66,16 +69,6 @@ app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
-
-app.MapGet("/", () => Results.Redirect("/swagger"));
-
-app.MapPost("/auth/login", async (LoginRequest req, IAuthService authService) =>
-{
-    if (!await authService.ValidateUser(req.UserName, req.Password))
-        return Results.Unauthorized();
-    var tokenResult = await authService.GenerateJwtToken(req.UserName);
-    return Results.Ok(new LoginResponse(tokenResult.token, tokenResult.expires));
-});
 
 string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
@@ -114,6 +107,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseFastEndpoints()
+   .UseSwaggerGen();
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
@@ -121,5 +117,3 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-record LoginRequest(string UserName, string Password);
-record LoginResponse(string Token, DateTime ExpiresAt);
