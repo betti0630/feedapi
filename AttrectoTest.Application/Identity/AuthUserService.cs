@@ -28,7 +28,7 @@ internal class AuthUserService : IAuthUserService
         _httpContextAccessor = httpContextAccessor;   
     }
 
-    public async Task<(string token, DateTime expires)> GenerateJwtToken( AppUser user)
+    public (string token, DateTime expires) GenerateJwtToken( AppUser user)
     {
 
         if (user is null) throw new InvalidOperationException("User not found");

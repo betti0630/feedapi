@@ -48,15 +48,20 @@ internal class AuthService : IAuthService
     public async Task<(string token, DateTime expires)> GenerateJwtToken(string userName)
     {
         var user = await _db.GetByAsync(u => u.UserName == userName);
+        if (user is null)
+        {
+            _logger.LogWarning("User {UserName} not found when generating JWT token", userName);
+            throw new NotFoundException(nameof(AppUser), userName);
+        }
 
-        return await _authUserService.GenerateJwtToken(user);
+        return _authUserService.GenerateJwtToken(user);
     }
 
-    public async Task<AppUser> GetCurrentUser()     {
+    public async Task<AppUser?> GetCurrentUser()     {
         var user = await _db.GetByAsync(u => u.Id == _authUserService.UserId);
         if (user is null)
         {
-            _logger.LogWarning("Current user with ID {UserId} not found", _authUserService.UserId);
+            _logger.LogWarning("Current user with ID {UserId} not found", _authUserService.UserId?.ToString() ?? "null");
             throw new NotFoundException(nameof(AppUser), _authUserService.UserId);
         }
         return user;
