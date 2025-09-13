@@ -1,10 +1,11 @@
-﻿using AttrectoTest.Api.Models;
+﻿using AttrectoTest.ApiService.Models;
 using AttrectoTest.Application.Exceptions;
 
 using Newtonsoft.Json;
+
 using System.Net;
 
-namespace AttrectoTest.Api.Middleware
+namespace AttrectoTest.ApiService.Middleware
 {
     public class ExceptionMiddleware
     {
@@ -14,7 +15,7 @@ namespace AttrectoTest.Api.Middleware
         public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
             _next = next;
-            this._logger = logger;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext httpContext)

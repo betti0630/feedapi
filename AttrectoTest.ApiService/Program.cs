@@ -1,4 +1,4 @@
-using AttrectoTest.Api.Middleware;
+using AttrectoTest.ApiService.Middleware;
 using AttrectoTest.Application;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;

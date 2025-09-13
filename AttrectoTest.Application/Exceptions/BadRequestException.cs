@@ -14,5 +14,5 @@ public class BadRequestException : Exception
         ValidationErrors = validationResult.ToDictionary();
     }
 
-    public IDictionary<string, string[]> ValidationErrors { get; set; }
+    public IDictionary<string, string[]>? ValidationErrors { get; set; }
 }

@@ -32,6 +32,17 @@ internal class TestDbContext : DbContext
         return base.SaveChangesAsync(cancellationToken);
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Feed>()
+            .ToTable("Feeds");
+        modelBuilder.Entity<ImageFeed>()
+            .ToTable("ImageFeeds");
+        modelBuilder.Entity<VideoFeed>()
+            .ToTable("VideoFeeds");
+        base.OnModelCreating(modelBuilder);
+    }
+
     public DbSet<AppUser> AppUsers => Set<AppUser>();
     public DbSet<Feed> Feeds => Set<Feed>();
 }
