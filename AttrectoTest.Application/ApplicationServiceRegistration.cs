@@ -28,6 +28,7 @@ public static class ApplicationServiceRegistration
     {
         services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAuthUserService, AuthUserService>();
         services.AddScoped<IAppUserService, AppUserService>();
 
         var jwt = configuration.GetSection("Jwt");

@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Domain;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Domain;
 using AttrectoTest.Domain.Common;
 
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,12 @@ namespace AttrectoTest.Persistence.DatabaseContext;
 
 internal class TestDbContext : DbContext
 {
+    private readonly IAuthUserService _authService;
 
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
+    public TestDbContext(DbContextOptions<TestDbContext> options, IAuthUserService authService) : base(options)
     {
-
-	}
+        _authService = authService;
+    }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -19,9 +21,11 @@ internal class TestDbContext : DbContext
             .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
         {
             entry.Entity.DateModified = DateTime.Now;
+            entry.Entity.ModifiedBy = _authService.UserName;
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.DateCreated = DateTime.Now;
+                entry.Entity.CreatedBy = _authService.UserName;
             }
         }
 

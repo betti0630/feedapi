@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Application.Contracts.Logging;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 
@@ -10,10 +11,13 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<CreateFeedCommandHandler> _logger;
+    private readonly IAuthService _authService;
 
-    public CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger)
+    public CreateFeedCommandHandler(IFeedRepository feedRepository, IAuthService authService,
+        IAppLogger<CreateFeedCommandHandler> logger)
     {
         _feedRepository = feedRepository;
+        _authService = authService;
         _logger = logger;
     }
 
@@ -25,11 +29,11 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
         if (validationResult.Errors.Any()) { 
             throw new BadRequestException("Invalid feed", validationResult);
         }
+        var user = await _authService.GetCurrentUser();
         var feed = new Domain.Feed
         {
             Title = request.Title,
-            Content = request.Content,
-            CreatedBy = "test"
+            Content = request.Content
         };
         await _feedRepository.CreateAsync(feed);
         return feed.Id;

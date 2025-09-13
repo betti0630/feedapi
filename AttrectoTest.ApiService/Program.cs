@@ -66,13 +66,15 @@ builder.Services.AddOpenApiDocument(config =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
+
 
 app.Services.RunDatabaseMigrations();
 
 app.UseCors("wasm");
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 //app.UseExceptionHandler();
