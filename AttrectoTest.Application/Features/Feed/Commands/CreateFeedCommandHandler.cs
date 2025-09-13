@@ -1,17 +1,22 @@
-﻿using AttrectoTest.Application.Exceptions;
+﻿using AttrectoTest.Application.Contracts.Logging;
+using AttrectoTest.Application.Contracts.Persistence;
+using AttrectoTest.Application.Exceptions;
 
 using MediatR;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AttrectoTest.Application.Features.Feed.Commands;
 
 internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int>
 {
+    private readonly IFeedRepository _feedRepository;
+    private readonly IAppLogger<CreateFeedCommandHandler> _logger;
+
+    public CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger)
+    {
+        _feedRepository = feedRepository;
+        _logger = logger;
+    }
+
     public async Task<int> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
@@ -20,6 +25,13 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
         if (validationResult.Errors.Any()) { 
             throw new BadRequestException("Invalid feed", validationResult);
         }
-        return 0;
+        var feed = new Domain.Feed
+        {
+            Title = request.Title,
+            Content = request.Content,
+            CreatedBy = "test"
+        };
+        await _feedRepository.CreateAsync(feed);
+        return feed.Id;
     }
 }

@@ -11,6 +11,6 @@ public class CreateFeedCommandValidator : AbstractValidator<CreateFeedCommand>
             .MaximumLength(100).WithMessage("Title maximum length is 100 characters!");
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("Content is required!")
-            .MaximumLength(1000).WithMessage("Content maximum length is 1000 characters!");
+            .MaximumLength(5000).WithMessage("Content maximum length is 5000 characters!");
     }
 }

@@ -21,6 +21,7 @@ public static class PersistenceServiceRegistration
         ));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IFeedRepository, FeedRepository>();
         return services;
     }
 
