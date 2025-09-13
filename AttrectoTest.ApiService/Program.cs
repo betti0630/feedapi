@@ -1,10 +1,9 @@
 using AttrectoTest.Application;
-using AttrectoTest.Application.Contracts.Identity;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
 
-using FastEndpoints;
-using FastEndpoints.Swagger;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 using Serilog;
 
@@ -38,7 +37,12 @@ builder.Services.AddAppAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddFastEndpoints();
+builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+//builder.Services.AddFastEndpoints();
 
 builder.Services.AddOpenApiDocument(config =>
 {
@@ -106,9 +110,8 @@ if (app.Environment.IsDevelopment())
         options.Path = "/redoc";
     });
 }
-
-app.UseFastEndpoints()
-   .UseSwaggerGen();
+app.MapControllers();
+app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.Run();
 

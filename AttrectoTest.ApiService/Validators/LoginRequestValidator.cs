@@ -1,10 +1,10 @@
-﻿using FastEndpoints;
+﻿using AttrectoTest.ApiService.Controllers;
 
 using FluentValidation;
 
-namespace AttrectoTest.ApiService.Endpoints.Auth;
+namespace AttrectoTest.ApiService.Validators;
 
-public class LoginRequestValidator : Validator<LoginRequest>
+public class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
     public LoginRequestValidator()
     {
@@ -17,3 +17,4 @@ public class LoginRequestValidator : Validator<LoginRequest>
             .MinimumLength(3).WithMessage("Password minimum length is 3");
     }
 }
+
