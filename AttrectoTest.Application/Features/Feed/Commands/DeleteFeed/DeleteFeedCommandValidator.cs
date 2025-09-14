@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+namespace AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 
 public class DeleteFeedCommandValidator : AbstractValidator<DeleteFeedCommand>
 {

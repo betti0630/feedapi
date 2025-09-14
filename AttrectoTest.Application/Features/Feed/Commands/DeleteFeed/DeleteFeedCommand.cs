@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+namespace AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 
 public record DeleteFeedCommand : IRequest
 {

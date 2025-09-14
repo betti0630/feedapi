@@ -1,8 +1,9 @@
 ﻿using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 using AttrectoTest.Application.Features.Feed.Dtos;
-using AttrectoTest.Application.Features.Feed.Quries;
-using AttrectoTest.Application.Features.Feed.Quries.GetFeed;
+using AttrectoTest.Application.Features.Feed.Queries.GetFeed;
+using AttrectoTest.Application.Models;
 
 using MediatR;
 
@@ -25,13 +26,26 @@ namespace AttrectoTest.ApiService.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<FeedsController>
+        /// <summary>
+        /// List feeds
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="includeExternal">Include external users' feeds</param>"
+        /// <returns>OK</returns>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<PagedFeeds>> Get( [FromQuery] int? page, [FromQuery] int? pageSize, [FromQuery] ListSort? sort, [FromQuery] bool? includeExternal, CancellationToken cancellationToken)
         {
-            return new string[] { "value1", "value2" };
+            var query = new ListFeedsQuery
+            {
+                IncludeExternal = includeExternal ?? false,
+                Page = page,
+                PageSize = pageSize,
+                Sort = sort ?? ListSort.CreatedAt_desc
+            };
+            var result = await _mediator.Send(query, cancellationToken);
+            return Ok(result);
         }
-
 
         /// <summary>
         /// Get feed

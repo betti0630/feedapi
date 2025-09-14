@@ -13,6 +13,8 @@ public record FeedDto
 
     public int AuthorId { get; set; }
 
+    public bool IsOwnFeed { get; set; }
+
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
 
     public int LikeCount { get; }

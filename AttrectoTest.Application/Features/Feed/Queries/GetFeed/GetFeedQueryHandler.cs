@@ -1,19 +1,22 @@
-﻿using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 
 using MediatR;
 
 
-namespace AttrectoTest.Application.Features.Feed.Quries.GetFeed;
+namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
 internal class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, FeedDto>
 {
     private readonly IFeedRepository _feedRepository;
+    private readonly IAuthUserService _authUserService;
 
-    public GetFeedQueryHandler(IFeedRepository feedRepository)
+    public GetFeedQueryHandler(IFeedRepository feedRepository, IAuthUserService authUserService)
     {
         _feedRepository = feedRepository;
+        _authUserService = authUserService;
     }
 
     public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
@@ -34,7 +37,8 @@ internal class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, FeedDto>
             Content = feed.Content,
             AuthorId = feed.AuthorId,
             AuthorUserName = feed.Author?.UserName ?? "Unknown",
-            PublishedAt = feed.PublishedAt
+            PublishedAt = feed.PublishedAt,
+            IsOwnFeed = feed.AuthorId == _authUserService.UserId
         };
     }
 }

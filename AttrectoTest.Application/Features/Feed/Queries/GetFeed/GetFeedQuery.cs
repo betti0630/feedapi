@@ -2,7 +2,7 @@
 
 using MediatR;
 
-namespace AttrectoTest.Application.Features.Feed.Quries.GetFeed;
+namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
 public class GetFeedQuery : IRequest<FeedDto>
 {
