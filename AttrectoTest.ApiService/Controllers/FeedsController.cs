@@ -20,6 +20,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using System.Threading;
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AttrectoTest.ApiService.Controllers
@@ -112,11 +114,18 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>Created</returns>
         [HttpPost("video")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateVideoFeed([FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> CreateVideoFeed([FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
         {
             var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
-
-            return NoContent();
+            var command = new CreateVideoFeedCommand
+            {
+                Title = feed.Title,
+                Content = feed.Content,
+                ImageData = bytes,
+                VideoUrl = feed.VideoUrl
+            };
+            var response = await _mediator.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(Post), new { id = response });
         }
 
         /// <summary>
@@ -138,34 +147,49 @@ namespace AttrectoTest.ApiService.Controllers
         /// Update image feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpPatch("{id}")]
+        [HttpPatch("image/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> PatchImageFeed(int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken ct)
+        public async Task<ActionResult<FeedDto>> PatchImageFeed(int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, ct);
-
-            return NoContent();
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var command = new UpdateImageFeedCommand
+            {
+                Id = feed.Id,
+                Title = feed.Title,
+                Content = feed.Content,
+                ImageData = bytes,
+            };
+            var response = await _mediator.Send(command, cancellationToken);
+            return Ok(response);
         }
 
         /// <summary>
         /// Update video feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpPatch("{id}")]
+        [HttpPatch("video/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> PatchVideoFeed(int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken ct)
+        public async Task<ActionResult<FeedDto>> PatchVideoFeed(int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, ct);
-
-            return NoContent();
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var command = new UpdateVideoFeedCommand
+            {
+                Id = feed.Id,
+                Title = feed.Title,
+                Content = feed.Content,
+                ImageData = bytes,
+                VideoUrl = feed.VideoUrl
+            };
+            var response = await _mediator.Send(command, cancellationToken);
+            return Ok(response);
         }
 
         /// <summary>

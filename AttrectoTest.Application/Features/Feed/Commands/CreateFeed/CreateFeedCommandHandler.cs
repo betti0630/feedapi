@@ -10,7 +10,8 @@ namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
 internal class CreateFeedCommandHandler : 
     IRequestHandler<CreateFeedCommand, FeedDto>,
-    IRequestHandler<CreateImageFeedCommand, FeedDto>
+    IRequestHandler<CreateImageFeedCommand, FeedDto>,
+    IRequestHandler<CreateVideoFeedCommand, FeedDto>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<CreateFeedCommandHandler> _logger;
@@ -26,7 +27,7 @@ internal class CreateFeedCommandHandler :
 
     public async Task<FeedDto> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
-        var feed = ValidateAndMakeFeed<Domain.Feed>(request);
+        var feed = await ValidateAndMakeFeed<Domain.Feed>(request);
         await _feedRepository.CreateAsync(feed);
         _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
         return MapToFeedDto(feed);
@@ -34,17 +35,27 @@ internal class CreateFeedCommandHandler :
 
     public async Task<FeedDto> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
     {
-        var feed = ValidateAndMakeFeed<Domain.ImageFeed>(request);
+        var feed = await ValidateAndMakeFeed<Domain.ImageFeed>(request);
         feed.ImageData = request.ImageData;
         await _feedRepository.CreateImageFeedAsync(feed);
         _logger.LogInformation("Image feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
         return MapToFeedDto(feed);
     }
 
-    private TFeed ValidateAndMakeFeed<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
+    public async Task<FeedDto> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
+    {
+        var feed = await ValidateAndMakeFeed<Domain.VideoFeed>(request);
+        feed.ImageData = request.ImageData;
+        feed.VideoUrl = request.VideoUrl;
+        await _feedRepository.CreateImageFeedAsync(feed);
+        _logger.LogInformation("Video feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
+        return MapToFeedDto(feed);
+    }
+
+    private async Task<TFeed> ValidateAndMakeFeed<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = validator.Validate(request);
+        var validationResult = await validator.ValidateAsync(request);
         if (validationResult.Errors.Any())
         {
             throw new BadRequestException("Invalid feed", validationResult);
