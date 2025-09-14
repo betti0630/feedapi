@@ -44,6 +44,7 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
             AuthorId = userId.Value
         };
         await _feedRepository.CreateAsync(feed);
+        _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, userId);
         return feed.Id;
     }
 }
