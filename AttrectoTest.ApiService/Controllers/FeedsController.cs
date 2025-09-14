@@ -1,4 +1,6 @@
-﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
+﻿using AttrectoTest.ApiService.Dtos.Feeds;
+using AttrectoTest.ApiService.Validators;
+using AttrectoTest.Application.Features.Feed.Commands.AddLike;
 using AttrectoTest.Application.Features.Feed.Commands.CreateComment;
 using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteComment;
@@ -11,6 +13,7 @@ using AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 using AttrectoTest.Application.Features.Feed.Queries.ListComments;
 using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
+using AttrectoTest.Domain;
 
 using MediatR;
 
@@ -27,10 +30,12 @@ namespace AttrectoTest.ApiService.Controllers
     public class FeedsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IImageFileProcessor _imageFileProcessor;
 
-        public FeedsController(IMediator mediator)
+        public FeedsController(IMediator mediator, IImageFileProcessor imageFileProcessor)
         {
             _mediator = mediator;
+            _imageFileProcessor = imageFileProcessor;
         }
 
         /// <summary>
@@ -83,11 +88,43 @@ namespace AttrectoTest.ApiService.Controllers
 
 
         /// <summary>
+        /// Create new image feed
+        /// </summary>
+        /// <returns>Created</returns>
+        [HttpPost("image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<FeedDto>> CreateImageFeed([FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
+        {
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var command = new CreateImageFeedCommand
+            {
+                Title = feed.Title,
+                Content = feed.Content,
+                ImageData = bytes
+            };
+            var response = await _mediator.Send(command, cancellationToken);
+            return CreatedAtAction(nameof(Post), new { id = response });
+         }
+
+        /// <summary>
+        /// Create new video feed
+        /// </summary>
+        /// <returns>Created</returns>
+        [HttpPost("video")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateVideoFeed([FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
+        {
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Update feed
         /// </summary>
         /// <returns>OK</returns>
         [HttpPatch("{id}")]
-        public async Task<ActionResult<FeedDto>> Put(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> Patch(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
@@ -97,6 +134,39 @@ namespace AttrectoTest.ApiService.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Update image feed
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPatch("{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PatchImageFeed(int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken ct)
+        {
+            if (id != feed.Id)
+            {
+                throw new ArgumentException("Feed ID mismatch");
+            }
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, ct);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Update video feed
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPatch("{id}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PatchVideoFeed(int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken ct)
+        {
+            if (id != feed.Id)
+            {
+                throw new ArgumentException("Feed ID mismatch");
+            }
+            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, ct);
+
+            return NoContent();
+        }
 
         /// <summary>
         /// Delete feed 

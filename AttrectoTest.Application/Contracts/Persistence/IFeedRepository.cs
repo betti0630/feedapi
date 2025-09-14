@@ -4,4 +4,5 @@ namespace AttrectoTest.Application.Contracts.Persistence;
 
 public interface IFeedRepository: IGenericRepository<Feed>
 {
+    Task CreateImageFeedAsync(ImageFeed entity);
 }

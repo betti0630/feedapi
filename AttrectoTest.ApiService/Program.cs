@@ -1,4 +1,5 @@
 using AttrectoTest.ApiService.Middleware;
+using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
@@ -21,6 +22,8 @@ builder.AddServiceDefaults();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+
+builder.Services.AddScoped<IImageFileProcessor, ImageFileProcessor>();
 
 // Add services to the container.
 builder.Services.AddProblemDetails();

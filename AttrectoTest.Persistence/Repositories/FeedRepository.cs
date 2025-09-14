@@ -9,4 +9,11 @@ internal class FeedRepository : GenericRepository<Feed>, IFeedRepository
     public FeedRepository(TestDbContext dbContext) : base(dbContext)
     {
     }
+
+    public async Task CreateImageFeedAsync(ImageFeed entity)
+    {
+        await _dbContext.Set<ImageFeed>().AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+    }
+
 }

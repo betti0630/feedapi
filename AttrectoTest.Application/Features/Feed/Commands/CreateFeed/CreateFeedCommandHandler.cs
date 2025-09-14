@@ -8,7 +8,9 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, FeedDto>
+internal class CreateFeedCommandHandler : 
+    IRequestHandler<CreateFeedCommand, FeedDto>,
+    IRequestHandler<CreateImageFeedCommand, FeedDto>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<CreateFeedCommandHandler> _logger;
@@ -24,10 +26,27 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, Fee
 
     public async Task<FeedDto> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
+        var feed = ValidateAndMakeFeed<Domain.Feed>(request);
+        await _feedRepository.CreateAsync(feed);
+        _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
+        return MapToFeedDto(feed);
+    }
 
-        if (validationResult.Errors.Any()) { 
+    public async Task<FeedDto> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
+    {
+        var feed = ValidateAndMakeFeed<Domain.ImageFeed>(request);
+        feed.ImageData = request.ImageData;
+        await _feedRepository.CreateImageFeedAsync(feed);
+        _logger.LogInformation("Image feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
+        return MapToFeedDto(feed);
+    }
+
+    private TFeed ValidateAndMakeFeed<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
+    {
+        var validator = new CreateFeedCommandValidator();
+        var validationResult = validator.Validate(request);
+        if (validationResult.Errors.Any())
+        {
             throw new BadRequestException("Invalid feed", validationResult);
         }
         var userId = _authService.UserId;
@@ -37,16 +56,19 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, Fee
             _logger.LogWarning("Unauthorized attempt to create a feed.");
             throw new BadRequestException("User must be authenticated to create a feed.");
         }
+        var feed = Activator.CreateInstance<TFeed>() as Domain.Feed;
 
-        var feed = new Domain.Feed
-        {
-            Title = request.Title,
-            Content = request.Content,
-            AuthorId = userId.Value
-        };
-        await _feedRepository.CreateAsync(feed);
-        _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, userId);
-        return new FeedDto()
+        feed.Title = request.Title;
+        feed.Content = request.Content;
+        feed.AuthorId = userId.Value;
+
+        return (TFeed)feed;
+
+    }
+
+    private FeedDto MapToFeedDto(Domain.Feed feed)
+    {
+        return new FeedDto
         {
             Id = feed.Id,
             Title = feed.Title,
@@ -56,4 +78,6 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, Fee
             PublishedAt = feed.PublishedAt
         };
     }
+
+
 }
