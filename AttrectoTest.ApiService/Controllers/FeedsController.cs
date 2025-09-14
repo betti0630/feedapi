@@ -87,7 +87,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// </summary>
         /// <returns>OK</returns>
         [HttpPatch("{id}")]
-        public async Task<ActionResult<Feed>> Put(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> Put(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
