@@ -2,6 +2,7 @@
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
+using AttrectoTest.Application.Features.Feed.Queries.Base;
 using AttrectoTest.Application.Models;
 
 using MediatR;
@@ -9,7 +10,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler : IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal class ListFeedsQueryHandler : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAuthUserService _authUserService;
@@ -23,10 +24,8 @@ internal class ListFeedsQueryHandler : IRequestHandler<ListFeedsQuery, PagedFeed
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
         var feeds = _feedRepository.List().Where(x => !x.IsDeleted);
-        if (request.Page is not null && request.PageSize is not null)
-        {
-            feeds = feeds.Skip((request.Page.Value - 1) * request.PageSize.Value).Take(request.PageSize.Value);
-        }
+        feeds = AddPaging<Domain.Feed>(feeds, request);
+
         switch (request.Sort) 
         {
             case ListSort.CreatedAt_asc:

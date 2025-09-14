@@ -1,10 +1,14 @@
 ﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
+using AttrectoTest.Application.Features.Feed.Commands.CreateComment;
 using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+using AttrectoTest.Application.Features.Feed.Commands.DeleteComment;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
+using AttrectoTest.Application.Features.Feed.Commands.UpdateComment;
 using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Queries.GetFeed;
+using AttrectoTest.Application.Features.Feed.Queries.ListComments;
 using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
 
@@ -133,6 +137,66 @@ namespace AttrectoTest.ApiService.Controllers
             await _mediator.Send(command, cancellationToken);
             return NoContent();
         }
+
+        #endregion
+
+        #region Comments
+
+        /// <summary>
+        /// List comments
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpGet, Route("{feedId}/comments", Name = "commentsGET")]
+        public async Task<ActionResult<PagedComments>> CommentsGET([FromQuery] int? page, [FromQuery] int? pageSize, int feedId, CancellationToken cancellationToken)
+        {
+            var query = new ListCommentsQuery
+            {
+                FeedId = feedId,
+                Page = page ?? 1,
+                PageSize = pageSize ?? 20
+            };
+            var result = await _mediator.Send(query, cancellationToken);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Create new comment
+        /// </summary>
+        /// <returns>Created</returns>
+        [HttpPost, Route("{feedId}/comments", Name = "commentsPOST")]
+        public async Task<ActionResult<CommentDto>> CommentsPOST([FromBody] CreateCommentCommand request, int feedId, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return CreatedAtAction(nameof(CommentsPOST), new { id = result.Id });
+        }
+
+        /// <summary>
+        /// Update comment 
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPatch, Route("{feedId}/comments/{commentId}", Name = "commentsPATCH")]
+        public async Task<ActionResult<CommentDto>> CommentsPATCH([FromBody] UpdateCommentCommand request, int feedId, int commentId, CancellationToken cancellationToken)
+        {
+            if (commentId != request.CommentId)
+            {
+                throw new ArgumentException("Comment ID mismatch");
+            }
+            var result = await _mediator.Send(request, cancellationToken);
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Delete comment 
+        /// </summary>
+        /// <returns>Deleted</returns>
+        [HttpDelete, Route("{feedId}/comments/{commentId}", Name = "commentsDELETE")]
+        public async Task<IActionResult> CommentsDELETE(int feedId, int commentId, CancellationToken cancellationToken)
+        {
+            var command = new DeleteCommentCommand { FeedId = feedId, CommentId = commentId };
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
+        }
+
 
         #endregion
     }
