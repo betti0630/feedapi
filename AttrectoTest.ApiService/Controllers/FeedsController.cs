@@ -1,4 +1,8 @@
-﻿using AttrectoTest.Application.Features.Feed.Commands;
+﻿using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
+using AttrectoTest.Application.Features.Feed.Dtos;
+using AttrectoTest.Application.Features.Feed.Quries;
+using AttrectoTest.Application.Features.Feed.Quries.GetFeed;
 
 using MediatR;
 
@@ -28,34 +32,62 @@ namespace AttrectoTest.ApiService.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<FeedsController>/5
+
+        /// <summary>
+        /// Get feed
+        /// </summary>
+        /// <returns>OK</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<FeedDto>> Get(int id, CancellationToken cancellationToken)
         {
-            return "value";
+            var query = new GetFeedQuery { Id = id };
+            var response = await _mediator.Send(query, cancellationToken);
+            return Ok(response);
         }
 
-        // POST api/<FeedsController>
+
+        /// <summary>
+        /// Create new feed
+        /// </summary>
+        /// <returns>Created</returns>
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Post(CreateFeedCommand feed)
+        public async Task<ActionResult<FeedDto>> Post([FromBody] CreateFeedCommand feed, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(feed);
+            var response = await _mediator.Send(feed, cancellationToken);
             return CreatedAtAction(nameof(Post), new { id = response });
         }
 
-        // PUT api/<FeedsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+
+        /// <summary>
+        /// Update feed
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Feed>> Put(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
         {
+            if (id != feed.Id)
+            {
+                throw new ArgumentException("Feed ID mismatch");
+            }
+            var response = await _mediator.Send(feed, cancellationToken);
+            return Ok(response);
         }
 
-        // DELETE api/<FeedsController>/5
+
+        /// <summary>
+        /// Delete feed 
+        /// </summary>
+        /// <returns>Soft deleted</returns>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
+            var command = new DeleteFeedCommand { Id = id };
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
         }
+
     }
 }

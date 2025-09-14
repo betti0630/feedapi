@@ -24,4 +24,6 @@ public class Feed : BaseEntity
 
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
 
+    public bool IsDeleted { get; set; } = false;
+
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AttrectoTest.Application.Features.Feed.Commands;
+namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
 public class CreateFeedCommandValidator : AbstractValidator<CreateFeedCommand>
 {

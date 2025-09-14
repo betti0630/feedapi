@@ -2,12 +2,13 @@
 using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
+using AttrectoTest.Application.Features.Feed.Dtos;
 
 using MediatR;
 
-namespace AttrectoTest.Application.Features.Feed.Commands;
+namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int>
+internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, FeedDto>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<CreateFeedCommandHandler> _logger;
@@ -21,7 +22,7 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
         _logger = logger;
     }
 
-    public async Task<int> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
+    public async Task<FeedDto> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
         var validationResult = await validator.ValidateAsync(request);
@@ -45,6 +46,14 @@ internal class CreateFeedCommandHandler : IRequestHandler<CreateFeedCommand, int
         };
         await _feedRepository.CreateAsync(feed);
         _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, userId);
-        return feed.Id;
+        return new FeedDto()
+        {
+            Id = feed.Id,
+            Title = feed.Title,
+            Content = feed.Content,
+            AuthorId = feed.AuthorId,
+            AuthorUserName = _authService.UserName ?? "Unknown",
+            PublishedAt = feed.PublishedAt
+        };
     }
 }
