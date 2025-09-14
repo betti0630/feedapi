@@ -1,8 +1,11 @@
-﻿using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
+﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
+using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
+using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
 using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Queries.GetFeed;
+using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
 
 using MediatR;
@@ -103,5 +106,34 @@ namespace AttrectoTest.ApiService.Controllers
             return NoContent();
         }
 
+
+        #region Like
+
+        /// <summary>
+        /// Feed like
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpPost, Route("{feedId}/like", Name = "likePOST")]
+        public async Task<IActionResult> LikePOST(int feedId, CancellationToken cancellationToken)
+        {
+            var command = new AddLikeCommand { FeedId = feedId };
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Like delete
+        /// </summary>
+        /// <returns>OK</returns>
+        [HttpDelete, Route("{feedId}/like", Name = "likeDELETE")]
+        public async Task<IActionResult> LikeDELETE(int feedId, CancellationToken cancellationToken)
+        {
+
+            var command = new DeleteLikeCommand { FeedId = feedId };
+            await _mediator.Send(command, cancellationToken);
+            return NoContent();
+        }
+
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ using AttrectoTest.Application.Models;
 using MediatR;
 
 
-namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
+namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
 internal class ListFeedsQueryHandler : IRequestHandler<ListFeedsQuery, PagedFeeds>
 {

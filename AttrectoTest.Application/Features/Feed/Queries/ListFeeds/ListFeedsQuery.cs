@@ -3,7 +3,7 @@ using AttrectoTest.Application.Models;
 
 using MediatR;
 
-namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
+namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
 public class ListFeedsQuery : IRequest<PagedFeeds>
 {
