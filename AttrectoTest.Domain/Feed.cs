@@ -26,4 +26,6 @@ public class Feed : BaseEntity
 
     public bool IsDeleted { get; set; } = false;
 
+    public ICollection<FeedLike> Likes { get; set; } = new List<FeedLike>();
+
 }

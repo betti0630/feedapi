@@ -40,9 +40,12 @@ internal class TestDbContext : DbContext
             .ToTable("ImageFeeds");
         modelBuilder.Entity<VideoFeed>()
             .ToTable("VideoFeeds");
+        modelBuilder.Entity<FeedLike>()
+            .HasKey(fl => new { fl.FeedId, fl.UserId });
         base.OnModelCreating(modelBuilder);
     }
 
     public DbSet<AppUser> AppUsers => Set<AppUser>();
     public DbSet<Feed> Feeds => Set<Feed>();
+    public DbSet<FeedLike> FeedLikes => Set<FeedLike>();
 }

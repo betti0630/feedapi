@@ -23,7 +23,7 @@ public record FeedDto
 
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
 
-    public int LikeCount { get; }
+    public int LikeCount { get; set; }
 
     public bool IsDeleted { get; }
 }

@@ -23,6 +23,13 @@ internal class DbSeeder(TestDbContext dbContext, IAppUserService userService)
             ("bob", "Passw0rd!", "User"),
             ("admin", "AdminPassw0rd!", "Admin")
         };
+        
+        
+        
+        
+        
+        
+        
         foreach (var (userName, password, role) in users)
         {
             await userService.AddNewUser(userName, password, role);
@@ -57,8 +64,16 @@ internal class DbSeeder(TestDbContext dbContext, IAppUserService userService)
         var feed24 = new Feed { Title = "Coding Tip", Content = "Always write unit tests for your critical business logic.", Author = Bob };
         var feed25 = new VideoFeed { Title = "Weekend Reflection", Content = "Took a break from coding and spent quality time with family.", Author = Alice, ImageData = Encoding.ASCII.GetBytes(image5), VideoUrl = "https://example.com/videos/family.mp4" };
 
-
         await dbContext.Feeds.AddRangeAsync(feed1, feed2, feed3, feed4, feed5, feed6, feed7, feed8, feed9, feed10, feed11, feed12, feed13, feed14, feed15, feed16, feed17, feed18, feed19, feed20, feed21, feed22, feed23, feed24, feed25);
+
+        var like1 = new FeedLike { Feed = feed1, User = Bob };
+        var like2 = new FeedLike { Feed = feed2, User = Alice };
+        var like6 = new FeedLike { Feed = feed2, User = Bob };
+        var like3 = new FeedLike { Feed = feed3, User = Bob };
+        var like4 = new FeedLike { Feed = feed4, User = Alice };
+        var like5 = new FeedLike { Feed = feed5, User = Bob };
+
+        await dbContext.FeedLikes.AddRangeAsync(like1, like2, like3, like4, like5, like6);
         await dbContext.SaveChangesAsync();
     }
 

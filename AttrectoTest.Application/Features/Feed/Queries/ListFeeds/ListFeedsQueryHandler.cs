@@ -34,7 +34,7 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, FeedMapper 
             default:
                 throw new BadRequestException("Invalid sort option.");
         }
-        var items = feeds.ToList().Select(f => mapper.MapFeedToDto(f, request.UserId)).ToList();
+        var items = feeds.Select(f => new {feed = f, likeCount = f.Likes.Count()}).ToList().Select(f => mapper.MapFeedToDto(f.feed, f.likeCount, request.UserId)).ToList();
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return result;      
     }
