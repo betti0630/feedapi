@@ -1,5 +1,4 @@
-﻿using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Mappers;
@@ -18,22 +17,14 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, FeedMapper 
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging<Domain.Feed>(feeds, request);
 
-        switch (request.Sort) 
+        feeds = request.Sort switch
         {
-            case ListSort.CreatedAt_asc:
-                feeds = feeds.OrderBy(x => x.PublishedAt);
-                break;
-            case ListSort.CreatedAt_desc:
-                feeds = feeds.OrderByDescending(x => x.PublishedAt);
-                break;
-            //case ListSort.Likes_desc:
-            //    feeds = feeds.OrderByDescending(x => x.Likes.Count);
-            //    break;
-            //case ListSort.Likes_asc:
-            //        feeds = feeds.OrderBy(x => x.Likes.Count);
-            default:
-                throw new BadRequestException("Invalid sort option.");
-        }
+            ListSort.CreatedAt_asc => feeds.OrderBy(x => x.PublishedAt),
+            ListSort.CreatedAt_desc => feeds.OrderByDescending(x => x.PublishedAt),
+            ListSort.Likes_desc => feeds.OrderByDescending(x => x.Likes.Count),
+            ListSort.Likes_asc => feeds.OrderBy(x => x.Likes.Count),
+            _ => throw new BadRequestException("Invalid sort option."),
+        };
         var items = feeds.Select(f => new {feed = f, likeCount = f.Likes.Count()}).ToList().Select(f => mapper.MapFeedToDto(f.feed, f.likeCount, request.UserId)).ToList();
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return result;      
