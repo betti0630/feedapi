@@ -1,10 +1,8 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
-
-using MediatR;
+﻿using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
-public record UpdateVideoFeedCommand : UpdateImageFeedCommand, IRequest<FeedDto>
+public record UpdateVideoFeedCommand : UpdateImageFeedCommand, IRequest<UpdateFeedCommandResponse>
 {
-    public string VideoUrl { get; set; } = default!;
+    public string? VideoUrl { get; set; }
 }

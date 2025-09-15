@@ -2,16 +2,15 @@
 using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
-using AttrectoTest.Application.Features.Feed.Dtos;
 
 using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
 internal class CreateFeedCommandHandler : 
-    IRequestHandler<CreateFeedCommand, FeedDto>,
-    IRequestHandler<CreateImageFeedCommand, FeedDto>,
-    IRequestHandler<CreateVideoFeedCommand, FeedDto>
+    IRequestHandler<CreateFeedCommand, CreateFeedCommandResponse>,
+    IRequestHandler<CreateImageFeedCommand, CreateFeedCommandResponse>,
+    IRequestHandler<CreateVideoFeedCommand, CreateFeedCommandResponse>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<CreateFeedCommandHandler> _logger;
@@ -25,31 +24,31 @@ internal class CreateFeedCommandHandler :
         _logger = logger;
     }
 
-    public async Task<FeedDto> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
+    public async Task<CreateFeedCommandResponse> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var feed = await ValidateAndMakeFeed<Domain.Feed>(request);
         await _feedRepository.CreateAsync(feed);
         _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
-    public async Task<FeedDto> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
+    public async Task<CreateFeedCommandResponse> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
     {
         var feed = await ValidateAndMakeFeed<Domain.ImageFeed>(request);
         feed.ImageData = request.ImageData;
-        await _feedRepository.CreateImageFeedAsync(feed);
+        await _feedRepository.CreateAsync(feed);
         _logger.LogInformation("Image feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
-    public async Task<FeedDto> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
+    public async Task<CreateFeedCommandResponse> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
     {
         var feed = await ValidateAndMakeFeed<Domain.VideoFeed>(request);
         feed.ImageData = request.ImageData;
         feed.VideoUrl = request.VideoUrl;
-        await _feedRepository.CreateImageFeedAsync(feed);
+        await _feedRepository.CreateAsync(feed);
         _logger.LogInformation("Video feed {FeedId} created successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
     private async Task<TFeed> ValidateAndMakeFeed<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
@@ -77,15 +76,12 @@ internal class CreateFeedCommandHandler :
 
     }
 
-    private FeedDto MapToFeedDto(Domain.Feed feed)
+    private CreateFeedCommandResponse MapToResponse(Domain.Feed feed)
     {
-        return new FeedDto
+        return new CreateFeedCommandResponse
         {
             Id = feed.Id,
             Title = feed.Title,
-            Content = feed.Content,
-            AuthorId = feed.AuthorId,
-            AuthorUserName = _authService.UserName ?? "Unknown",
             PublishedAt = feed.PublishedAt
         };
     }

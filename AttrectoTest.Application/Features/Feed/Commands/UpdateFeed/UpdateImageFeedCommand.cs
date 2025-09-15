@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
-public record UpdateImageFeedCommand : UpdateFeedCommand, IRequest<FeedDto>
+public record UpdateImageFeedCommand : UpdateFeedCommand, IRequest<UpdateFeedCommandResponse>
 {
-    public byte[] ImageData { get; set; } = default!;
+    public byte[]? ImageData { get; set; }
 }

@@ -13,14 +13,13 @@ using AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 using AttrectoTest.Application.Features.Feed.Queries.ListComments;
 using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
-using AttrectoTest.Domain;
+
 
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Threading;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,12 +31,11 @@ namespace AttrectoTest.ApiService.Controllers
     public class FeedsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IImageFileProcessor _imageFileProcessor;
 
-        public FeedsController(IMediator mediator, IImageFileProcessor imageFileProcessor)
+
+        public FeedsController(IMediator mediator)
         {
             _mediator = mediator;
-            _imageFileProcessor = imageFileProcessor;
         }
 
         /// <summary>
@@ -95,9 +93,9 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>Created</returns>
         [HttpPost("image")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> CreateImageFeed([FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> CreateImageFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
         {
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var bytes = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             var command = new CreateImageFeedCommand
             {
                 Title = feed.Title,
@@ -114,9 +112,9 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>Created</returns>
         [HttpPost("video")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> CreateVideoFeed([FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> CreateVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
         {
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var bytes = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             var command = new CreateVideoFeedCommand
             {
                 Title = feed.Title,
@@ -149,20 +147,21 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>OK</returns>
         [HttpPatch("image/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> PatchImageFeed(int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> PatchImageFeed([FromServices] IImageFileProcessor imageFileProcessor, int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             var command = new UpdateImageFeedCommand
             {
                 Id = feed.Id,
                 Title = feed.Title,
-                Content = feed.Content,
-                ImageData = bytes,
+                Content = feed.Content
             };
+            if (feed.File is not null) { 
+                command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            }
             var response = await _mediator.Send(command, cancellationToken);
             return Ok(response);
         }
@@ -173,21 +172,23 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>OK</returns>
         [HttpPatch("video/{id}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> PatchVideoFeed(int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> PatchVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var bytes = await _imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             var command = new UpdateVideoFeedCommand
             {
                 Id = feed.Id,
                 Title = feed.Title,
                 Content = feed.Content,
-                ImageData = bytes,
                 VideoUrl = feed.VideoUrl
             };
+            if (feed.File is not null)
+            {
+                command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            }
             var response = await _mediator.Send(command, cancellationToken);
             return Ok(response);
         }

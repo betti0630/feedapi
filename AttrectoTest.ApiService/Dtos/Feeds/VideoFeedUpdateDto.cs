@@ -2,5 +2,5 @@
 
 public class VideoFeedUpdateDto: ImageFeedUpdateDto
 {
-    public string VideoUrl { get; set; } = default!;
+    public string? VideoUrl { get; set; }
 }

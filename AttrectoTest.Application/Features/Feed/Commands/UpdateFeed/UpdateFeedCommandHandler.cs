@@ -2,7 +2,6 @@
 using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
-using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Domain;
 
 using MediatR;
@@ -10,9 +9,9 @@ using MediatR;
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
 internal class UpdateFeedCommandHandler : 
-    IRequestHandler<UpdateFeedCommand, FeedDto>,
-    IRequestHandler<UpdateImageFeedCommand, FeedDto>,
-    IRequestHandler<UpdateVideoFeedCommand, FeedDto>
+    IRequestHandler<UpdateFeedCommand, UpdateFeedCommandResponse>,
+    IRequestHandler<UpdateImageFeedCommand, UpdateFeedCommandResponse>,
+    IRequestHandler<UpdateVideoFeedCommand, UpdateFeedCommandResponse>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<UpdateFeedCommandHandler> _logger;
@@ -26,43 +25,43 @@ internal class UpdateFeedCommandHandler :
         _logger = logger;
     }
 
-    public async Task<FeedDto> Handle(UpdateFeedCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateFeedCommandResponse> Handle(UpdateFeedCommand request, CancellationToken cancellationToken)
     {
-        var feed =await ValidateRequestAndGetUpdatedFeed(request, (id) => _feedRepository.GetByIdAsync(id));
+        var feed =await ValidateRequestAndGetUpdatedFeed<Domain.Feed>(request);
 
         await _feedRepository.UpdateAsync(feed);
         _logger.LogInformation("Feed {FeedId} updated successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
-    public async Task<FeedDto> Handle(UpdateImageFeedCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateFeedCommandResponse> Handle(UpdateImageFeedCommand request, CancellationToken cancellationToken)
     {
-        var feed = await ValidateRequestAndGetUpdatedFeed(request, async (id) => await _feedRepository.GetImageFeedByIdAsync(id)) as ImageFeed;
-        if (feed == null)
-        {
-            throw new BadRequestException("Feed is not an image feed.");
+        var feed = await ValidateRequestAndGetUpdatedFeed<ImageFeed>(request);
+
+        if (feed.ImageData is not null) { 
+            feed.ImageData = request.ImageData;
         }
-        feed.ImageData = request.ImageData;
-        await _feedRepository.UpdateImageFeedAsync(feed);
+        await _feedRepository.UpdateAsync(feed);
         _logger.LogInformation("Image feed {FeedId} updated successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
-    public async Task<FeedDto> Handle(UpdateVideoFeedCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateFeedCommandResponse> Handle(UpdateVideoFeedCommand request, CancellationToken cancellationToken)
     {
-        var feed = await ValidateRequestAndGetUpdatedFeed(request, async (id) => await _feedRepository.GetVideoFeedByIdAsync(id)) as VideoFeed;
-        if (feed == null)
-        {
-            throw new BadRequestException("Feed is not a video feed.");
+        var feed = await ValidateRequestAndGetUpdatedFeed<VideoFeed>(request);
+
+        if (request.ImageData is not null) { 
+            feed.ImageData = request.ImageData;
         }
-        feed.ImageData = request.ImageData;
-        feed.VideoUrl = request.VideoUrl;
-        await _feedRepository.UpdateVideoFeedAsync(feed);
+        if (request.VideoUrl is not null) { 
+            feed.VideoUrl = request.VideoUrl;
+        }
+        await _feedRepository.UpdateAsync(feed);
         _logger.LogInformation("Video feed {FeedId} updated successfully by user {UserId}.", feed.Id, _authService.UserId ?? -1);
-        return MapToFeedDto(feed);
+        return MapToResponse(feed);
     }
 
-    private async Task<Domain.Feed> ValidateRequestAndGetUpdatedFeed(UpdateFeedCommand request, Func<int, Task<Domain.Feed?>> getFeedFunc)
+    private async Task<TFeed> ValidateRequestAndGetUpdatedFeed<TFeed>(UpdateFeedCommand request) where TFeed : Domain.Feed
     {
         var validator = new UpdateFeedCommandValidator();
         var validationResult = await validator.ValidateAsync(request);
@@ -78,11 +77,16 @@ internal class UpdateFeedCommandHandler :
             _logger.LogWarning("Unauthorized attempt to create a feed.");
             throw new BadRequestException("User must be authenticated to create a feed.");
         }
-        var feed = await getFeedFunc(request.Id);
+        var feed = await _feedRepository.GetByIdAsync(request.Id);
         if (feed == null)
         {
             throw new NotFoundException(nameof(Domain.Feed), request.Id);
         }
+        if (feed is not TFeed)
+        {
+            throw new BadRequestException($"Feed is not of type {typeof(TFeed).Name}.");
+        }
+        
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot update a deleted feed.");
@@ -92,20 +96,21 @@ internal class UpdateFeedCommandHandler :
             _logger.LogWarning("User {UserId} attempted to update feed {FeedId} without permission.", userId, feed.Id);
             throw new BadRequestException("User does not have permission to update this feed.");
         }
-        feed.Title = request.Title;
-        feed.Content = request.Content;
-        return feed;
+        if (request.Title is not null) { 
+            feed.Title = request.Title;
+        }
+        if (request.Content is not null) { 
+            feed.Content = request.Content;
+        }
+        return (TFeed)feed;
     }
 
-    private FeedDto MapToFeedDto(Domain.Feed feed)
+    private UpdateFeedCommandResponse MapToResponse(Domain.Feed feed)
     {
-        return new FeedDto
+        return new UpdateFeedCommandResponse
         {
             Id = feed.Id,
             Title = feed.Title,
-            Content = feed.Content,
-            AuthorId = feed.AuthorId,
-            AuthorUserName = _authService.UserName ?? "Unknown",
             PublishedAt = feed.PublishedAt
         };
     }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-public record CreateVideoFeedCommand : CreateImageFeedCommand, IRequest<FeedDto>
+public record CreateVideoFeedCommand : CreateImageFeedCommand, IRequest<CreateFeedCommandResponse>
 {
     public string VideoUrl { get; set; } = default!;
 }
