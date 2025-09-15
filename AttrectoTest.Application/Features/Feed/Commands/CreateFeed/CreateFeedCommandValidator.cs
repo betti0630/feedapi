@@ -1,4 +1,5 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
 using FluentValidation;
 
@@ -14,5 +15,20 @@ public class CreateFeedCommandValidator : AbstractValidator<CreateFeedCommand>
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("Content is required!")
             .MaximumLength(5000).WithMessage("Content maximum length is 5000 characters!");
+    }
+}
+
+public class CreateVideoFeedCommandValidator : AbstractValidator<CreateVideoFeedCommand>
+{
+    public CreateVideoFeedCommandValidator()
+    {
+        Include(new CreateFeedCommandValidator());
+
+        RuleFor(x => x.VideoUrl)
+            .NotEmpty().WithMessage("Video URL is required!")
+            .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out var result)
+                         && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
+            .WithMessage("Video must be a valid URL!");
+
     }
 }

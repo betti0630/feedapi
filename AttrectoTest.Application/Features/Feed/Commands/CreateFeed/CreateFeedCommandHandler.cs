@@ -44,7 +44,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
 
     public async Task<CreateFeedCommandResponse> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
     {
-        var validator = new CreateFeedCommandValidator();
+        var validator = new CreateVideoFeedCommandValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
         if (validationResult.Errors.Count != 0)
         {

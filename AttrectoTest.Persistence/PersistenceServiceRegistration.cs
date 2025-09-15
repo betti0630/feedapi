@@ -41,8 +41,6 @@ public static class PersistenceServiceRegistration
             {
                 db.Database.Migrate();
                 Console.WriteLine("Migration is successful.");
-                var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
-                userService.AddNewUser("test", "Passw0rd!", "User").Wait();
                 break;
             }
             catch (Exception ex)
@@ -53,6 +51,11 @@ public static class PersistenceServiceRegistration
                 Thread.Sleep(delay);
             }
         }
+
+        var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+        var seeder = new Seed.DbSeeder(dbContext, userService);
+        seeder.SeedAsync().Wait();
     }
 
 }

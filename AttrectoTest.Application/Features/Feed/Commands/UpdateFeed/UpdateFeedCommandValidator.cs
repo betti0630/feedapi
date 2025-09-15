@@ -14,5 +14,20 @@ public class UpdateFeedCommandValidator : AbstractValidator<UpdateFeedCommand>
             .MaximumLength(5000).WithMessage("Content maximum length is 5000 characters!");
         RuleFor(x => x.UserId)
             .GreaterThan(0).WithMessage("User must be authenticated to update a feed.");
+
+    }
+}
+
+public class UpdateVideoFeedCommandValidator : AbstractValidator<UpdateVideoFeedCommand>
+{
+    public UpdateVideoFeedCommandValidator()
+    {
+        Include(new UpdateFeedCommandValidator());
+
+        RuleFor(x => x.VideoUrl)
+            .Must(uri => uri is null || Uri.TryCreate(uri, UriKind.Absolute, out var result)
+                         && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
+            .WithMessage("Video must be a valid URL!");
+
     }
 }
