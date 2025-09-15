@@ -14,7 +14,9 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging(feeds, request);
        
-        var items = feeds.Select(feed => new FeedDto()
+        var items = feeds.ToList().Select(feed => { 
+            FeedDto? dto; 
+            dto = new FeedDto()
         {
             Id = feed.Id,
             Title = feed.Title,
@@ -23,8 +25,11 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
             AuthorUserName = feed.Author.UserName,
             PublishedAt = feed.PublishedAt,
             IsOwnFeed = feed.AuthorId == request.UserId
-        }).ToList();
+        };
+            return dto; }).ToList();
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return null;      
     }
+
+
 }

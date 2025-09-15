@@ -1,4 +1,5 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Features.Feed.Mappers;
 using AttrectoTest.Application.Helpers;
 using AttrectoTest.Application.Identity;
 using AttrectoTest.Application.Models;
@@ -33,6 +34,8 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAppUserService, AppUserService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserIdBehavior<,>));
+
+        services.AddScoped<FeedMapper>();
 
         var jwt = configuration.GetSection("Jwt");
         services.Configure<JwtSettings>(jwt);

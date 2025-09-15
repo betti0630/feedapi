@@ -2,6 +2,7 @@
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
+using AttrectoTest.Application.Features.Feed.Mappers;
 using AttrectoTest.Application.Features.Feed.Queries.Base;
 using AttrectoTest.Application.Models;
 
@@ -10,7 +11,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal class ListFeedsQueryHandler(IFeedRepository feedRepository, FeedMapper mapper) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
@@ -33,16 +34,7 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository) : ListBaseQ
             default:
                 throw new BadRequestException("Invalid sort option.");
         }
-        var items = feeds.Select(feed => new FeedDto()
-        {
-            Id = feed.Id,
-            Title = feed.Title,
-            Content = feed.Content,
-            AuthorId = feed.AuthorId,
-            AuthorUserName = feed.Author.UserName,
-            PublishedAt = feed.PublishedAt,
-            IsOwnFeed = feed.AuthorId == request.UserId
-        }).ToList();
+        var items = feeds.ToList().Select(f => mapper.MapFeedToDto(f, request.UserId)).ToList();
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return result;      
     }

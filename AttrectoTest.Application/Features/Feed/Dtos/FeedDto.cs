@@ -1,6 +1,12 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace AttrectoTest.Application.Features.Feed.Dtos;
 
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+[JsonDerivedType(typeof(FeedDto), "text")]
+[JsonDerivedType(typeof(ImageFeedDto), "image")]
+[JsonDerivedType(typeof(VideoFeedDto), "video")]
 public record FeedDto
 {
     public int Id { get; set; }
