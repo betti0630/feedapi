@@ -26,15 +26,31 @@ internal class FeedRepository(TestDbContext dbContext) : GenericRepository<Feed>
         return await _dbContext.Set<FeedLike>().CountAsync(fl => fl.FeedId == feedId, cancellationToken);
     }
 
-    public async Task AddLikeAsync(FeedLike feedLike, CancellationToken cancellationToken = default)
+    public async Task AddLikeAsync(int feedId, int userId, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Set<FeedLike>().AddAsync(feedLike, cancellationToken);
+        if (await _dbContext.Set<FeedLike>().AnyAsync(fl => fl.FeedId == feedId && fl.UserId == userId, cancellationToken))
+        {
+            return;
+        }
+        await _dbContext.Set<FeedLike>().AddAsync(new FeedLike
+        {
+            FeedId = feedId,
+            UserId = userId
+        }, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task RemoveLikeAsync(FeedLike feedLike, CancellationToken cancellationToken = default)
+    public async Task RemoveLikeAsync(int feedId, int userId, CancellationToken cancellationToken = default)
     {
-        _dbContext.Set<FeedLike>().Remove(feedLike);
+        if (!await _dbContext.Set<FeedLike>().AnyAsync(fl => fl.FeedId == feedId && fl.UserId == userId, cancellationToken))
+        {
+            return;
+        }
+        _dbContext.Set<FeedLike>().Remove(new FeedLike
+        {
+            FeedId = feedId,
+            UserId = userId
+        });
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

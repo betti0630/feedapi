@@ -17,6 +17,7 @@ internal class DeleteLikeCommandHandler(IFeedRepository feedRepository, IAppLogg
         {
             throw new BadRequestException("Cannot update a deleted feed.");
         }
-        logger.LogInformation("Feed {FeedId} liked successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.RemoveLikeAsync(request.FeedId, request.UserId, cancellationToken);
+        logger.LogInformation("Feed {FeedId} like removed successfully by user {UserId}.", feed.Id, request.UserId);
     }
 }

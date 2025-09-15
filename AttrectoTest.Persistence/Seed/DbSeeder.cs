@@ -24,12 +24,6 @@ internal class DbSeeder(TestDbContext dbContext, IAppUserService userService)
             ("admin", "AdminPassw0rd!", "Admin")
         };
         
-        
-        
-        
-        
-        
-        
         foreach (var (userName, password, role) in users)
         {
             await userService.AddNewUser(userName, password, role);
