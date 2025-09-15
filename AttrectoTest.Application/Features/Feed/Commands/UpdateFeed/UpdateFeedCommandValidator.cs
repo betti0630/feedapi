@@ -12,5 +12,7 @@ public class UpdateFeedCommandValidator : AbstractValidator<UpdateFeedCommand>
             .MaximumLength(100).WithMessage("Title maximum length is 100 characters!");
         RuleFor(x => x.Content)
             .MaximumLength(5000).WithMessage("Content maximum length is 5000 characters!");
+        RuleFor(x => x.UserId)
+            .GreaterThan(0).WithMessage("User must be authenticated to update a feed.");
     }
 }

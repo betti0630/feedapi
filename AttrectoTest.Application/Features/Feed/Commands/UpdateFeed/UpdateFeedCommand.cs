@@ -1,10 +1,10 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
+﻿using AttrectoTest.Application.Features.Base;
 
 using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
-public record UpdateFeedCommand : IRequest<UpdateFeedCommandResponse>
+public record UpdateFeedCommand : UserRequest, IRequest<UpdateFeedCommandResponse>
 {
     public int Id { get; set; }
     public string? Title { get; set; }

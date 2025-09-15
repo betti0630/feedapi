@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using AttrectoTest.Application.Contracts.Identity;
+
+using FluentValidation;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 

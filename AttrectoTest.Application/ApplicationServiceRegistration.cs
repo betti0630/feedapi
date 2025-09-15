@@ -1,15 +1,16 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Helpers;
 using AttrectoTest.Application.Identity;
 using AttrectoTest.Application.Models;
 using AttrectoTest.Domain;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-
-using MediatR;
 
 using System.Reflection;
 using System.Text;
@@ -30,6 +31,8 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAuthUserService, AuthUserService>();
         services.AddScoped<IAppUserService, AppUserService>();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserIdBehavior<,>));
 
         var jwt = configuration.GetSection("Jwt");
         services.Configure<JwtSettings>(jwt);
