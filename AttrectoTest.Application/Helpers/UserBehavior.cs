@@ -33,6 +33,6 @@ public class UserIdBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, T
             req.UserName = httpContext?.User?.FindFirstValue(ClaimTypes.Name);
         }
 
-        return await next();
+        return await next(cancellationToken);
     }
 }

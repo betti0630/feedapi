@@ -1,11 +1,8 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
-using AttrectoTest.Application.Models;
+﻿using AttrectoTest.Application.Features.Base;
 
-using MediatR;
+namespace AttrectoTest.Application.Features.Feed.Queries.Base;
 
-namespace AttrectoTest.Application.Features.Feed.Queries.ListComments;
-
-public abstract class ListBaseQuery 
+public abstract record ListBaseQuery : UserRequest
 {
     public int? Page { get; set; } 
     public int? PageSize { get; set; }

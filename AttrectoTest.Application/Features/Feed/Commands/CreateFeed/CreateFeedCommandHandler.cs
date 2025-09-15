@@ -23,8 +23,8 @@ internal class CreateFeedCommandHandler :
     public async Task<CreateFeedCommandResponse> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
-        if (validationResult.Errors.Any())
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }
@@ -38,8 +38,8 @@ internal class CreateFeedCommandHandler :
     public async Task<CreateFeedCommandResponse> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
-        if (validationResult.Errors.Any())
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }
@@ -54,8 +54,8 @@ internal class CreateFeedCommandHandler :
     public async Task<CreateFeedCommandResponse> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
-        if (validationResult.Errors.Any())
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }

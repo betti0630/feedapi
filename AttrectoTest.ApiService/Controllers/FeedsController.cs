@@ -261,6 +261,10 @@ namespace AttrectoTest.ApiService.Controllers
         [HttpPost, Route("{feedId}/comments", Name = "commentsPOST")]
         public async Task<ActionResult<CommentDto>> CommentsPOST([FromBody] CreateCommentCommand request, int feedId, CancellationToken cancellationToken)
         {
+            if (feedId != request.FeedId)
+            {
+                throw new ArgumentException("Feed ID mismatch");
+            }
             var result = await _mediator.Send(request, cancellationToken);
             return CreatedAtAction(nameof(CommentsPOST), new { id = result.Id });
         }
@@ -272,6 +276,10 @@ namespace AttrectoTest.ApiService.Controllers
         [HttpPatch, Route("{feedId}/comments/{commentId}", Name = "commentsPATCH")]
         public async Task<ActionResult<CommentDto>> CommentsPATCH([FromBody] UpdateCommentCommand request, int feedId, int commentId, CancellationToken cancellationToken)
         {
+            if (feedId != request.FeedId)
+            {
+                throw new ArgumentException("Feed ID mismatch");
+            }
             if (commentId != request.CommentId)
             {
                 throw new ArgumentException("Comment ID mismatch");

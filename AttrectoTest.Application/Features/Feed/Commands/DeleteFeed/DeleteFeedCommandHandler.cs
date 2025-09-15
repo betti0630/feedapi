@@ -12,49 +12,35 @@ internal class DeleteFeedCommandHandler : IRequestHandler<DeleteFeedCommand>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<DeleteFeedCommandHandler> _logger;
-    private readonly IAuthUserService _authService;
 
-    public DeleteFeedCommandHandler(IFeedRepository feedRepository, IAuthUserService authService,
-        IAppLogger<DeleteFeedCommandHandler> logger)
+    public DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger)
     {
         _feedRepository = feedRepository;
-        _authService = authService;
         _logger = logger;
     }
 
     public async Task Handle(DeleteFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new DeleteFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.Errors.Any()) { 
+        if (validationResult.Errors.Count != 0) { 
             throw new BadRequestException("Invalid feed", validationResult);
         }
-        var userId = _authService.UserId;
 
-        if (userId == null || userId <= 0)
-        {
-            _logger.LogWarning("Unauthorized attempt to create a feed.");
-            throw new BadRequestException("User must be authenticated to create a feed.");
-        }
-
-        var feed = await _feedRepository.GetByIdAsync(request.Id);
-        if (feed == null)
-        {
-            throw new NotFoundException(nameof(Domain.Feed), request.Id);
-        }
+        var feed = await _feedRepository.GetByIdAsync(request.Id) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot delete a deleted feed.");
         }
-        if (feed.AuthorId != userId)
+        if (feed.AuthorId != request.UserId)
         {
-            _logger.LogWarning("User {UserId} attempted to delete feed {FeedId} without permission.", userId, feed.Id);
+            _logger.LogWarning("User {UserId} attempted to delete feed {FeedId} without permission.", request.UserId, feed.Id);
             throw new BadRequestException("User does not have permission to delete this feed.");
         }
 
         feed.IsDeleted = true;
         await _feedRepository.UpdateAsync(feed);
-        _logger.LogInformation("Feed {FeedId} deleted successfully by user {UserId}.", feed.Id, userId);
+        _logger.LogInformation("Feed {FeedId} deleted successfully by user {UserId}.", feed.Id, request.UserId);
     }
 }

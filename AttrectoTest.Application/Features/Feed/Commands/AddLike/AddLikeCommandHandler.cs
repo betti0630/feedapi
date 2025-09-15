@@ -11,29 +11,22 @@ internal class AddLikeCommandHandler : IRequestHandler<AddLikeCommand>
 {
     private readonly IFeedRepository _feedRepository;
     private readonly IAppLogger<AddLikeCommandHandler> _logger;
-    private readonly IAuthUserService _authService;
 
-    public AddLikeCommandHandler(IFeedRepository feedRepository, IAuthUserService authService,
-        IAppLogger<AddLikeCommandHandler> logger)
+
+    public AddLikeCommandHandler(IFeedRepository feedRepository, IAppLogger<AddLikeCommandHandler> logger)
     {
         _feedRepository = feedRepository;
-        _authService = authService;
         _logger = logger;
     }
 
     public async Task Handle(AddLikeCommand request, CancellationToken cancellationToken)
     {
 
-        var feed = await _feedRepository.GetByIdAsync(request.FeedId);
-        if (feed == null)
-        {
-            throw new NotFoundException(nameof(Domain.Feed), request.FeedId);
-        }
+        var feed = await _feedRepository.GetByIdAsync(request.FeedId) ?? throw new NotFoundException(nameof(Domain.Feed), request.FeedId);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot update a deleted feed.");
         }
-        var userId = _authService.UserId;
-        _logger.LogInformation("Feed {FeedId} liked successfully by user {UserId}.", feed.Id, userId ?? -1);
+        _logger.LogInformation("Feed {FeedId} liked successfully by user {UserId}.", feed.Id, request.UserId);
     }
 }

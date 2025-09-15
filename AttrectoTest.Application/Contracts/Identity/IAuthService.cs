@@ -6,5 +6,4 @@ public interface IAuthService
 {
     public Task<bool> ValidateUser(string userName, string password);
     public Task<(string token, DateTime expires)> GenerateJwtToken(string userName);
-    public Task<AppUser?> GetCurrentUser();
 }

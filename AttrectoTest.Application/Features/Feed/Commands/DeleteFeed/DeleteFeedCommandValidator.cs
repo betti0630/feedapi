@@ -8,5 +8,7 @@ public class DeleteFeedCommandValidator : AbstractValidator<DeleteFeedCommand>
     {
         RuleFor(x => x.Id)
             .GreaterThan(0).WithMessage("Id must be greater than 0!");
+        RuleFor(x => x.UserId)
+            .GreaterThan(0).WithMessage("User must be authenticated to delete a feed.");
     }
 }

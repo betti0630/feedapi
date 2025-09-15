@@ -4,10 +4,7 @@ using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Domain;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-
-using System.Security.Claims;
 
 namespace AttrectoTest.Application.Identity;
 
@@ -55,16 +52,6 @@ internal class AuthService : IAuthService
         }
 
         return _authUserService.GenerateJwtToken(user);
-    }
-
-    public async Task<AppUser?> GetCurrentUser()     {
-        var user = await _db.GetByAsync(u => u.Id == _authUserService.UserId);
-        if (user is null)
-        {
-            _logger.LogWarning("Current user with ID {UserId} not found", _authUserService.UserId?.ToString() ?? "null");
-            throw new NotFoundException(nameof(AppUser), _authUserService.UserId);
-        }
-        return user;
     }
 
 }

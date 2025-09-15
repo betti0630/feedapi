@@ -1,5 +1,4 @@
 ﻿using AttrectoTest.Application.Exceptions;
-using AttrectoTest.Application.Features.Feed.Queries.ListComments;
 using AttrectoTest.Application.Models;
 using AttrectoTest.Domain;
 using AttrectoTest.Domain.Common;

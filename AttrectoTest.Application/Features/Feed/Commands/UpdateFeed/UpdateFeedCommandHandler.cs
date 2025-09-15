@@ -24,9 +24,9 @@ internal class UpdateFeedCommandHandler :
     public async Task<UpdateFeedCommandResponse> Handle(UpdateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.Errors.Any())
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }
@@ -47,9 +47,9 @@ internal class UpdateFeedCommandHandler :
     public async Task<UpdateFeedCommandResponse> Handle(UpdateImageFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.Errors.Any())
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }
@@ -73,9 +73,9 @@ internal class UpdateFeedCommandHandler :
     public async Task<UpdateFeedCommandResponse> Handle(UpdateVideoFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        if (validationResult.Errors.Any())
+        if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }

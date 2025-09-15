@@ -13,12 +13,10 @@ namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 internal class ListFeedsQueryHandler : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     private readonly IFeedRepository _feedRepository;
-    private readonly IAuthUserService _authUserService;
 
-    public ListFeedsQueryHandler(IFeedRepository feedRepository, IAuthUserService authUserService)
+    public ListFeedsQueryHandler(IFeedRepository feedRepository)
     {
         _feedRepository = feedRepository;
-        _authUserService = authUserService;
     }
 
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
@@ -50,7 +48,7 @@ internal class ListFeedsQueryHandler : ListBaseQueryHandler<ListFeedsQuery>, IRe
             AuthorId = feed.AuthorId,
             AuthorUserName = feed.Author.UserName,
             PublishedAt = feed.PublishedAt,
-            IsOwnFeed = feed.AuthorId == _authUserService.UserId
+            IsOwnFeed = feed.AuthorId == request.UserId
         }).ToList();
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return result;      
