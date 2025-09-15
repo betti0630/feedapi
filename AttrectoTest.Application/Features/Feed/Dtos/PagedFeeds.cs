@@ -2,10 +2,6 @@
 
 namespace AttrectoTest.Application.Features.Feed.Dtos;
 
-public class PagedFeeds : PagedDto<FeedDto>
+public class PagedFeeds(List<FeedDto> @items, int? @page, int? @pageSize, int @total) : PagedDto<FeedDto>(items, page, pageSize, total)
 {
-    public PagedFeeds(List<FeedDto> @items, int? @page, int? @pageSize, int @total) : base(items, page, pageSize, total)
-    {
-    }
-
 }

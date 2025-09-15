@@ -8,28 +8,19 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace AttrectoTest.Application.Identity;
 
-internal class AppUserService : IAppUserService
+internal class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db) : IAppUserService
 {
-    private readonly IPasswordHasher<AppUser> _hasher;
-    private readonly IGenericRepository<AppUser> _db;
-
-    public AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db)
-    {
-        _hasher = hasher;
-        _db = db;
-    }
-
     public async Task AddNewUser(string userName, string password, string? roles)
     {
-        if (!await _db.AnyAsync())
+        if (!await db.AnyAsync())
         {
             var user = new AppUser
             {
                 UserName = userName,
                 RolesCsv = roles
             };
-            user.PasswordHash = _hasher.HashPassword(user, password);
-            await _db.CreateAsync(user);
+            user.PasswordHash = hasher.HashPassword(user, password);
+            await db.CreateAsync(user);
         }
     }
 }

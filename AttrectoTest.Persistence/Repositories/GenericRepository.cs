@@ -8,30 +8,25 @@ using System.Linq.Expressions;
 
 namespace AttrectoTest.Persistence.Repositories;
 
-internal class GenericRepository<T> : IGenericRepository<T> where T : AppEntity
+internal class GenericRepository<T>(TestDbContext dbContext) : IGenericRepository<T> where T : AppEntity
 {
-    protected readonly TestDbContext _dbContext;
+    protected readonly TestDbContext _dbContext = dbContext;
 
-    public GenericRepository(TestDbContext dbContext)
+    public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {
-        _dbContext = dbContext;
+        await _dbContext.Set<T>().AddAsync(entity, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task CreateAsync(T entity)
-    {
-        await _dbContext.Set<T>().AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteAsync(T entity)
+    public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
         _dbContext.Set<T>().Remove(entity);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<T>> GetAsync()
+    public async Task<IReadOnlyList<T>> GetAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
+        return await _dbContext.Set<T>().AsNoTracking().ToListAsync(cancellationToken: cancellationToken);
     }
 
     public IQueryable<T> List()
@@ -40,24 +35,24 @@ internal class GenericRepository<T> : IGenericRepository<T> where T : AppEntity
     }
 
 
-    public Task<bool> AnyAsync()     {
-        return _dbContext.Set<T>().AnyAsync();
+    public Task<bool> AnyAsync(CancellationToken cancellationToken = default)     {
+        return _dbContext.Set<T>().AnyAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<T?> GetByAsync(Expression<Func<T, bool>> predicate)
+    public async Task<T?> GetByAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate);
+        return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
     }
 
-    public async Task<T?> GetByIdAsync(int id)
+    public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await GetByAsync(x => x.Id == id);
+        return await GetByAsync(x => x.Id == id, cancellationToken);
     }
 
 
-    public async Task UpdateAsync(T entity)
+    public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

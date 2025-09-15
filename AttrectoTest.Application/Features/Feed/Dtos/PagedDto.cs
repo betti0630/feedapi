@@ -2,19 +2,12 @@
 
 namespace AttrectoTest.Application.Features.Feed.Dtos;
 
-public abstract class PagedDto<T>
+public abstract class PagedDto<T>(List<T> @items, int? @page, int? @pageSize, int @total)
 {
-    public PagedDto(List<T> @items, int? @page, int? @pageSize, int @total)
-    {
-        this.Items = @items;
-        this.Page = @page;
-        this.PageSize = @pageSize;
-        this.Total = @total;
-    }
     [Required]
-    public List<T> Items { get; }
-    public int? Page { get; }
-    public int? PageSize { get; }
-    public int Total { get; }
+    public List<T> Items { get; } = @items;
+    public int? Page { get; } = @page;
+    public int? PageSize { get; } = @pageSize;
+    public int Total { get; } = @total;
 }
 

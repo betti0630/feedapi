@@ -8,17 +8,8 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 
-internal class DeleteFeedCommandHandler : IRequestHandler<DeleteFeedCommand>
+internal class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger) : IRequestHandler<DeleteFeedCommand>
 {
-    private readonly IFeedRepository _feedRepository;
-    private readonly IAppLogger<DeleteFeedCommandHandler> _logger;
-
-    public DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger)
-    {
-        _feedRepository = feedRepository;
-        _logger = logger;
-    }
-
     public async Task Handle(DeleteFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new DeleteFeedCommandValidator();
@@ -28,19 +19,19 @@ internal class DeleteFeedCommandHandler : IRequestHandler<DeleteFeedCommand>
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await _feedRepository.GetByIdAsync(request.Id) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot delete a deleted feed.");
         }
         if (feed.AuthorId != request.UserId)
         {
-            _logger.LogWarning("User {UserId} attempted to delete feed {FeedId} without permission.", request.UserId, feed.Id);
+            logger.LogWarning("User {UserId} attempted to delete feed {FeedId} without permission.", request.UserId, feed.Id);
             throw new BadRequestException("User does not have permission to delete this feed.");
         }
 
         feed.IsDeleted = true;
-        await _feedRepository.UpdateAsync(feed);
-        _logger.LogInformation("Feed {FeedId} deleted successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.UpdateAsync(feed, cancellationToken);
+        logger.LogInformation("Feed {FeedId} deleted successfully by user {UserId}.", feed.Id, request.UserId);
     }
 }

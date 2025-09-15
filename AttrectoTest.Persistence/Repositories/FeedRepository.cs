@@ -5,10 +5,6 @@ using AttrectoTest.Persistence.DatabaseContext;
 
 namespace AttrectoTest.Persistence.Repositories;
 
-internal class FeedRepository : GenericRepository<Feed>, IFeedRepository
+internal class FeedRepository(TestDbContext dbContext) : GenericRepository<Feed>(dbContext), IFeedRepository
 {
-    public FeedRepository(TestDbContext dbContext) : base(dbContext)
-    {
-    }
-    
 }

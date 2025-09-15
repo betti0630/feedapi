@@ -6,20 +6,11 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-internal class CreateFeedCommandHandler : 
+internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger) : 
     IRequestHandler<CreateFeedCommand, CreateFeedCommandResponse>,
     IRequestHandler<CreateImageFeedCommand, CreateFeedCommandResponse>,
     IRequestHandler<CreateVideoFeedCommand, CreateFeedCommandResponse>
 {
-    private readonly IFeedRepository _feedRepository;
-    private readonly IAppLogger<CreateFeedCommandHandler> _logger;
-
-    public CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger)
-    {
-        _feedRepository = feedRepository;
-        _logger = logger;
-    }
-
     public async Task<CreateFeedCommandResponse> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
@@ -30,8 +21,8 @@ internal class CreateFeedCommandHandler :
         }
         
         var feed = CreateFeedFromRequest<Domain.Feed>(request);
-        await _feedRepository.CreateAsync(feed);
-        _logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.CreateAsync(feed, cancellationToken);
+        logger.LogInformation("Feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -46,8 +37,8 @@ internal class CreateFeedCommandHandler :
         
         var feed = CreateFeedFromRequest<Domain.ImageFeed>(request);
         feed.ImageData = request.ImageData;
-        await _feedRepository.CreateAsync(feed);
-        _logger.LogInformation("Image feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.CreateAsync(feed, cancellationToken);
+        logger.LogInformation("Image feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -63,12 +54,12 @@ internal class CreateFeedCommandHandler :
         var feed = CreateFeedFromRequest<Domain.VideoFeed>(request);
         feed.ImageData = request.ImageData;
         feed.VideoUrl = request.VideoUrl;
-        await _feedRepository.CreateAsync(feed);
-        _logger.LogInformation("Video feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.CreateAsync(feed, cancellationToken);
+        logger.LogInformation("Video feed {FeedId} created successfully by user {UserId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
-    private TFeed CreateFeedFromRequest<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
+    private static TFeed CreateFeedFromRequest<TFeed>(CreateFeedCommand request) where TFeed : Domain.Feed
     {
 
         var feed = Activator.CreateInstance<TFeed>() as Domain.Feed;
@@ -80,7 +71,7 @@ internal class CreateFeedCommandHandler :
         return (TFeed)feed;
     }
 
-    private CreateFeedCommandResponse MapToResponse(Domain.Feed feed)
+    private static CreateFeedCommandResponse MapToResponse(Domain.Feed feed)
     {
         return new CreateFeedCommandResponse
         {

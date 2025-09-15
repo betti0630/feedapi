@@ -7,25 +7,16 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
 
-internal class DeleteLikeCommandHandler : IRequestHandler<DeleteLikeCommand>
+internal class DeleteLikeCommandHandler(IFeedRepository feedRepository, IAppLogger<AddLikeCommandHandler> logger) : IRequestHandler<DeleteLikeCommand>
 {
-    private readonly IFeedRepository _feedRepository;
-    private readonly IAppLogger<AddLikeCommandHandler> _logger;
-
-    public DeleteLikeCommandHandler(IFeedRepository feedRepository, IAppLogger<AddLikeCommandHandler> logger)
-    {
-        _feedRepository = feedRepository;
-        _logger = logger;
-    }
-
     public async Task Handle(DeleteLikeCommand request, CancellationToken cancellationToken)
     {
 
-        var feed = await _feedRepository.GetByIdAsync(request.FeedId) ?? throw new NotFoundException(nameof(Domain.Feed), request.FeedId);
+        var feed = await feedRepository.GetByIdAsync(request.FeedId, cancellationToken) ?? throw new NotFoundException(nameof(Domain.Feed), request.FeedId);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot update a deleted feed.");
         }
-        _logger.LogInformation("Feed {FeedId} liked successfully by user {UserId}.", feed.Id, request.UserId);
+        logger.LogInformation("Feed {FeedId} liked successfully by user {UserId}.", feed.Id, request.UserId);
     }
 }

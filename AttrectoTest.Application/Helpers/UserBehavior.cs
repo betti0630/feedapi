@@ -10,21 +10,14 @@ using System.Security.Claims;
 
 namespace AttrectoTest.Application.Helpers;
 
-public class UserIdBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public class UserIdBehavior<TRequest, TResponse>(IHttpContextAccessor httpContextAccessor) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public UserIdBehavior(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (request is UserRequest req)
         {
-            var httpContext = _httpContextAccessor.HttpContext;
+            var httpContext = httpContextAccessor.HttpContext;
             var userId = httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (int.TryParse(userId, out int uid))
             {

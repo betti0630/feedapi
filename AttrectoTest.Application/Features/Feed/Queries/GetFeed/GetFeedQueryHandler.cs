@@ -8,18 +8,11 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
-internal class GetFeedQueryHandler : IRequestHandler<GetFeedQuery, FeedDto>
+internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHandler<GetFeedQuery, FeedDto>
 {
-    private readonly IFeedRepository _feedRepository;
-
-    public GetFeedQueryHandler(IFeedRepository feedRepository)
-    {
-        _feedRepository = feedRepository;
-    }
-
     public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {
-        var feed = await _feedRepository.GetByIdAsync(request.Id) ?? throw new NotFoundException(nameof(Feed), request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Feed), request.Id);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot retrieve a deleted feed.");

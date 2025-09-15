@@ -7,18 +7,11 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListComments;
 
-internal class ListCommentsQueryHandler : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
+internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
 {
-    private readonly IFeedRepository _feedRepository;
-
-    public ListCommentsQueryHandler(IFeedRepository feedRepository)
-    {
-        _feedRepository = feedRepository;
-    }
-
     public async Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)
     {
-        var feeds = _feedRepository.List().Where(x => !x.IsDeleted);
+        var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging(feeds, request);
        
         var items = feeds.Select(feed => new FeedDto()

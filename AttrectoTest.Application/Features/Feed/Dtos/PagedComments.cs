@@ -1,10 +1,5 @@
 ﻿namespace AttrectoTest.Application.Features.Feed.Dtos;
 
-public class PagedComments : PagedDto<CommentDto>
+public class PagedComments(List<CommentDto> @items, int? @page, int? @pageSize, int @total) : PagedDto<CommentDto>(items, page, pageSize, total)
 {
-    public PagedComments(List<CommentDto> @items, int? @page, int? @pageSize, int @total) : base(items, page, pageSize, total)
-    {
-
-    }
-
 }

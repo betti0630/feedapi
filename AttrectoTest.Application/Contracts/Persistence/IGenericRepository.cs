@@ -6,12 +6,12 @@ namespace AttrectoTest.Application.Contracts.Persistence;
 
 public interface IGenericRepository<T> where T : AppEntity
 {
-    Task<IReadOnlyList<T>> GetAsync();
-    Task<T?> GetByAsync(Expression<Func<T, bool>> predicate);
-    Task<T?> GetByIdAsync(int id);
+    Task<IReadOnlyList<T>> GetAsync(CancellationToken cancellationToken = default);
+    Task<T?> GetByAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     IQueryable<T> List();
-    Task<bool> AnyAsync();
-    Task CreateAsync(T entity);
-    Task UpdateAsync(T entity);
-    Task DeleteAsync(T entity);
+    Task<bool> AnyAsync(CancellationToken cancellationToken = default);
+    Task CreateAsync(T entity, CancellationToken cancellationToken = default);
+    Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
+    Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
 }

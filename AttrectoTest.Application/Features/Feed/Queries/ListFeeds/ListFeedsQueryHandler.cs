@@ -10,18 +10,11 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal class ListFeedsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
-    private readonly IFeedRepository _feedRepository;
-
-    public ListFeedsQueryHandler(IFeedRepository feedRepository)
-    {
-        _feedRepository = feedRepository;
-    }
-
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
-        var feeds = _feedRepository.List().Where(x => !x.IsDeleted);
+        var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging<Domain.Feed>(feeds, request);
 
         switch (request.Sort) 

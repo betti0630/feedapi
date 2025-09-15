@@ -7,20 +7,11 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
-internal class UpdateFeedCommandHandler : 
+internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<UpdateFeedCommandHandler> logger) : 
     IRequestHandler<UpdateFeedCommand, UpdateFeedCommandResponse>,
     IRequestHandler<UpdateImageFeedCommand, UpdateFeedCommandResponse>,
     IRequestHandler<UpdateVideoFeedCommand, UpdateFeedCommandResponse>
 {
-    private readonly IFeedRepository _feedRepository;
-    private readonly IAppLogger<UpdateFeedCommandHandler> _logger;
-
-    public UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<UpdateFeedCommandHandler> logger)
-    {
-        _feedRepository = feedRepository;
-        _logger = logger;
-    }
-
     public async Task<UpdateFeedCommandResponse> Handle(UpdateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateFeedCommandValidator();
@@ -31,7 +22,7 @@ internal class UpdateFeedCommandHandler :
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await _feedRepository.GetByIdAsync(request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken);
         if (feed is not Domain.Feed imageFeed)
         {
             throw new BadRequestException($"Feed is not of type {nameof(Domain.Feed)}.");
@@ -39,8 +30,8 @@ internal class UpdateFeedCommandHandler :
         ValidateFeed(feed, request);
         FillFeedByRequest(feed, request);
 
-        await _feedRepository.UpdateAsync(feed);
-        _logger.LogInformation("Feed {FeedId} updated successfully by user {UserId}.", feed.Id, request.UserId);
+        await feedRepository.UpdateAsync(feed, cancellationToken);
+        logger.LogInformation("Feed {FeedId} updated successfully by user {UserId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -54,7 +45,7 @@ internal class UpdateFeedCommandHandler :
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await _feedRepository.GetByIdAsync(request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken);
         if (feed is not ImageFeed imageFeed)
         {
             throw new BadRequestException($"Feed is not of type { nameof(ImageFeed) }.");
@@ -65,8 +56,8 @@ internal class UpdateFeedCommandHandler :
         if (request.ImageData is not null) {
             imageFeed.ImageData = request.ImageData;
         }
-        await _feedRepository.UpdateAsync(imageFeed);
-        _logger.LogInformation("Image feed {FeedId} updated successfully by user {UserId}.", imageFeed.Id, request.UserId);
+        await feedRepository.UpdateAsync(imageFeed, cancellationToken);
+        logger.LogInformation("Image feed {FeedId} updated successfully by user {UserId}.", imageFeed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -80,7 +71,7 @@ internal class UpdateFeedCommandHandler :
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await _feedRepository.GetByIdAsync(request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken);
         if (feed is not VideoFeed videoFeed)
         {
             throw new BadRequestException($"Feed is not of type {nameof(VideoFeed)}.");
@@ -94,8 +85,8 @@ internal class UpdateFeedCommandHandler :
         if (request.VideoUrl is not null) {
             videoFeed.VideoUrl = request.VideoUrl;
         }
-        await _feedRepository.UpdateAsync(videoFeed);
-        _logger.LogInformation("Video feed {FeedId} updated successfully by user {UserId}.", videoFeed.Id, request.UserId);
+        await feedRepository.UpdateAsync(videoFeed, cancellationToken);
+        logger.LogInformation("Video feed {FeedId} updated successfully by user {UserId}.", videoFeed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -111,12 +102,12 @@ internal class UpdateFeedCommandHandler :
         }
         if (feed.AuthorId != request.UserId)
         {
-            _logger.LogWarning("User {UserId} attempted to update feed {FeedId} without permission.", request.UserId, feed.Id);
+            logger.LogWarning("User {UserId} attempted to update feed {FeedId} without permission.", request.UserId, feed.Id);
             throw new BadRequestException("User does not have permission to update this feed.");
         }
     }
 
-    private void FillFeedByRequest(Domain.Feed feed, UpdateFeedCommand request) 
+    private static void FillFeedByRequest(Domain.Feed feed, UpdateFeedCommand request) 
     {
         if (request.Title is not null) { 
             feed.Title = request.Title;
@@ -126,7 +117,7 @@ internal class UpdateFeedCommandHandler :
         }
     }
 
-    private UpdateFeedCommandResponse MapToResponse(Domain.Feed feed)
+    private static UpdateFeedCommandResponse MapToResponse(Domain.Feed feed)
     {
         return new UpdateFeedCommandResponse
         {

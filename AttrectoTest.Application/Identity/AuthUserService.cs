@@ -17,16 +17,9 @@ using System.Text;
 
 namespace AttrectoTest.Application.Identity;
 
-internal class AuthUserService : IAuthUserService
+internal class AuthUserService(IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContextAccessor) : IAuthUserService
 {
-    private readonly JwtSettings _jwtSettings;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public AuthUserService(IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContextAccessor)
-    {
-        _jwtSettings = jwtSettings.Value;
-        _httpContextAccessor = httpContextAccessor;   
-    }
+    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
     public (string token, DateTime expires) GenerateJwtToken( AppUser user)
     {
@@ -56,13 +49,13 @@ internal class AuthUserService : IAuthUserService
     {
         get
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (int.TryParse(userId, out int uid)) {
                 return uid;
             }
             return null;
         }
     }
-    public string? UserName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
+    public string? UserName => httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
 
 }

@@ -28,15 +28,8 @@ namespace AttrectoTest.ApiService.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class FeedsController : ControllerBase
+    public class FeedsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-
-        public FeedsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
         /// <summary>
         /// List feeds
@@ -55,7 +48,7 @@ namespace AttrectoTest.ApiService.Controllers
                 PageSize = pageSize,
                 Sort = sort ?? ListSort.CreatedAt_desc
             };
-            var result = await _mediator.Send(query, cancellationToken);
+            var result = await mediator.Send(query, cancellationToken);
             return Ok(result);
         }
 
@@ -67,7 +60,7 @@ namespace AttrectoTest.ApiService.Controllers
         public async Task<ActionResult<FeedDto>> Get(int id, CancellationToken cancellationToken)
         {
             var query = new GetFeedQuery { Id = id };
-            var response = await _mediator.Send(query, cancellationToken);
+            var response = await mediator.Send(query, cancellationToken);
             return Ok(response);
         }
 
@@ -82,7 +75,7 @@ namespace AttrectoTest.ApiService.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<FeedDto>> Post([FromBody] CreateFeedCommand feed, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(feed, cancellationToken);
+            var response = await mediator.Send(feed, cancellationToken);
             return CreatedAtAction(nameof(Post), new { id = response });
         }
 
@@ -102,7 +95,7 @@ namespace AttrectoTest.ApiService.Controllers
                 Content = feed.Content,
                 ImageData = bytes
             };
-            var response = await _mediator.Send(command, cancellationToken);
+            var response = await mediator.Send(command, cancellationToken);
             return CreatedAtAction(nameof(Post), new { id = response });
          }
 
@@ -122,7 +115,7 @@ namespace AttrectoTest.ApiService.Controllers
                 ImageData = bytes,
                 VideoUrl = feed.VideoUrl
             };
-            var response = await _mediator.Send(command, cancellationToken);
+            var response = await mediator.Send(command, cancellationToken);
             return CreatedAtAction(nameof(Post), new { id = response });
         }
 
@@ -137,7 +130,7 @@ namespace AttrectoTest.ApiService.Controllers
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var response = await _mediator.Send(feed, cancellationToken);
+            var response = await mediator.Send(feed, cancellationToken);
             return Ok(response);
         }
 
@@ -162,7 +155,7 @@ namespace AttrectoTest.ApiService.Controllers
             if (feed.File is not null) { 
                 command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             }
-            var response = await _mediator.Send(command, cancellationToken);
+            var response = await mediator.Send(command, cancellationToken);
             return Ok(response);
         }
 
@@ -189,7 +182,7 @@ namespace AttrectoTest.ApiService.Controllers
             {
                 command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
             }
-            var response = await _mediator.Send(command, cancellationToken);
+            var response = await mediator.Send(command, cancellationToken);
             return Ok(response);
         }
 
@@ -201,7 +194,7 @@ namespace AttrectoTest.ApiService.Controllers
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var command = new DeleteFeedCommand { Id = id };
-            await _mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
@@ -216,7 +209,7 @@ namespace AttrectoTest.ApiService.Controllers
         public async Task<IActionResult> LikePOST(int feedId, CancellationToken cancellationToken)
         {
             var command = new AddLikeCommand { FeedId = feedId };
-            await _mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
@@ -229,7 +222,7 @@ namespace AttrectoTest.ApiService.Controllers
         {
 
             var command = new DeleteLikeCommand { FeedId = feedId };
-            await _mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
@@ -250,7 +243,7 @@ namespace AttrectoTest.ApiService.Controllers
                 Page = page ?? 1,
                 PageSize = pageSize ?? 20
             };
-            var result = await _mediator.Send(query, cancellationToken);
+            var result = await mediator.Send(query, cancellationToken);
             return Ok(result);
         }
 
@@ -265,7 +258,7 @@ namespace AttrectoTest.ApiService.Controllers
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
-            var result = await _mediator.Send(request, cancellationToken);
+            var result = await mediator.Send(request, cancellationToken);
             return CreatedAtAction(nameof(CommentsPOST), new { id = result.Id });
         }
 
@@ -284,7 +277,7 @@ namespace AttrectoTest.ApiService.Controllers
             {
                 throw new ArgumentException("Comment ID mismatch");
             }
-            var result = await _mediator.Send(request, cancellationToken);
+            var result = await mediator.Send(request, cancellationToken);
             return Ok(result);
         }
 
@@ -296,7 +289,7 @@ namespace AttrectoTest.ApiService.Controllers
         public async Task<IActionResult> CommentsDELETE(int feedId, int commentId, CancellationToken cancellationToken)
         {
             var command = new DeleteCommentCommand { FeedId = feedId, CommentId = commentId };
-            await _mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
