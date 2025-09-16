@@ -28,4 +28,6 @@ public class Feed : BaseEntity
 
     public ICollection<FeedLike> Likes { get; set; } = new List<FeedLike>();
 
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
 }

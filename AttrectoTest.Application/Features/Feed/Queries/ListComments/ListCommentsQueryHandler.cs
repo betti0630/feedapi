@@ -1,6 +1,8 @@
 ﻿using AttrectoTest.Application.Contracts.Persistence;
+using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Queries.Base;
+using AttrectoTest.Domain;
 
 using MediatR;
 
@@ -11,25 +13,22 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
 {
     public async Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)
     {
-        var feeds = feedRepository.List().Where(x => !x.IsDeleted);
-        feeds = AddPaging(feeds, request);
-       
-        var items = feeds.ToList().Select(feed => { 
-            FeedDto? dto; 
-            dto = new FeedDto()
+        var feeds = feedRepository.List();
+        var feedItem = feeds
+            .Where(x => x.Id == request.FeedId)
+            .Select(f => new { feed = f, comments = f.Comments }).FirstOrDefault()
+            ?? throw new NotFoundException(nameof(Feed), request.FeedId);
+        var feed = feedItem.feed;
+        if (feed.IsDeleted)
         {
-            Id = feed.Id,
-            Title = feed.Title,
-            Content = feed.Content,
-            AuthorId = feed.AuthorId,
-            AuthorUserName = feed.Author.UserName,
-            PublishedAt = feed.PublishedAt,
-            IsOwnFeed = feed.AuthorId == request.UserId
-        };
-            return dto; }).ToList();
-        var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
-        return null;      
+            throw new KeyNotFoundException($"Feed with id {request.FeedId} not found");
+        }
+        var comments = feedItem.comments.AsQueryable();
+        comments = AddPaging(comments, request);
+       
+        var items = comments.ToList()
+            .Select(comment => new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId))
+            .ToList();
+        return new PagedComments(items, request.Page, request.PageSize, feedItem.comments.Count);
     }
-
-
 }

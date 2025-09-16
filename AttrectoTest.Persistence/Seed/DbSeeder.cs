@@ -68,6 +68,14 @@ internal class DbSeeder(TestDbContext dbContext, IAppUserService userService)
         var like5 = new FeedLike { Feed = feed5, User = Bob };
 
         await dbContext.FeedLikes.AddRangeAsync(like1, like2, like3, like4, like5, like6);
+
+        var comment1 = new Comment { Feed = feed1, User = Bob, Content = "Great first post, Alice! Looking forward to more." };
+        var comment2 = new Comment { Feed = feed1, User = Alice, Content = "Thanks for the motivation, Bob! Needed that today." };
+        var comment3 = new Comment { Feed = feed1, User = Bob, Content = "Exciting news! .NET 8 is going to be a game-changer." };
+        var comment4 = new Comment { Feed = feed1, User = Alice, Content = "Amazing photo, Bob! The colors are stunning." };
+        var comment5 = new Comment { Feed = feed1, User = Bob, Content = "Interesting tip! I'll try that next time I make coffee." };
+        await dbContext.Comments.AddRangeAsync(comment1, comment2, comment3, comment4, comment5);
+
         await dbContext.SaveChangesAsync();
     }
 
