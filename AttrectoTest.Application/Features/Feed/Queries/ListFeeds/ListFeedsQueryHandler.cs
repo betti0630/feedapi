@@ -20,8 +20,12 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, FeedMapper 
 
         var items = feeds.Select(f => new {feed = f, likeCount = f.Likes.Count()}).ToList()
             .Select(f => mapper.MapFeedToDto(f.feed, f.likeCount, request.UserId)).ToList();
-        var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);
-        items.AddRange(rssItems);
+        if (request.IncludeExternal ?? false)
+        {
+            var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);
+            items.AddRange(rssItems);
+        }
+
         items = (request.Sort switch
         {
             ListSort.CreatedAt_asc => items.OrderBy(x => x.PublishedAt),

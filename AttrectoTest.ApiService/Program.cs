@@ -27,6 +27,8 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddScoped<IImageFileProcessor, ImageFileProcessor>();
 
+builder.Services.AddMemoryCache();
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
