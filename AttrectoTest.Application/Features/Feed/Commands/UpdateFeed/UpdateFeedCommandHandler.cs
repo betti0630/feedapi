@@ -31,7 +31,7 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         FillFeedByRequest(feed, request);
 
         await feedRepository.UpdateAsync(feed, cancellationToken);
-        logger.LogInformation("Feed {FeedId} updated successfully by user {UserId}.", feed.Id, request.UserId);
+        logger.LogInformation("Feed {FeedId} updated successfully by user {AuthorId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -57,7 +57,7 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
             imageFeed.ImageData = request.ImageData;
         }
         await feedRepository.UpdateAsync(imageFeed, cancellationToken);
-        logger.LogInformation("Image feed {FeedId} updated successfully by user {UserId}.", imageFeed.Id, request.UserId);
+        logger.LogInformation("Image feed {FeedId} updated successfully by user {AuthorId}.", imageFeed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -86,7 +86,7 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
             videoFeed.VideoUrl = request.VideoUrl;
         }
         await feedRepository.UpdateAsync(videoFeed, cancellationToken);
-        logger.LogInformation("Video feed {FeedId} updated successfully by user {UserId}.", videoFeed.Id, request.UserId);
+        logger.LogInformation("Video feed {FeedId} updated successfully by user {AuthorId}.", videoFeed.Id, request.UserId);
         return MapToResponse(feed);
     }
 
@@ -102,7 +102,7 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         }
         if (feed.AuthorId != request.UserId)
         {
-            logger.LogWarning("User {UserId} attempted to update feed {FeedId} without permission.", request.UserId, feed.Id);
+            logger.LogWarning("User {AuthorId} attempted to update feed {FeedId} without permission.", request.UserId, feed.Id);
             throw new BadRequestException("User does not have permission to update this feed.");
         }
     }

@@ -27,7 +27,7 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
         comments = AddPaging(comments, request);
        
         var items = comments.ToList()
-            .Select(comment => new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId))
+            .Select(comment => new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId, request.UserId))
             .ToList();
         return new PagedComments(items, request.Page, request.PageSize, feedItem.comments.Count);
     }

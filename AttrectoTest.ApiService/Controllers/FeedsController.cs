@@ -259,7 +259,7 @@ namespace AttrectoTest.ApiService.Controllers
                 throw new ArgumentException("Feed ID mismatch");
             }
             var result = await mediator.Send(request, cancellationToken);
-            return CreatedAtAction(nameof(CommentsPOST), new { id = result.Id });
+            return CreatedAtAction(nameof(CommentsPOST), result);
         }
 
         /// <summary>

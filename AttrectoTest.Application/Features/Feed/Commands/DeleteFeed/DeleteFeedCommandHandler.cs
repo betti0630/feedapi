@@ -26,12 +26,12 @@ internal class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         }
         if (feed.AuthorId != request.UserId)
         {
-            logger.LogWarning("User {UserId} attempted to delete feed {FeedId} without permission.", request.UserId, feed.Id);
+            logger.LogWarning("User {AuthorId} attempted to delete feed {FeedId} without permission.", request.UserId, feed.Id);
             throw new BadRequestException("User does not have permission to delete this feed.");
         }
 
         feed.IsDeleted = true;
         await feedRepository.UpdateAsync(feed, cancellationToken);
-        logger.LogInformation("Feed {FeedId} deleted successfully by user {UserId}.", feed.Id, request.UserId);
+        logger.LogInformation("Feed {FeedId} deleted successfully by user {AuthorId}.", feed.Id, request.UserId);
     }
 }

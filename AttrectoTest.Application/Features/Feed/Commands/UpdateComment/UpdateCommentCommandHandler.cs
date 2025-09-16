@@ -1,20 +1,34 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
+﻿using AttrectoTest.Application.Contracts.Persistence;
+using AttrectoTest.Application.Features.Feed.Dtos;
 
 using MediatR;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateComment;
 
-internal class UpdateCommentCommandHandler : IRequestHandler<UpdateCommentCommand, CommentDto>
+internal class UpdateCommentCommandHandler(IFeedRepository feedRepository, ICommentRepository commentRepository) : IRequestHandler<UpdateCommentCommand, CommentDto>
 {
-    public Task<CommentDto> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
+    public async Task<CommentDto> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
     {
-        //comment author
-        throw new NotImplementedException();
+        var feed = await feedRepository.GetByIdAsync(request.FeedId, cancellationToken) ?? throw new KeyNotFoundException($"Feed with id {request.FeedId} not found");
+        if (feed.IsDeleted)
+        {
+            throw new KeyNotFoundException($"Feed with id {request.FeedId} not found");
+        }
+        var comment = await commentRepository.GetByIdAsync(request.CommentId) ?? throw new KeyNotFoundException($"Comment with id {request.CommentId} not found.");
+        if (comment.UserId != request.UserId)
+        {
+            throw new UnauthorizedAccessException("You are not authorized to update this comment.");
+        }
+        if (request.Content is not null)
+        {
+
+            if (request.Content.Length > 500)
+            {
+                throw new ArgumentException("Comment content cannot exceed 500 characters.");
+            }
+            comment.Content = request.Content;
+            await commentRepository.UpdateAsync(comment, cancellationToken);
+        }
+        return new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId, request.UserId);
     }
 }

@@ -1,10 +1,10 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
+﻿using AttrectoTest.Application.Features.Base;
 
 using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteComment;
 
-public class DeleteCommentCommand : IRequest
+public record DeleteCommentCommand : UserRequest, IRequest
 {
     public int FeedId { get; set; }
     public int CommentId { get; set; }

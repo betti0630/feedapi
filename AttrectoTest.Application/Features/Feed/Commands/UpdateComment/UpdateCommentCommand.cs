@@ -9,5 +9,5 @@ public record UpdateCommentCommand : UserRequest, IRequest<CommentDto>
 {
     public required int FeedId { get; set; }
     public required int CommentId { get; set; }
-    public string? Text { get; set; }
+    public string? Content { get; set; }
 }
