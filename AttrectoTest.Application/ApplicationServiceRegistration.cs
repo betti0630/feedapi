@@ -34,7 +34,8 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthUserService, AuthUserService>();
         services.AddScoped<IAppUserService, AppUserService>();
 
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserIdBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
 
         services.AddScoped<FeedMapper>();
 

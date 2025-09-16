@@ -6,5 +6,5 @@ namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
 public record UpdateImageFeedCommand : UpdateFeedCommand, IRequest<UpdateFeedCommandResponse>
 {
-    public byte[]? ImageData { get; set; }
+    public string? ImageUrl { get; set; }
 }

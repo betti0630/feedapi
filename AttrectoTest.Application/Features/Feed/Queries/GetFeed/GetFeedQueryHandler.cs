@@ -26,6 +26,6 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository, FeedMapper ma
             throw new BadRequestException("Cannot retrieve a deleted feed.");
         }
 
-        return mapper.MapFeedToDto(feed, item.likeCount, request.UserId);
+        return mapper.MapFeedToDto(feed, item.likeCount, request.UserId, request.BaseUrl);
     }
 }

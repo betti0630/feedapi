@@ -53,8 +53,8 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         ValidateFeed(imageFeed, request);
         FillFeedByRequest(feed, request);
 
-        if (request.ImageData is not null) {
-            imageFeed.ImageData = request.ImageData;
+        if (request.ImageUrl is not null) {
+            imageFeed.ImageUrl = request.ImageUrl;
         }
         await feedRepository.UpdateAsync(imageFeed, cancellationToken);
         logger.LogInformation("Image feed {FeedId} updated successfully by user {AuthorId}.", imageFeed.Id, request.UserId);
@@ -79,8 +79,8 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         ValidateFeed(videoFeed, request);
         FillFeedByRequest(videoFeed, request);
 
-        if (request.ImageData is not null) {
-            videoFeed.ImageData = request.ImageData;
+        if (request.ImageUrl is not null) {
+            videoFeed.ImageUrl = request.ImageUrl;
         }
         if (request.VideoUrl is not null) {
             videoFeed.VideoUrl = request.VideoUrl;

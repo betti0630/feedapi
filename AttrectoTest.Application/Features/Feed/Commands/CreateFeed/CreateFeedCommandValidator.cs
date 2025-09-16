@@ -15,6 +15,8 @@ public class CreateFeedCommandValidator : AbstractValidator<CreateFeedCommand>
         RuleFor(x => x.Content)
             .NotEmpty().WithMessage("Content is required!")
             .MaximumLength(5000).WithMessage("Content maximum length is 5000 characters!");
+        RuleFor(x => x.UserId)
+            .GreaterThan(0).WithMessage("User must be authenticated to create a feed.");
     }
 }
 

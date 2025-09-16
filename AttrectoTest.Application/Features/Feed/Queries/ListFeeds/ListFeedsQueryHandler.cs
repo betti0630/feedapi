@@ -19,7 +19,7 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, FeedMapper 
         feeds = AddPaging<Domain.Feed>(feeds, request);
 
         var items = feeds.Select(f => new {feed = f, likeCount = f.Likes.Count()}).ToList()
-            .Select(f => mapper.MapFeedToDto(f.feed, f.likeCount, request.UserId)).ToList();
+            .Select(f => mapper.MapFeedToDto(f.feed, f.likeCount, request.UserId, request.BaseUrl)).ToList();
         if (request.IncludeExternal ?? false)
         {
             var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);

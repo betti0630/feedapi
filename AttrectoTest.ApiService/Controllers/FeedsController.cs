@@ -21,8 +21,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace AttrectoTest.ApiService.Controllers
 {
     [Route("api/[controller]")]
@@ -88,12 +86,13 @@ namespace AttrectoTest.ApiService.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<FeedDto>> CreateImageFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
         {
-            var bytes = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
+            
             var command = new CreateImageFeedCommand
             {
                 Title = feed.Title,
                 Content = feed.Content,
-                ImageData = bytes
+                ImageUrl = imageUrl
             };
             var response = await mediator.Send(command, cancellationToken);
             return CreatedAtAction(nameof(Post), new { id = response });
@@ -107,12 +106,13 @@ namespace AttrectoTest.ApiService.Controllers
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<FeedDto>> CreateVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
         {
-            var bytes = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
+
             var command = new CreateVideoFeedCommand
             {
                 Title = feed.Title,
                 Content = feed.Content,
-                ImageData = bytes,
+                ImageUrl = imageUrl,
                 VideoUrl = feed.VideoUrl
             };
             var response = await mediator.Send(command, cancellationToken);
@@ -152,8 +152,9 @@ namespace AttrectoTest.ApiService.Controllers
                 Title = feed.Title,
                 Content = feed.Content
             };
-            if (feed.File is not null) { 
-                command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+            if (feed.File is not null) {
+                var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
+                command.ImageUrl = imageUrl;
             }
             var response = await mediator.Send(command, cancellationToken);
             return Ok(response);
@@ -180,7 +181,8 @@ namespace AttrectoTest.ApiService.Controllers
             };
             if (feed.File is not null)
             {
-                command.ImageData = await imageFileProcessor.ValidateAndGetContentOfImage(feed.File, cancellationToken);
+                var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
+                command.ImageUrl = imageUrl;
             }
             var response = await mediator.Send(command, cancellationToken);
             return Ok(response);

@@ -36,7 +36,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         }
         
         var feed = CreateFeedFromRequest<Domain.ImageFeed>(request);
-        feed.ImageData = request.ImageData;
+        feed.ImageUrl = request.ImageUrl;
         await feedRepository.CreateAsync(feed, cancellationToken);
         logger.LogInformation("Image feed {FeedId} created successfully by user {AuthorId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
@@ -52,7 +52,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         }
 
         var feed = CreateFeedFromRequest<Domain.VideoFeed>(request);
-        feed.ImageData = request.ImageData;
+        feed.ImageUrl = request.ImageUrl;
         feed.VideoUrl = request.VideoUrl;
         await feedRepository.CreateAsync(feed, cancellationToken);
         logger.LogInformation("Video feed {FeedId} created successfully by user {AuthorId}.", feed.Id, request.UserId);

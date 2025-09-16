@@ -6,7 +6,7 @@ namespace AttrectoTest.Application.Features.Feed.Mappers;
 
 public class FeedMapper
 {
-    public FeedDto MapFeedToDto(Domain.Feed feed, int likeCount, int userId)
+    public FeedDto MapFeedToDto(Domain.Feed feed, int likeCount, int userId, string? baseUrl)
     {
         FeedDto dto = feed switch
         {
@@ -27,7 +27,7 @@ public class FeedMapper
         
         if (feed is ImageFeed imageFeed && dto is ImageFeedDto imageDto)
         {
-            //imageDto.ImageData = imageFeed.ImageData;
+            imageDto.ImageUrl = $"{baseUrl}{imageFeed.ImageUrl}";
         }
         if (feed is VideoFeed videoFeed && dto is VideoFeedDto videoDto)
         {

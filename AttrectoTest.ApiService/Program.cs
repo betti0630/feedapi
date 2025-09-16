@@ -110,6 +110,8 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
+app.UseStaticFiles();
+
 app.Run();
 
 
