@@ -27,7 +27,7 @@ export default function Home() {
           <p>Be vagy jelentkezve!</p>
           <button onClick={auth.logout}>Logout</button>
           {data!=null ? <FeedList feeds={data.items}></FeedList> : ""}
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         </>
       ) : (
         <p>Nem vagy bejelentkezve.</p>

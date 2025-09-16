@@ -18,9 +18,9 @@ export default function FeedItem({ feed }) {
   const date = new Date(publishedAt).toLocaleString();
 
   return (
-    <div className="max-w-md rounded-2xl shadow-md overflow-hidden bg-white mb-4">
-      {imageUrl ? <img src={imageUrl} alt={title} className="w-full h-64 object-cover" /> : ""}
-      {videoUrl ? <a href={videoUrl}>VIDEO</a> : ""}
+    <div className="w-full rounded-2xl shadow-md overflow-hidden bg-white mb-4">
+      {imageUrl ? <img src={`${process.env.REACT_APP_IMAGE_URL}${imageUrl}`} alt={title} className="w-full object-contain" /> : ""}
+      {videoUrl ? <div><a href={videoUrl}>VIDEO</a></div> : ""}
       <div className="p-4">
         <h2 className="text-xl font-bold">{title}</h2>
           {/* RSS típus → HTML renderelése */}

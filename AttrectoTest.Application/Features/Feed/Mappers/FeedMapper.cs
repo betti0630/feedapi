@@ -27,7 +27,7 @@ public class FeedMapper
         
         if (feed is ImageFeed imageFeed && dto is ImageFeedDto imageDto)
         {
-            imageDto.ImageUrl = $"{baseUrl}{imageFeed.ImageUrl}";
+            imageDto.ImageUrl = $"{imageFeed.ImageUrl}";
         }
         if (feed is VideoFeed videoFeed && dto is VideoFeedDto videoDto)
         {

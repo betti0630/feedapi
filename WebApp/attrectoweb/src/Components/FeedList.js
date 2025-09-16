@@ -7,9 +7,11 @@ export default function FeedList({ feeds }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="flex flex-col items-center space-y-6">
       {feeds.map(feed => (
-        <FeedItem key={feed.id} feed={feed} />
+        <div className="w-full max-w-5xl" key={feed.id}>
+          <FeedItem key={feed.id} feed={feed} />
+        </div>
       ))}
     </div>
   );
