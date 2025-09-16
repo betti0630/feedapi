@@ -1,3 +1,4 @@
+using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.ApiService.Middleware;
 using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application;
@@ -6,6 +7,7 @@ using AttrectoTest.Persistence;
 
 using FluentValidation;
 using FluentValidation.AspNetCore;
+
 
 using Serilog;
 
@@ -66,6 +68,8 @@ builder.Services.AddOpenApiDocument(config =>
     config.OperationProcessors.Add(
         new NSwag.Generation.Processors.Security.AspNetCoreOperationSecurityScopeProcessor("JWT"));
 });
+
+builder.Services.ConfigureQuartz(builder.Configuration);
 
 var app = builder.Build();
 
