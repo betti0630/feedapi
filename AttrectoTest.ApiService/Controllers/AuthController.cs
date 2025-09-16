@@ -8,14 +8,8 @@ namespace AttrectoTest.ApiService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(IAuthService authService, IAppUserService userService) : ControllerBase
 {
-    private readonly IAuthService _authService;
-
-    public AuthController(IAuthService authService)
-    {
-        _authService = authService;
-    }
 
     /// <summary>
     /// Login (JWT)
@@ -25,23 +19,23 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<LoginResponse>> Login([FromBody]LoginRequest request, CancellationToken cancellationToken)
     {
-        if (!await _authService.ValidateUser(request.UserName, request.Password))
+        if (!await authService.ValidateUser(request.UserName, request.Password, cancellationToken))
         {
             return Unauthorized();
         }
-        var (token, expires) = await _authService.GenerateJwtToken(request.UserName);
+        var (token, expires) = await authService.GenerateJwtToken(request.UserName);
         return Ok(new LoginResponse(token));
     }
 
     /// <summary>
-    /// User registration
+    /// UserDto registration
     /// </summary>
     /// <returns>Created</returns>
     [HttpPost, Route("register", Name = "register")]
-    public Task<ActionResult<User>> Register([FromBody] RegisterRequest body, CancellationToken cancellationToken)
+    public async Task<ActionResult<string>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
-
-        throw new NotImplementedException();
+        await userService.AddNewUser(request.UserName, request.Password, "User", cancellationToken);
+        return CreatedAtRoute("register", request.UserName, "User created");    
     }
 
 }

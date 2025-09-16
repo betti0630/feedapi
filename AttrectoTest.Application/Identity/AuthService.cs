@@ -12,9 +12,9 @@ internal class AuthService(IAuthUserService authUserService,
     IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db,
     IAppLogger<AuthService> logger) : IAuthService
 {
-    public async Task<bool> ValidateUser(string userName, string password)
+    public async Task<bool> ValidateUser(string userName, string password, CancellationToken cancellationToken = default)
     {
-        var user = await db.GetByAsync(u => u.UserName == userName);
+        var user = await db.GetByAsync(u => u.UserName == userName, cancellationToken);
         if (user is null) { 
             logger.LogWarning("User {UserName} not found during login attempt", userName);
             return false;

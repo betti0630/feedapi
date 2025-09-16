@@ -2,5 +2,5 @@
 
 public interface IAppUserService
 {
-    Task AddNewUser(string userName, string password, string? roles);
+    Task AddNewUser(string userName, string password, string? roles, CancellationToken cancellationToken = default);
 }

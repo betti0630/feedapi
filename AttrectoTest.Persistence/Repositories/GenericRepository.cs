@@ -39,6 +39,11 @@ internal class GenericRepository<T>(TestDbContext dbContext) : IGenericRepositor
         return _dbContext.Set<T>().AnyAsync(cancellationToken: cancellationToken);
     }
 
+    public virtual Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Set<T>().AnyAsync(predicate, cancellationToken: cancellationToken);
+    }
+
     public virtual async Task<T?> GetByAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
