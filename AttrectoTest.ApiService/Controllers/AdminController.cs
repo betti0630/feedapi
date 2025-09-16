@@ -1,19 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AttrectoTest.Application.Features.Feed.Commands.PurgeFeed;
+
+using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttrectoTest.ApiService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    [Authorize(Roles = "Admin")]
+    public class AdminController(IMediator mediator) : ControllerBase
     {
         /// <summary>
         /// Purge soft deleted feedek 
         /// </summary>
         /// <returns>Job started</returns>
-        [HttpPost, Route("maintenance/purge-soft-deleted", Name = "purge-soft-deleted")]
-        public async Task<IActionResult> PurgeSoftDeleted(CancellationToken cancellationToken)
+        [HttpPost, Route("maintenance/purgeFeeds")]
+        public async Task<IActionResult> PurgeFeeds(CancellationToken cancellationToken)
         {
+            var command = new PurgeFeedCommand();
+            await mediator.Send(command, cancellationToken);
             return NoContent();
         }
 
