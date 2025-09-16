@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../AuthContext";
 import axios from "axios";
+import FeedList from "../Components/FeedList";
 
 export default function Home() {
   const auth = useAuth();
@@ -8,10 +9,10 @@ export default function Home() {
 
   useEffect(() => {
     if (auth.token) {
-      axios.get(`${process.env.REACT_APP_API_URL}/weatherforecast`, {
+      axios.get(`${process.env.REACT_APP_API_URL}/Feeds?includeExternal=true`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
-        },
+        }
       })
       .then((r) => setData(r.data))
       .catch(() => setData("Hiba történt."));
@@ -25,6 +26,7 @@ export default function Home() {
         <>
           <p>Be vagy jelentkezve!</p>
           <button onClick={auth.logout}>Logout</button>
+          {data!=null ? <FeedList feeds={data.items}></FeedList> : ""}
           <pre>{JSON.stringify(data, null, 2)}</pre>
         </>
       ) : (

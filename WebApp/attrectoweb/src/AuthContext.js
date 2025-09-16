@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       password,
     });
 
-    const jwt = response.data.token;
+    const jwt = response.data.access_token;
     localStorage.setItem("token", jwt);
     setToken(jwt);
   };
