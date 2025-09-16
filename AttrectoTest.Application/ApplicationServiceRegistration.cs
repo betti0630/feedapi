@@ -3,6 +3,7 @@ using AttrectoTest.Application.Features.Feed.Mappers;
 using AttrectoTest.Application.Helpers;
 using AttrectoTest.Application.Identity;
 using AttrectoTest.Application.Models;
+using AttrectoTest.Application.Services;
 using AttrectoTest.Domain;
 
 using MediatR;
@@ -36,6 +37,8 @@ public static class ApplicationServiceRegistration
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserIdBehavior<,>));
 
         services.AddScoped<FeedMapper>();
+
+        services.AddHttpClient<RssService>();
 
         var jwt = configuration.GetSection("Jwt");
         services.Configure<JwtSettings>(jwt);

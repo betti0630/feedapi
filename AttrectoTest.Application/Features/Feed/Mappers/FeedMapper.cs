@@ -27,7 +27,7 @@ public class FeedMapper
         
         if (feed is ImageFeed imageFeed && dto is ImageFeedDto imageDto)
         {
-            imageDto.ImageData = imageFeed.ImageData;
+            //imageDto.ImageData = imageFeed.ImageData;
         }
         if (feed is VideoFeed videoFeed && dto is VideoFeedDto videoDto)
         {

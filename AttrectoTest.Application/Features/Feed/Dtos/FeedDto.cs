@@ -7,6 +7,7 @@ namespace AttrectoTest.Application.Features.Feed.Dtos;
 [JsonDerivedType(typeof(FeedDto), "text")]
 [JsonDerivedType(typeof(ImageFeedDto), "image")]
 [JsonDerivedType(typeof(VideoFeedDto), "video")]
+[JsonDerivedType(typeof(RssFeedDto), "rss")]
 public record FeedDto
 {
     public int Id { get; set; }
