@@ -15,7 +15,7 @@ Before you begin, ensure you have:
 
 ```bash
 git clone https://github.com/betti0630/feedapi.git
-cd attrecto
+cd feedapi
 ```
 ## Run with Docker
 
