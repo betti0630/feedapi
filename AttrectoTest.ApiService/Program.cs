@@ -8,6 +8,7 @@ using AttrectoTest.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 using Serilog;
 
@@ -78,6 +79,8 @@ builder.Services.AddOpenApiDocument(config =>
 
 builder.Services.ConfigureQuartz(builder.Configuration);
 
+builder.Services.ConfigureHealthCheck(builder.Configuration);
+
 var app = builder.Build();
 
 
@@ -94,6 +97,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 //app.UseExceptionHandler();
 
 app.MapDefaultEndpoints();
+
 
 if (app.Environment.IsDevelopment())
 {
