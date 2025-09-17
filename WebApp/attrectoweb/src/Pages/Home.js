@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import axios from "axios";
 import FeedList from "../Components/FeedList";
+import Login from "../Components/Login";
 
 export default function Home() {
   const auth = useAuth();
@@ -9,28 +10,41 @@ export default function Home() {
 
   useEffect(() => {
     if (auth.token) {
-      axios.get(`${process.env.REACT_APP_API_URL}/Feeds?includeExternal=true`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        }
-      })
-      .then((r) => setData(r.data))
-      .catch(() => setData("Hiba történt."));
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/Feeds?includeExternal=true`, {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        .then((r) => setData(r.data))
+        .catch(() => setData("Hiba történt."));
     }
   }, [auth.token]);
 
   return (
-    <div>
-      <h2>Home</h2>
+    <div className="relative min-h-screen bg-gray-100">
       {auth.token ? (
         <>
-          <p>Be vagy jelentkezve!</p>
-          <button onClick={auth.logout}>Logout</button>
-          {data!=null ? <FeedList feeds={data.items}></FeedList> : ""}
-          {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+          <button
+            onClick={auth.logout}
+            className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+          <div className="flex justify-center pt-16">
+            {data != null ? (
+              <FeedList feeds={data.items} />
+            ) : (
+              <p className="text-gray-500">No feeds available</p>
+            )}
+          </div>
         </>
       ) : (
-        <p>Nem vagy bejelentkezve.</p>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="w-full max-w-sm">
+            <Login />
+          </div>
+        </div>
       )}
     </div>
   );
