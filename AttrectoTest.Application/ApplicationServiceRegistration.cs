@@ -37,8 +37,6 @@ public static class ApplicationServiceRegistration
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
 
-        services.AddScoped<FeedMapper>();
-
         services.AddHttpClient<RssService>();
 
         var jwt = configuration.GetSection("Jwt");

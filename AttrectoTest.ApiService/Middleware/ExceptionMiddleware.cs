@@ -62,7 +62,7 @@ namespace AttrectoTest.ApiService.Middleware
 
             httpContext.Response.StatusCode = (int)statusCode;
             var logMessage = JsonConvert.SerializeObject(problem);
-            logger.LogError(message: logMessage);
+            logger.LogError(logMessage);
             await httpContext.Response.WriteAsJsonAsync(problem);
 
         }

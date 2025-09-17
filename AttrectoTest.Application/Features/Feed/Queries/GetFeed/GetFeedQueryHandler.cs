@@ -1,18 +1,17 @@
-﻿using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Mappers;
-using AttrectoTest.Domain;
+
 
 using MediatR;
 
 
 namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
-internal class GetFeedQueryHandler(IFeedRepository feedRepository, FeedMapper mapper) : IRequestHandler<GetFeedQuery, FeedDto>
+internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHandler<GetFeedQuery, FeedDto>
 {
-    public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
+    public Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {
         var feeds = feedRepository.List();
 
@@ -26,6 +25,7 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository, FeedMapper ma
             throw new BadRequestException("Cannot retrieve a deleted feed.");
         }
 
-        return mapper.MapFeedToDto(feed, item.likeCount, request.UserId, request.BaseUrl);
+        var result = feed.MapFeedToDto(item.likeCount, request.UserId);
+        return Task.FromResult(result);
     }
 }

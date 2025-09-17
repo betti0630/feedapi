@@ -26,8 +26,8 @@ public class Feed : BaseEntity
 
     public bool IsDeleted { get; set; } = false;
 
-    public ICollection<FeedLike> Likes { get; set; } = new List<FeedLike>();
+    public ICollection<FeedLike> Likes { get; set; } = [];
 
-    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public ICollection<Comment> Comments { get; set; } = [];
 
 }

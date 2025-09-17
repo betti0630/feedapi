@@ -50,7 +50,7 @@ internal class ImageFileProcessor(IWebHostEnvironment env) : IImageFileProcessor
         return relativePath;
     }
 
-    private void CheckFile(IFormFile file)
+    private static void CheckFile(IFormFile file)
     {
         if (file == null || file.Length == 0)
             throw new BadRequestException("No file uploaded.");

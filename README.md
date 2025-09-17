@@ -2,11 +2,24 @@
 
 Sample .NET API with React frontend and MariaDB.
 
-## Run with Docker
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) 
+- Node.js + npm 
+- Docker & Docker Compose  
+- (Optional) MariaDB or other relational database if running without Docker 
+
+## Clone the Repo
 
 ```bash
 git clone https://github.com/betti0630/attrecto.git
 cd attrecto
+```
+## Run with Docker
+
+```bash
 docker compose up --build
 ```
 

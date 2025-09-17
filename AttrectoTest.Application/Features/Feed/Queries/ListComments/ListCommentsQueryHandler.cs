@@ -11,7 +11,7 @@ namespace AttrectoTest.Application.Features.Feed.Queries.ListComments;
 
 internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
 {
-    public async Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)
+    public Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)
     {
         var feeds = feedRepository.List();
         var feedItem = feeds
@@ -29,6 +29,7 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
         var items = comments.ToList()
             .Select(comment => new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId, request.UserId))
             .ToList();
-        return new PagedComments(items, request.Page, request.PageSize, feedItem.comments.Count);
+        var result = new PagedComments(items, request.Page, request.PageSize, feedItem.comments.Count);
+        return Task.FromResult(result);
     }
 }

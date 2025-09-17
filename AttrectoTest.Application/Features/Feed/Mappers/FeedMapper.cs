@@ -4,9 +4,9 @@ using AttrectoTest.Domain;
 
 namespace AttrectoTest.Application.Features.Feed.Mappers;
 
-public class FeedMapper
+public static class FeedMapper
 {
-    public FeedDto MapFeedToDto(Domain.Feed feed, int likeCount, int userId, string? baseUrl)
+    public static FeedDto MapFeedToDto(this Domain.Feed feed, int likeCount, int userId)
     {
         FeedDto dto = feed switch
         {
