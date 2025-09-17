@@ -7,7 +7,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 
-internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<UpdateFeedCommandHandler> logger) : 
+public class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<UpdateFeedCommandHandler> logger) : 
     IRequestHandler<UpdateFeedCommand, UpdateFeedCommandResponse>,
     IRequestHandler<UpdateImageFeedCommand, UpdateFeedCommandResponse>,
     IRequestHandler<UpdateVideoFeedCommand, UpdateFeedCommandResponse>
@@ -22,7 +22,7 @@ internal class UpdateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
         if (feed is not Domain.Feed imageFeed)
         {
             throw new BadRequestException($"Feed is not of type {nameof(Domain.Feed)}.");

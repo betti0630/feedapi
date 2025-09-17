@@ -25,8 +25,8 @@ public class UpdateVideoFeedCommandValidator : AbstractValidator<UpdateVideoFeed
         Include(new UpdateFeedCommandValidator());
 
         RuleFor(x => x.VideoUrl)
-            .Must(uri => uri is null || Uri.TryCreate(uri, UriKind.Absolute, out var result)
-                         && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps))
+            .Must(uri => uri is null || (Uri.TryCreate(uri, UriKind.Absolute, out var result)
+                         && (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps)))
             .WithMessage("Video must be a valid URL!");
 
     }
