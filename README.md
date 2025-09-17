@@ -14,7 +14,7 @@ Before you begin, ensure you have:
 ## Clone the Repo
 
 ```bash
-git clone https://github.com/betti0630/attrecto.git
+git clone https://github.com/betti0630/feedapi.git
 cd attrecto
 ```
 ## Run with Docker
