@@ -84,9 +84,6 @@ builder.Services.ConfigureHealthCheck(builder.Configuration);
 var app = builder.Build();
 
 
-
-app.Services.RunDatabaseMigrations();
-
 app.UseCors("web");
 app.UseAuthentication();
 app.UseAuthorization();
@@ -120,6 +117,8 @@ app.MapControllers();
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.UseStaticFiles();
+
+app.Services.RunDatabaseMigrations();
 
 app.Run();
 

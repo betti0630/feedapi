@@ -38,25 +38,28 @@ public static class PersistenceServiceRegistration
         /// Try to apply migrations with retries, because the database might not be available yet.
         while (retries > 0)
         {
-            try
+            if (db.Database.CanConnect())
             {
+                if (db.Database.GetPendingMigrations().Count() == 0)
+                {
+                    Console.WriteLine("No pending migrations.");
+                    break;
+                }
                 db.Database.Migrate();
                 Console.WriteLine("Migration is successful.");
+                var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+                var seeder = new Seed.DbSeeder(dbContext, userService);
+                seeder.SeedAsync().Wait();
                 break;
-            }
-            catch (Exception ex)
-            {
+            } else {
                 retries--;
-                Console.WriteLine($"Migration is failed, retry after {delay.TotalSeconds}s... ({ex.Message})");
-                if (retries == 0) throw;
+                Console.WriteLine($"Database not available yet. Retrying in {delay.TotalSeconds} seconds... ({retries} retries left)");
                 Thread.Sleep(delay);
-            }
+            } 
         }
 
-        var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
-        var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-        var seeder = new Seed.DbSeeder(dbContext, userService);
-        seeder.SeedAsync().Wait();
+
     }
 
 }
