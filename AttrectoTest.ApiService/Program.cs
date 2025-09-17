@@ -32,13 +32,18 @@ builder.Services.AddMemoryCache();
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
+if (allowedOrigins == null || allowedOrigins.Length == 0)
+{
+    throw new InvalidOperationException("No allowed origins configured. Please set the 'AllowedOrigins' configuration.");
+}
 builder.Services.AddCors(opt =>
 {
-    opt.AddPolicy("wasm", p => p
-        .WithOrigins("http://webfrontend:80", "http://localhost:3000")
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    opt.AddPolicy("web", p => p
+    .WithOrigins(allowedOrigins)
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 });
 
 builder.Services.AddAppAuthentication(builder.Configuration);
@@ -79,7 +84,7 @@ var app = builder.Build();
 
 app.Services.RunDatabaseMigrations();
 
-app.UseCors("wasm");
+app.UseCors("web");
 app.UseAuthentication();
 app.UseAuthorization();
 

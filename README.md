@@ -38,6 +38,7 @@ Start MariaDB with:
 Backend (AttrectoTest.ApiService):
 
 ```bash
+dotnet build
 dotnet run
 ```
 
@@ -47,6 +48,10 @@ Frontend (WebApp/attrectoweb):
 npm install
 npm start
 ```
+
+- API: http://localhost:5481
+- Frontend: http://localhost:3000
+
 
 ## Usage
 **1. Register or login**
