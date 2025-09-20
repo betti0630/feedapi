@@ -14,6 +14,9 @@ services:
       - mariadb_data:/var/lib/mysql
 
   apiservice:
+    build:
+      context: .
+      dockerfile: AttrectoTest.ApiService/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=IntegrationTest
       - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrectotest;User=myuser;Password=mypassword;
