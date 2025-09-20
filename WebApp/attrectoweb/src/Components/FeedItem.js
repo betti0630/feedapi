@@ -1,10 +1,12 @@
 import React from "react";
+import LikeButton from "./LikeButton.js";
 
 export default function FeedItem({ feed }) {
   if (!feed) return null;
 
   const {
     $type,
+    id,
     imageUrl,
     videoUrl,
     title,
@@ -13,6 +15,7 @@ export default function FeedItem({ feed }) {
     publishedAt,
     likeCount,
     isOwnFeed,
+    isLiked,
   } = feed;
 
   const date = new Date(publishedAt).toLocaleString();
@@ -53,7 +56,7 @@ export default function FeedItem({ feed }) {
           <span>{date}</span>
         </div>
         <div className="flex justify-between items-center mt-3">
-          <span className="text-gray-600">❤️ {likeCount}</span>
+          <LikeButton feedId={id} initialLiked={isLiked} initialCount={likeCount} />
           {isOwnFeed && (
             <button className="px-3 py-1 text-sm bg-red-500 text-white rounded-xl hover:bg-red-600">
               Delete

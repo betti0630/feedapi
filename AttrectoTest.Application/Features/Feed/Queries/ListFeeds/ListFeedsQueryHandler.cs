@@ -18,8 +18,15 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService 
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging<Domain.Feed>(feeds, request);
 
-        var items = feeds.Select(f => new {feed = f, likeCount = f.Likes.Count()}).ToList()
-            .Select(f => f.feed.MapFeedToDto(f.likeCount, request.UserId)).ToList();
+        var items = feeds
+            .Select(f => new
+            {
+                feed = f,
+                likeCount = f.Likes.Count(),
+                isLiked = f.Likes.Count(c => c.UserId == request.UserId) > 0
+            })
+            .ToList()
+            .Select(f => f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId)).ToList();
         if (request.IncludeExternal ?? false)
         {
             var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);

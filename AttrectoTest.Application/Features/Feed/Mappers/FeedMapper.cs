@@ -6,7 +6,7 @@ namespace AttrectoTest.Application.Features.Feed.Mappers;
 
 public static class FeedMapper
 {
-    public static FeedDto MapFeedToDto(this Domain.Feed feed, int likeCount, int userId)
+    public static FeedDto MapFeedToDto(this Domain.Feed feed, int likeCount, bool isLiked, int userId)
     {
         FeedDto dto = feed switch
         {
@@ -24,6 +24,7 @@ public static class FeedMapper
         dto.PublishedAt = feed.PublishedAt;
         dto.IsOwnFeed = feed.AuthorId == userId;
         dto.LikeCount = likeCount;
+        dto.IsLiked = isLiked;
         
         if (feed is ImageFeed imageFeed && dto is ImageFeedDto imageDto)
         {

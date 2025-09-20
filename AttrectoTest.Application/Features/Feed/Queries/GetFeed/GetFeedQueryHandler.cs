@@ -17,7 +17,13 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHan
 
         var item = feeds
             .Where(x => x.Id == request.Id)
-            .Select(f => new { feed = f, likeCount = f.Likes.Count() }).FirstOrDefault()
+            .Select(f => new
+            {
+                feed = f,
+                likeCount = f.Likes.Count(),
+                isLiked = f.Likes.Count(c => c.UserId == request.UserId) > 0
+            })
+            .FirstOrDefault()
             ?? throw new NotFoundException(nameof(Feed), request.Id); 
         var feed = item.feed;
         if (feed.IsDeleted)
@@ -25,7 +31,7 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHan
             throw new NotFoundException(nameof(Feed), request.Id);
         }
 
-        var result = feed.MapFeedToDto(item.likeCount, request.UserId);
+        var result = feed.MapFeedToDto(item.likeCount, item.isLiked, request.UserId);
         return Task.FromResult(result);
     }
 }

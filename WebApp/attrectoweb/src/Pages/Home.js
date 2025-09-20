@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
-import axios from "axios";
 import FeedList from "../Components/FeedList";
 import Login from "../Components/Login";
 
@@ -10,14 +9,19 @@ export default function Home() {
 
   useEffect(() => {
     if (auth.token) {
-      axios
-        .get(`${process.env.REACT_APP_API_URL}/Feeds?includeExternal=true`, {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
+      fetch(`${process.env.REACT_APP_API_URL}/Feeds?includeExternal=true`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      })
+        .then((r) => {
+          if (!r.ok) {
+            throw new Error("API error");
+          }
+          return r.json();
         })
-        .then((r) => setData(r.data))
-        .catch(() => setData("Hiba történt."));
+        .then((data) => setData(data))
+        .catch(() => setData("An error occured."));
     }
   }, [auth.token]);
 

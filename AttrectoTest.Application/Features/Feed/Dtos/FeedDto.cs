@@ -26,5 +26,7 @@ public record FeedDto
 
     public int LikeCount { get; set; }
 
+    public bool IsLiked { get; set; }
+
     public bool IsDeleted { get; }
 }
