@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{EB4A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Application.Tests", "AttrectoTest.Application.Tests\AttrectoTest.Application.Tests.csproj", "{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.IntegrationTests", "AttrectoTest.IntegrationTests\AttrectoTest.IntegrationTests.csproj", "{8AC5E155-B3E0-4100-9F29-3DDCA665703B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC5E155-B3E0-4100-9F29-3DDCA665703B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC5E155-B3E0-4100-9F29-3DDCA665703B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC5E155-B3E0-4100-9F29-3DDCA665703B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC5E155-B3E0-4100-9F29-3DDCA665703B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{11263E33-E7A3-4DDC-B9F0-FEB8C618290A} = {C2F7B46D-8B16-462B-95AE-94429A557B00}
 		{90E3D323-E2C1-4267-AACD-AF098273866B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE} = {B37AF3FC-B9D6-4DE8-B162-C1C866CAA53A}
+		{8AC5E155-B3E0-4100-9F29-3DDCA665703B} = {B37AF3FC-B9D6-4DE8-B162-C1C866CAA53A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {30DE79BA-1F7C-4107-94B2-97AD824E1693}
