@@ -90,4 +90,15 @@ Authorization: Bearer <your-token>
 
 POST to /api/feeds with a JSON body (or form-data if uploading image).
 
+## CI Pipeline
+
+The project runs **integration tests** in GitHub Actions:
+
+- Docker Compose starts MariaDB and the API (IntegrationTest mode).
+- The pipeline waits for the API `/health` endpoint.
+- xUnit integration tests run against the live API.
+
+The build fails if the services don’t start or any test fails.
+
+![CI](https://github.com/betti0630/feedapi/actions/workflows/ci.yml/badge.svg)
 
