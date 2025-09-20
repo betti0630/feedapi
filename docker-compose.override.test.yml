@@ -1,26 +1,4 @@
-
 services:
-  mariadb:
-    image: mariadb:11
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: attrectotest
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
-    ports:
-      - "3306:3306"
-    volumes:
-      - mariadb_data:/var/lib/mysql
-
   apiservice:
-    build:
-      context: .
-      dockerfile: AttrectoTest.ApiService/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=IntegrationTest
-      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrectotest;User=myuser;Password=mypassword;
-    ports:
-      - "5001:8080"
-    depends_on:
-      - mariadb
