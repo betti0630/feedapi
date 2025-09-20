@@ -34,7 +34,7 @@ jobs:
             sleep 5
           done
           echo "API did not start in time" >&2
-          docker-compose logs
+          docker compose -f docker-compose.yml -f docker-compose.override.test.yml logs
           exit 1
 
       - name: Run integration tests
