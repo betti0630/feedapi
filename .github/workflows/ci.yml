@@ -43,3 +43,11 @@ jobs:
       - name: Shutdown containers
         if: always()
         run: docker compose down -v
+
+      - name: Show MariaDB logs
+        if: always()
+        run: docker compose logs mariadb
+
+      - name: Show API logs
+        if: always()
+        run: docker compose logs apiservice
