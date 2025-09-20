@@ -1,4 +1,6 @@
-﻿namespace AttrectoTest.ApiService.Dtos.Feeds;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace AttrectoTest.Application.Features.Feed.Dtos;
 
 public class ImageFeedUpdateDto
 {

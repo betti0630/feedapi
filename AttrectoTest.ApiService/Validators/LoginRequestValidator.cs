@@ -1,5 +1,5 @@
 ﻿using AttrectoTest.ApiService.Controllers;
-using AttrectoTest.ApiService.Dtos.Auth;
+using AttrectoTest.Application.Identity.Dtos.Auth;
 
 using FluentValidation;
 

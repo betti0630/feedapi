@@ -1,5 +1,4 @@
-﻿using AttrectoTest.ApiService.Dtos.Feeds;
-using AttrectoTest.ApiService.Validators;
+﻿using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application.Features.Feed.Commands.AddLike;
 using AttrectoTest.Application.Features.Feed.Commands.CreateComment;
 using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;

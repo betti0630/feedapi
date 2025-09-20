@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AttrectoTest.ApiService.Dtos.Auth
+namespace AttrectoTest.Application.Identity.Dtos.Auth
 {
     public record LoginResponse
     {

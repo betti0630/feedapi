@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.ApiService.Dtos.Feeds;
+﻿namespace AttrectoTest.Application.Features.Feed.Dtos;
 
 public class VideoFeedCreateDto: ImageFeedCreateDto
 {

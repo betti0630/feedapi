@@ -1,5 +1,5 @@
-﻿using AttrectoTest.ApiService.Dtos.Auth;
-using AttrectoTest.Application.Contracts.Identity;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Identity.Dtos.Auth;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
