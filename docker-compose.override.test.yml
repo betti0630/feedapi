@@ -1,0 +1,8 @@
+
+services:
+  apiservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=IntegrationTest
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrectotest;User=myuser;Password=mypassword;
+    ports:
+      - "5001:8080"
