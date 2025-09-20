@@ -37,7 +37,7 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 if (allowedOrigins == null || allowedOrigins.Length == 0)
 {
-    throw new InvalidOperationException("No allowed origins configured. Please set the 'AllowedOrigins' configuration.");
+    //throw new InvalidOperationException("No allowed origins configured. Please set the 'AllowedOrigins' configuration.");
 }
 builder.Services.AddCors(opt =>
 {
