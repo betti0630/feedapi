@@ -70,10 +70,10 @@ namespace AttrectoTest.ApiService.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<FeedDto>> Post([FromBody] CreateFeedCommand feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<CreateFeedCommandResponse>> Post([FromBody] CreateFeedCommand feed, CancellationToken cancellationToken)
         {
             var response = await mediator.Send(feed, cancellationToken);
-            return CreatedAtAction(nameof(Post), new { id = response });
+            return CreatedAtAction(nameof(Post), response);
         }
 
 
@@ -83,7 +83,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>Created</returns>
         [HttpPost("image")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> CreateImageFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<CreateFeedCommandResponse>> CreateImageFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
         {
             var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
             
@@ -94,7 +94,7 @@ namespace AttrectoTest.ApiService.Controllers
                 ImageUrl = imageUrl
             };
             var response = await mediator.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(Post), new { id = response });
+            return CreatedAtAction(nameof(Post), response);
          }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// <returns>Created</returns>
         [HttpPost("video")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> CreateVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<CreateFeedCommandResponse>> CreateVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
         {
             var imageUrl = await imageFileProcessor.ValidateAndGetUrlOfImage(feed.File, cancellationToken);
 
@@ -115,7 +115,7 @@ namespace AttrectoTest.ApiService.Controllers
                 VideoUrl = feed.VideoUrl
             };
             var response = await mediator.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(Post), new { id = response });
+            return CreatedAtAction(nameof(Post), response);
         }
 
         /// <summary>

@@ -22,7 +22,7 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHan
         var feed = item.feed;
         if (feed.IsDeleted)
         {
-            throw new BadRequestException("Cannot retrieve a deleted feed.");
+            throw new NotFoundException(nameof(Feed), request.Id);
         }
 
         var result = feed.MapFeedToDto(item.likeCount, request.UserId);
