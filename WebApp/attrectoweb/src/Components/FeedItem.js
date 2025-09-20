@@ -1,7 +1,10 @@
 import React from "react";
+import { useAuth } from "../AuthContext";
 import LikeButton from "./LikeButton.js";
 
-export default function FeedItem({ feed }) {
+export default function FeedItem({ feed, onDelete }) {
+  const auth = useAuth();
+
   if (!feed) return null;
 
   const {
@@ -19,6 +22,31 @@ export default function FeedItem({ feed }) {
   } = feed;
 
   const date = new Date(publishedAt).toLocaleString();
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure?")) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/Feeds/${feed.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        if (onDelete) onDelete(feed.id); // szülőnek szólunk
+      } else {
+        alert("Error on deleting");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Error on deleting");
+    }
+  };
 
   return (
     <div className="w-full rounded-2xl shadow-md overflow-hidden bg-white mb-4">
@@ -56,9 +84,16 @@ export default function FeedItem({ feed }) {
           <span>{date}</span>
         </div>
         <div className="flex justify-between items-center mt-3">
-          <LikeButton feedId={id} initialLiked={isLiked} initialCount={likeCount} />
+          <LikeButton
+            feedId={id}
+            initialLiked={isLiked}
+            initialCount={likeCount}
+          />
           {isOwnFeed && (
-            <button className="px-3 py-1 text-sm bg-red-500 text-white rounded-xl hover:bg-red-600">
+            <button
+              onClick={handleDelete}
+              className="px-3 py-1 text-sm bg-red-500 text-white rounded-xl hover:bg-red-600"
+            >
               Delete
             </button>
           )}
