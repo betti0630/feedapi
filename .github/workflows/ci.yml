@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build solution
+        run: dotnet build --configuration Release
+
+      - name: Start API with Docker Compose
+        run: docker compose -f docker-compose.yml -f docker-compose.override.test.yml up -d --build
+
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..30}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/health || true)
+            if [ "$status" -eq 200 ]; then
+              echo "API is up!"
+              exit 0
+            fi
+            echo "Waiting for API (status=$status)..."
+            sleep 5
+          done
+          echo "API did not start in time" >&2
+          docker-compose logs
+          exit 1
+
+      - name: Run integration tests
+        run: dotnet test --configuration Release --no-build
+
+      - name: Shutdown containers
+        if: always()
+        run: docker compose down -v
