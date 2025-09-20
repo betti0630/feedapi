@@ -58,10 +58,20 @@ npm start
    
 Send a POST request to /api/auth/register or /api/auth/login with JSON body:
 
+User:
 ```json
 {
   "username": "alice",
   "password": "Passw0rd!"
+}
+```
+
+Admin:
+User:
+```json
+{
+  "username": "admin",
+  "password": "AdminPassw0rd!"
 }
 ```
 
