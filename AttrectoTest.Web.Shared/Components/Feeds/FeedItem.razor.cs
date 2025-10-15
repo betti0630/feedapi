@@ -1,13 +1,13 @@
-﻿using AttrectoTest.Web.Services.Base;
+﻿using AttrectoTest.Web.Shared.Models;
 
 using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.Web.Components.Feeds;
+namespace AttrectoTest.Web.Shared.Components.Feeds;
 
 public partial class FeedItem : ComponentBase
 {
     [Parameter]
-    public FeedDto? Feed { get; set;}
+    public FeedItemModel? Feed { get; set;}
 
     private void HandleDelete()
     {

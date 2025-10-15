@@ -1,8 +1,8 @@
-﻿@using AttrectoTest.Web.Services.Base
+﻿@using AttrectoTest.Web.Shared.Models
 @if (Feed != null)
 {
     <div class="w-full rounded-2xl shadow-md overflow-hidden bg-white mb-4">
-        @if (Feed is ImageFeedDto imageFeed)
+        @if (Feed is ImageFeedItemModel imageFeed)
         {
             <img 
                 src=@($"http://localhost:5481/{imageFeed.ImageUrl}")
@@ -11,15 +11,15 @@
         }
         <div class="p-4">
             <h2 class="text-xl font-bold">@Feed.Title</h2>
-            @if (Feed is RssFeedDto rssFeed)
+            @if (Feed is RssFeedItemModel rssFeed)
             {
                 <div class="prose max-w-none text-gray-700">
                     @((MarkupString)Feed.Content)
                 </div>
             } else
             {
-                <p className="text-gray-700">@Feed.Content</p>
-                @if (Feed is VideoFeedDto videoFeed)
+                <p class="text-gray-700">@Feed.Content</p>
+                @if (Feed is VideoFeedItemModel videoFeed)
                 {
                     <div>
                         <a href=@videoFeed.VideoUrl>@videoFeed.VideoUrl</a>
@@ -30,7 +30,7 @@
                 <span>By @Feed.AuthorUserName</span>
                 <span>@Feed.PublishedAt</span>
             </div>
-                    <div className="flex justify-between items-center mt-3">
+                    <div class="flex justify-between items-center mt-3">
           <LikeButton
             FeedId=@Feed.Id
             InitialLiked=@Feed.IsLiked

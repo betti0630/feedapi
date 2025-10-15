@@ -1,6 +1,6 @@
-﻿using AttrectoTest.Web.Contracts;
-using AttrectoTest.Web.Providers;
+﻿using AttrectoTest.Web.Providers;
 using AttrectoTest.Web.Services.Base;
+using AttrectoTest.Web.Shared.Contracts;
 
 using Blazored.SessionStorage;
 

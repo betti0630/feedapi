@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.Web.Components.Feeds;
+namespace AttrectoTest.Web.Shared.Components.Feeds;
 
 public partial class LikeButton : ComponentBase
 {

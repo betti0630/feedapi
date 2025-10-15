@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{9C28790E-B097-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Web", "AttrectoTest.Web\AttrectoTest.Web.csproj", "{4B7A970B-743C-48BE-AE43-CE0B74AF9A28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Web.Shared", "AttrectoTest.Web.Shared\AttrectoTest.Web.Shared.csproj", "{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{4B7A970B-743C-48BE-AE43-CE0B74AF9A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B7A970B-743C-48BE-AE43-CE0B74AF9A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B7A970B-743C-48BE-AE43-CE0B74AF9A28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{7166F3B4-5F78-EB57-E0FE-EE8417ACC8EE} = {B37AF3FC-B9D6-4DE8-B162-C1C866CAA53A}
 		{8AC5E155-B3E0-4100-9F29-3DDCA665703B} = {B37AF3FC-B9D6-4DE8-B162-C1C866CAA53A}
 		{4B7A970B-743C-48BE-AE43-CE0B74AF9A28} = {9C28790E-B097-4CE6-9810-4041E3D9C35F}
+		{896E7BD2-A7BB-4ABB-8763-B74256B0D6E3} = {9C28790E-B097-4CE6-9810-4041E3D9C35F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {30DE79BA-1F7C-4107-94B2-97AD824E1693}

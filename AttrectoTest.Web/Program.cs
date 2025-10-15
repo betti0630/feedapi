@@ -4,16 +4,22 @@ using AttrectoTest.Web.Handlers;
 using AttrectoTest.Web.Providers;
 using AttrectoTest.Web.Services;
 using AttrectoTest.Web.Services.Base;
+using AttrectoTest.Web.Shared.Contracts;
 
 using Blazored.SessionStorage;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+
+using System.Reflection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddTransient<JwtAuthorizationMessageHandler>();
 builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri("http://localhost:5481/"))

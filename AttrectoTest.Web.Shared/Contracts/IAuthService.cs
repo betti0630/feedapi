@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.Web.Contracts;
+﻿namespace AttrectoTest.Web.Shared.Contracts;
 
 public interface IAuthService
 {

@@ -1,7 +1,7 @@
-﻿@if (_feeds != null)
+﻿@if (_model != null)
 {
     <div class="flex flex-col items-center space-y-6">
-        @foreach (var feed in _feeds.Items)
+        @foreach (var feed in _model.Items)
         {
             <div class="w-full max-w-5xl" key={feed.id}>
                 <FeedItem Feed="@feed" />
