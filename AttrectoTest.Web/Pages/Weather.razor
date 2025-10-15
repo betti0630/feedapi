@@ -1,7 +1,9 @@
 ﻿@page "/weather"
+@using AttrectoTest.Web.Contracts
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IFeedService FeedService
 
 <PageTitle>Weather</PageTitle>
 
@@ -44,6 +46,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        var feeds = await FeedService.GetFeeds();
     }
 
     public class WeatherForecast

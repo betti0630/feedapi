@@ -53,7 +53,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// Get feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{feedId}")]
         public async Task<ActionResult<FeedDto>> Get(int id, CancellationToken cancellationToken)
         {
             var query = new GetFeedQuery { Id = id };
@@ -122,7 +122,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// Update feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpPatch("{id}")]
+        [HttpPatch("{feedId}")]
         public async Task<ActionResult<FeedDto>> Patch(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
         {
             if (id != feed.Id)
@@ -137,11 +137,11 @@ namespace AttrectoTest.ApiService.Controllers
         /// Update image feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpPatch("image/{id}")]
+        [HttpPatch("image/{feedId}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> PatchImageFeed([FromServices] IImageFileProcessor imageFileProcessor, int id, [FromForm] ImageFeedUpdateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> PatchImageFeed([FromServices] IImageFileProcessor imageFileProcessor, int feedId, [FromForm] ImageFeedUpdateDto feed, CancellationToken cancellationToken)
         {
-            if (id != feed.Id)
+            if (feedId != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
@@ -163,11 +163,11 @@ namespace AttrectoTest.ApiService.Controllers
         /// Update video feed
         /// </summary>
         /// <returns>OK</returns>
-        [HttpPatch("video/{id}")]
+        [HttpPatch("video/{feedId}")]
         [Consumes("multipart/form-data")]
-        public async Task<ActionResult<FeedDto>> PatchVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, int id, [FromForm] VideoFeedUpdateDto feed, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> PatchVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, int feedId, [FromForm] VideoFeedUpdateDto feed, CancellationToken cancellationToken)
         {
-            if (id != feed.Id)
+            if (feedId != feed.Id)
             {
                 throw new ArgumentException("Feed ID mismatch");
             }
@@ -191,7 +191,7 @@ namespace AttrectoTest.ApiService.Controllers
         /// Delete feed 
         /// </summary>
         /// <returns>Soft deleted</returns>
-        [HttpDelete("{id}")]
+        [HttpDelete("{feedId}")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             var command = new DeleteFeedCommand { Id = id };

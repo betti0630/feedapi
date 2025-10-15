@@ -3,17 +3,15 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.SessionStorage;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace AttrectoTest.Web.Helpers
+namespace AttrectoTest.Web.Providers
 {
     public class JwtAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ISessionStorageService _sessionStorage;
-        private readonly HttpClient _http;
 
-        public JwtAuthStateProvider(ISessionStorageService sessionStorage, HttpClient http)
+        public JwtAuthStateProvider(ISessionStorageService sessionStorage)
         {
             _sessionStorage = sessionStorage;
-            _http = http;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -22,8 +20,6 @@ namespace AttrectoTest.Web.Helpers
 
             if (string.IsNullOrWhiteSpace(token))
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-
-            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             var handler = new JwtSecurityTokenHandler();
             var jwt = handler.ReadJwtToken(token);
@@ -45,9 +41,10 @@ namespace AttrectoTest.Web.Helpers
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
         }
 
-        public void NotifyUserLogout()
+        public async Task NotifyUserLogout()
         {
             var anonymous = new ClaimsPrincipal(new ClaimsIdentity());
+            await _sessionStorage.RemoveItemAsync("jwt");
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymous)));
         }
     }

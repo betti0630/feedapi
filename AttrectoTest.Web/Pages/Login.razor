@@ -1,6 +1,7 @@
 ﻿@page "/login"
-@using AttrectoTest.Web.Helpers
-@inject AuthService Auth
+@using AttrectoTest.Web.Contracts
+@using AttrectoTest.Web.Services
+@inject IAuthService Auth
 @inject NavigationManager Nav
 
 <h3>Login</h3>
@@ -27,7 +28,7 @@
 
     private async Task LoginClick()
     {
-        var ok = await Auth.LoginAsync(email, password);
+        var ok = await Auth.Login(email, password);
         if (ok)
         {
             Nav.NavigateTo("/");
