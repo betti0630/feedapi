@@ -1,0 +1,15 @@
+﻿@if (_feeds != null)
+{
+    <div className="flex flex-col items-center space-y-6">
+        @foreach (var feed in _feeds.Items)
+        {
+            <div className="w-full max-w-5xl" key={feed.id}>
+                <FeedItem Feed="@feed" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p className="text-gray-500">No feeds available.</p>
+}
