@@ -1,9 +1,9 @@
 ﻿@if (_feeds != null)
 {
-    <div className="flex flex-col items-center space-y-6">
+    <div class="flex flex-col items-center space-y-6">
         @foreach (var feed in _feeds.Items)
         {
-            <div className="w-full max-w-5xl" key={feed.id}>
+            <div class="w-full max-w-5xl" key={feed.id}>
                 <FeedItem Feed="@feed" />
             </div>
         }
@@ -11,5 +11,5 @@
 }
 else
 {
-    <p className="text-gray-500">No feeds available.</p>
+    <p class="text-gray-500">No feeds available.</p>
 }

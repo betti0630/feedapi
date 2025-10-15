@@ -14,7 +14,7 @@ public class FeedService : BaseHttpService, IFeedService
 
     public async Task<PagedFeeds> GetFeeds()
     {
-        var feeds = await _client.GetAsync(1, 10, ListSort.CreatedAt_desc, true);
+        var feeds = await _client.GetAsync(1, 100, ListSort.CreatedAt_desc, false);
         return feeds;
     }
 
