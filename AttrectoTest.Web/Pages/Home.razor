@@ -1,0 +1,28 @@
+﻿@page "/"
+@using AttrectoTest.Web.Helpers
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <p>Üdv, @context.User.Identity.Name!</p>
+        <button @onclick="Logout">Kijelentkezés</button>
+    </Authorized>
+    <NotAuthorized>
+        <p>Kérlek, <a href="/login">jelentkezz be</a>.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    [Inject] AuthService Auth { get; set; } = default!;
+
+    private void Logout()
+    {
+        Auth.Logout();
+    }
+}
