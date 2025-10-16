@@ -6,7 +6,7 @@
         @if (Feed is ImageFeedItemModel imageFeed)
         {
             <img 
-                src=@($"http://localhost:5481/{imageFeed.ImageUrl}")
+                src=@imageFeed.ImageUrl
                 alt="@Feed.Title"
                  class="w-full object-contain" />
         }

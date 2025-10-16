@@ -1,5 +1,6 @@
-using AttrectoTest.BlazorWasm;
 using AttrectoTest.Blazor.Shared.Contracts;
+using AttrectoTest.BlazorWasm;
+using AttrectoTest.BlazorWasm.Configuration;
 using AttrectoTest.BlazorWasm.Handlers;
 using AttrectoTest.BlazorWasm.Providers;
 using AttrectoTest.BlazorWasm.Services;
@@ -14,15 +15,22 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Reflection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddTransient<JwtAuthorizationMessageHandler>();
-builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri("http://localhost:5481/"))
+
+var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSettings>();
+
+builder.Services.Configure<ApiSettings>(
+    builder.Configuration.GetSection("ApiSettings"));
+
+builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.BaseUrl))
     .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
-builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri("http://localhost:5481/"))
+builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.BaseUrl))
     .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
 
 
