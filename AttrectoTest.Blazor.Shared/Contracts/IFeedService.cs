@@ -5,4 +5,7 @@ namespace AttrectoTest.Blazor.Shared.Contracts;
 public interface IFeedService
 {
     Task<FeedListModel> GetFeeds();
+    Task DeleteFeed(int feedId);
+    Task<bool> AddLike(int feedId);
+    Task<bool> DeleteLike(int feedId);
 }

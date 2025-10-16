@@ -901,11 +901,11 @@ namespace AttrectoTest.BlazorWasm.Services.Base
         System.Threading.Tasks.Task<FeedDto> PatchAsync(int? id, string feedId, UpdateFeedCommand feed, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> DeleteAsync(int? id, string feedId);
+        System.Threading.Tasks.Task DeleteAsync(int feedId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> DeleteAsync(int? id, string feedId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteAsync(int feedId, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<CreateFeedCommandResponse> CreateImageFeedAsync(string title, string content, FileParameter file);
@@ -936,18 +936,18 @@ namespace AttrectoTest.BlazorWasm.Services.Base
         System.Threading.Tasks.Task<FeedDto> PatchVideoFeedAsync(int feedId, string videoUrl, int? id, string title, string content, FileParameter file, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LikePOSTAsync(int feedId);
+        System.Threading.Tasks.Task LikePOSTAsync(int feedId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LikePOSTAsync(int feedId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task LikePOSTAsync(int feedId, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LikeDELETEAsync(int feedId);
+        System.Threading.Tasks.Task LikeDELETEAsync(int feedId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> LikeDELETEAsync(int feedId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task LikeDELETEAsync(int feedId, System.Threading.CancellationToken cancellationToken);
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<PagedComments> CommentsGETAsync(int? page, int? pageSize, int feedId);
@@ -1388,14 +1388,14 @@ namespace AttrectoTest.BlazorWasm.Services.Base
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> DeleteAsync(int? id, string feedId)
+        public virtual System.Threading.Tasks.Task DeleteAsync(int feedId)
         {
-            return DeleteAsync(id, feedId, System.Threading.CancellationToken.None);
+            return DeleteAsync(feedId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> DeleteAsync(int? id, string feedId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteAsync(int feedId, System.Threading.CancellationToken cancellationToken)
         {
             if (feedId == null)
                 throw new System.ArgumentNullException("feedId");
@@ -1407,19 +1407,12 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     // Operation Path: "api/Feeds/{feedId}"
                     urlBuilder_.Append("api/Feeds/");
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(feedId, System.Globalization.CultureInfo.InvariantCulture)));
-                    urlBuilder_.Append('?');
-                    if (id != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("id")).Append('=').Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture))).Append('&');
-                    }
-                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1444,17 +1437,38 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 204)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await ReadAsStreamAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -1900,14 +1914,14 @@ namespace AttrectoTest.BlazorWasm.Services.Base
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> LikePOSTAsync(int feedId)
+        public virtual System.Threading.Tasks.Task LikePOSTAsync(int feedId)
         {
             return LikePOSTAsync(feedId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> LikePOSTAsync(int feedId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task LikePOSTAsync(int feedId, System.Threading.CancellationToken cancellationToken)
         {
             if (feedId == null)
                 throw new System.ArgumentNullException("feedId");
@@ -1920,7 +1934,6 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                 {
                     request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -1952,17 +1965,38 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 204)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await ReadAsStreamAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally
@@ -1980,14 +2014,14 @@ namespace AttrectoTest.BlazorWasm.Services.Base
         }
 
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> LikeDELETEAsync(int feedId)
+        public virtual System.Threading.Tasks.Task LikeDELETEAsync(int feedId)
         {
             return LikeDELETEAsync(feedId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> LikeDELETEAsync(int feedId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task LikeDELETEAsync(int feedId, System.Threading.CancellationToken cancellationToken)
         {
             if (feedId == null)
                 throw new System.ArgumentNullException("feedId");
@@ -1999,7 +2033,6 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
@@ -2031,17 +2064,38 @@ namespace AttrectoTest.BlazorWasm.Services.Base
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 204)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await ReadAsStreamAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, null, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
-                            var responseData_ = response_.Content == null ? null : await ReadAsStringAsync(response_.Content, cancellationToken).ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                     }
                     finally

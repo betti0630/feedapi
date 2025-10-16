@@ -25,4 +25,35 @@ public class FeedService : BaseHttpService, IFeedService
         return model;
     }
 
+    public async Task<bool> AddLike(int feedId)
+    {
+        try
+        {
+            await _client.LikePOSTAsync(feedId);
+            return true;
+        }
+        catch (ApiException ex)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteLike(int feedId)
+    {
+        try
+        {
+            await _client.LikeDELETEAsync(feedId);
+            return true;
+        }
+        catch (ApiException ex)
+        {
+            return false;
+        }
+    }
+
+    public async Task DeleteFeed(int feedId)
+    {
+        await _client.DeleteAsync(feedId);
+    }
+
 }

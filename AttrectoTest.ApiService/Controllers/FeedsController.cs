@@ -192,9 +192,13 @@ namespace AttrectoTest.ApiService.Controllers
         /// </summary>
         /// <returns>Soft deleted</returns>
         [HttpDelete("{feedId}")]
-        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Delete(int feedId, CancellationToken cancellationToken)
         {
-            var command = new DeleteFeedCommand { Id = id };
+            var command = new DeleteFeedCommand { Id = feedId };
             await mediator.Send(command, cancellationToken);
             return NoContent();
         }
@@ -207,6 +211,10 @@ namespace AttrectoTest.ApiService.Controllers
         /// </summary>
         /// <returns>OK</returns>
         [HttpPost, Route("{feedId}/like", Name = "likePOST")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> LikePOST(int feedId, CancellationToken cancellationToken)
         {
             var command = new AddLikeCommand { FeedId = feedId };
@@ -219,6 +227,10 @@ namespace AttrectoTest.ApiService.Controllers
         /// </summary>
         /// <returns>OK</returns>
         [HttpDelete, Route("{feedId}/like", Name = "likeDELETE")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
         public async Task<IActionResult> LikeDELETE(int feedId, CancellationToken cancellationToken)
         {
 

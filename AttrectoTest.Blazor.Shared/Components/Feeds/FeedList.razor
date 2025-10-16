@@ -4,7 +4,7 @@
         @foreach (var feed in _model.Items)
         {
             <div class="w-full max-w-5xl" key={feed.id}>
-                <FeedItem Feed="@feed" />
+                <FeedItem Feed="@feed" OnFeedDeleted="HandleFeedDeleted" />
             </div>
         }
     </div>
