@@ -1,41 +1,31 @@
 ﻿@page "/login"
-@using AttrectoTest.Blazor.Shared.Contracts
-@using AttrectoTest.BlazorWasm.Services
-@inject IAuthService Auth
-@inject NavigationManager Nav
 
-<h3>Login</h3>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
 
-@if (!string.IsNullOrEmpty(error))
-{
-    <div class="alert alert-danger">@error</div>
-}
 
-<div class="form-group">
-    <label>Email:</label>
-    <input @bind="email" class="form-control" />
-</div>
-<div class="form-group">
-    <label>Password:</label>
-    <input @bind="password" type="password" class="form-control" />
-</div>
-<button class="btn btn-primary" @onclick="LoginClick">Login</button>
 
-@code {
-    private string email = "";
-    private string password = "";
-    private string? error;
+    <div class="bg-white shadow-md rounded-2xl p-8 w-full max-w-sm space-y-4">
 
-    private async Task LoginClick()
-    {
-        var ok = await Auth.Login(email, password);
-        if (ok)
+        <input @bind="_userName"
+               placeholder="Username"
+               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <input @bind="_password"
+               type="password"
+               placeholder="Password"
+               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <button type="submit"
+                class="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+                @onclick="LoginClick">
+            Login
+        </button>
+
+        @if (!string.IsNullOrEmpty(_error))
         {
-            Nav.NavigateTo("/");
+            <p class="bg-red-100 text-red-600 text-sm p-2 rounded-lg text-center">
+                @_error
+            </p>
         }
-        else
-        {
-            error = "Login failed";
-        }
-    }
-}
+    </div>
+</div>
