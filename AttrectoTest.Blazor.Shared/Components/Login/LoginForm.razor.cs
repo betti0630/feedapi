@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.BlazorWasm.Pages;
+namespace AttrectoTest.Blazor.Shared.Components.Login;
 
-public partial class Login
+public partial class LoginForm
 {
 
     [Inject] protected IAuthService Auth { get; set; } = null!;
