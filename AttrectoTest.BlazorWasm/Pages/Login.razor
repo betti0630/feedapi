@@ -1,0 +1,41 @@
+﻿@page "/login"
+@using AttrectoTest.Blazor.Shared.Contracts
+@using AttrectoTest.BlazorWasm.Services
+@inject IAuthService Auth
+@inject NavigationManager Nav
+
+<h3>Login</h3>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger">@error</div>
+}
+
+<div class="form-group">
+    <label>Email:</label>
+    <input @bind="email" class="form-control" />
+</div>
+<div class="form-group">
+    <label>Password:</label>
+    <input @bind="password" type="password" class="form-control" />
+</div>
+<button class="btn btn-primary" @onclick="LoginClick">Login</button>
+
+@code {
+    private string email = "";
+    private string password = "";
+    private string? error;
+
+    private async Task LoginClick()
+    {
+        var ok = await Auth.Login(email, password);
+        if (ok)
+        {
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            error = "Login failed";
+        }
+    }
+}

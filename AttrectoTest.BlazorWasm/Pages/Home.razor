@@ -1,0 +1,37 @@
+﻿@page "/"
+@using AttrectoTest.Blazor.Shared.Contracts
+@using AttrectoTest.BlazorWasm.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Home</PageTitle>
+
+<h1 class="p-4 font-bold text-blue-600">Hello, world!</h1>
+
+Welcome to your new app.
+<div class="relative min-h-screen bg-gray-100">
+<AuthorizeView>
+    <Authorized>
+        <p>Üdv, @context.User.Identity.Name!</p>
+            <button 
+                @onclick="Logout" 
+                class="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                Kijelentkezés
+            </button>
+             <div class="flex justify-center pt-16">
+                <FeedList></FeedList>
+            </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Kérlek, <a href="/login">jelentkezz be</a>.</p>
+    </NotAuthorized>
+</AuthorizeView>
+</div>
+
+@code {
+    [Inject] IAuthService Auth { get; set; } = default!;
+
+    private void Logout()
+    {
+        Auth.Logout();
+    }
+}
