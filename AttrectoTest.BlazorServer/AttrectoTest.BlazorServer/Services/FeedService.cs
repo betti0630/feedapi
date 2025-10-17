@@ -1,4 +1,7 @@
-﻿using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
+﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
+using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
+using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
+using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
 using AttrectoTest.Blazor.Shared.Contracts;
 using AttrectoTest.Blazor.Shared.Models;
@@ -9,8 +12,10 @@ using AutoMapper;
 using MediatR;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 using System.Runtime;
+using System.Threading;
 
 
 namespace AttrecotTest.BlazorServer.Services;
@@ -28,19 +33,24 @@ public class FeedService : IFeedService
         _navigationManager = navigationManager;
     }
 
-    public Task<bool> AddLike(int feedId)
+    public async Task<bool> AddLike(int feedId)
     {
-        throw new NotImplementedException();
+        var command = new AddLikeCommand { FeedId = feedId };
+        await _mediator.Send(command);
+        return true;
     }
 
-    public Task DeleteFeed(int feedId)
+    public async Task DeleteFeed(int feedId)
     {
-        throw new NotImplementedException();
+        var command = new DeleteFeedCommand { Id = feedId };
+        await _mediator.Send(command);
     }
 
-    public Task<bool> DeleteLike(int feedId)
+    public async Task<bool> DeleteLike(int feedId)
     {
-        throw new NotImplementedException();
+        var command = new DeleteLikeCommand { FeedId = feedId };
+        await _mediator.Send(command);
+        return true;
     }
 
     public async Task<FeedListModel> GetFeeds()
