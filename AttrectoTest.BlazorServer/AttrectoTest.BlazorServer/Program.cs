@@ -84,4 +84,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(AttrectoTest.BlazorServer.Client._Imports).Assembly);
 
+app.Services.RunDatabaseMigrations();
+
 app.Run();

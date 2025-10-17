@@ -49,7 +49,7 @@ public class FeedService : IFeedService
         {
             IncludeExternal =  false,
             Page = 1,
-            PageSize = 10,
+            PageSize = 100,
             Sort = ListSort.CreatedAt_desc
         };
         var result = await _mediator.Send(query);
