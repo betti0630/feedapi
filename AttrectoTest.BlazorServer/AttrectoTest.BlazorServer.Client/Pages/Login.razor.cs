@@ -34,9 +34,16 @@ namespace AttrectoTest.BlazorServer.Client.Pages
             var ok = await AuthManager.Login(LoginReq.UserName, LoginReq.Password);
             if (ok)
             {
+                var userId = LoginReq.UserName switch
+                {
+                    "alice" => 1,
+                    "bob" => 2,
+                    _ => 0
+                };
                 var claims = new List<Claim>
                 {
-            new Claim(ClaimTypes.Name, LoginReq.UserName)
+                    new Claim(ClaimTypes.Name, LoginReq.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

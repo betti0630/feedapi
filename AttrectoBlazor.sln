@@ -29,10 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.BlazorServer",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.BlazorServer.Client", "AttrectoTest.BlazorServer\AttrectoTest.BlazorServer.Client\AttrectoTest.BlazorServer.Client.csproj", "{808B6119-0A12-45FE-AF9C-82B14F7DC11C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{8772AA94-4AA1-4A21-9E05-F2D777D47144}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.ApiService", "AttrectoTest.ApiService\AttrectoTest.ApiService.csproj", "{BE2E723C-12F0-AA4C-552D-AEE697778CA9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,10 +71,6 @@ Global
 		{808B6119-0A12-45FE-AF9C-82B14F7DC11C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{808B6119-0A12-45FE-AF9C-82B14F7DC11C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{808B6119-0A12-45FE-AF9C-82B14F7DC11C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE2E723C-12F0-AA4C-552D-AEE697778CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE2E723C-12F0-AA4C-552D-AEE697778CA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE2E723C-12F0-AA4C-552D-AEE697778CA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE2E723C-12F0-AA4C-552D-AEE697778CA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,7 +85,6 @@ Global
 		{C7D0BFE5-0FCE-EBB9-5A5D-AF7E73204AD8} = {9C28790E-B097-4CE6-9810-4041E3D9C35F}
 		{A9EBC4A6-FBFD-4CEB-A56E-A45E88A3BDDC} = {9C28790E-B097-4CE6-9810-4041E3D9C35F}
 		{808B6119-0A12-45FE-AF9C-82B14F7DC11C} = {9C28790E-B097-4CE6-9810-4041E3D9C35F}
-		{BE2E723C-12F0-AA4C-552D-AEE697778CA9} = {8772AA94-4AA1-4A21-9E05-F2D777D47144}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {30DE79BA-1F7C-4107-94B2-97AD824E1693}

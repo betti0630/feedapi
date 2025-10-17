@@ -2,6 +2,6 @@
 
 namespace AttrectoTest.Application.Contracts.Persistence;
 
-public interface ICommentRepository: IGenericRepository<Comment>
+public interface ICommentRepository: IQueryableRepository<Comment>, IDisposable
 {
 }

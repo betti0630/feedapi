@@ -2,7 +2,7 @@
 
 namespace AttrectoTest.Application.Contracts.Persistence;
 
-public interface IFeedRepository: IGenericRepository<Feed>
+public interface IFeedRepository: IQueryableRepository<Feed>, IDisposable
 {
     Task<int> GetLikesCountAsync(int feedId, CancellationToken cancellationToken = default);
     Task AddLikeAsync(int feedId, int userId, CancellationToken cancellationToken = default);

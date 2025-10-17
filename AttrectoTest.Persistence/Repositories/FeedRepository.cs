@@ -10,11 +10,11 @@ using System.Linq.Expressions;
 
 namespace AttrectoTest.Persistence.Repositories;
 
-internal class FeedRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericRepository<Feed>(contextFactory), IFeedRepository
+internal class FeedRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericQueryableRepository<Feed>(contextFactory), IFeedRepository, IDisposable
 {
     public override IQueryable<Feed> List()
     {
-        using var dbContext = _contextFactory.CreateDbContext();
+        var dbContext = CreateNewContext();
         return dbContext.Set<Feed>().Include(f => f.Author).AsNoTracking().AsQueryable();
     }
 

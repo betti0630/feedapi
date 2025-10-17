@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\AttrectoTest.Infrastructure\AttrectoTest.Infrastructure.csproj" />
     <ProjectReference Include="..\..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />
     <ProjectReference Include="..\AttrectoTest.BlazorServer.Client\AttrectoTest.BlazorServer.Client.csproj" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.20" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>

@@ -9,7 +9,6 @@ public interface IGenericRepository<T> where T : AppEntity
     Task<IReadOnlyList<T>> GetAsync(CancellationToken cancellationToken = default);
     Task<T?> GetByAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    IQueryable<T> List();
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task CreateAsync(T entity, CancellationToken cancellationToken = default);

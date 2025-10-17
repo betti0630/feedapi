@@ -32,14 +32,7 @@ internal class GenericRepository<T>(IDbContextFactory<TestDbContext> contextFact
         return await dbContext.Set<T>().AsNoTracking().ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public virtual IQueryable<T> List()
-    {
-        using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Set<T>().AsNoTracking().AsQueryable();
-    }
-
-
-    public virtual async Task<bool> AnyAsync(CancellationToken cancellationToken = default)     {
+     public virtual async Task<bool> AnyAsync(CancellationToken cancellationToken = default)     {
         await using var dbContext = _contextFactory.CreateDbContext();
         return await dbContext.Set<T>().AnyAsync(cancellationToken: cancellationToken);
     }
