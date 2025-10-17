@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace AttrectoTest.BlazorWasm.Services
 {
-    public class AuthService : IAuthService
+    public class AuthManager : IAuthManager
     {
         private readonly IAuthClient _authClient;
         private readonly ISessionStorageService _sessionStorage;
         private readonly AuthenticationStateProvider _authStateProvider;
 
 
-        public AuthService(IAuthClient authClient, ISessionStorageService sessionStorage, AuthenticationStateProvider authStateProvider)
+        public AuthManager(IAuthClient authClient, ISessionStorageService sessionStorage, AuthenticationStateProvider authStateProvider)
         {
             _authClient = authClient;
             _sessionStorage = sessionStorage;

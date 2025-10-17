@@ -13,12 +13,19 @@ public static class PersistenceServiceRegistration
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<TestDbContext>(options =>
-            options.UseMySql(
-                configuration.GetConnectionString("DefaultConnection"),
-                new MySqlServerVersion(new Version(11, 3, 0)),
-                b => b.MigrationsAssembly(typeof(TestDbContext).Assembly.FullName)
-        ));
+        //services.AddDbContext<TestDbContext>(options =>
+        //    options.UseMySql(
+        //        configuration.GetConnectionString("DefaultConnection"),
+        //        new MySqlServerVersion(new Version(11, 3, 0)),
+        //        b => b.MigrationsAssembly(typeof(TestDbContext).Assembly.FullName)
+        //));
+
+        services.AddDbContextFactory<TestDbContext>(options =>
+    options.UseMySql(
+        configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(11, 3, 0)),
+        b => b.MigrationsAssembly(typeof(TestDbContext).Assembly.FullName)
+));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IFeedRepository, FeedRepository>();

@@ -7,7 +7,7 @@ namespace AttrectoTest.Blazor.Shared.Components.Login;
 public partial class LoginForm
 {
 
-    [Inject] protected IAuthService Auth { get; set; } = null!;
+    [Inject] protected IAuthManager Auth { get; set; } = null!;
     [Inject] protected NavigationManager Nav { get; set; } = null!;
 
     private string _userName = "";

@@ -24,7 +24,7 @@
 </AuthorizeView>
 
 @code {
-    [Inject] IAuthService Auth { get; set; } = default!;
+    [Inject] IAuthManager Auth { get; set; } = default!;
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
 
     private void Login()

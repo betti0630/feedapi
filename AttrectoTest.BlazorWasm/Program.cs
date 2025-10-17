@@ -34,7 +34,7 @@ builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.Base
     .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
 
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IFeedService, FeedService>();
 
 builder.Services.AddBlazoredSessionStorage();

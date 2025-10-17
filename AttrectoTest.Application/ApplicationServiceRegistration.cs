@@ -29,15 +29,7 @@ public static class ApplicationServiceRegistration
 
     public static IServiceCollection AddAppAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IAuthUserService, AuthUserService>();
-        services.AddScoped<IAppUserService, AppUserService>();
-
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
-
-        services.AddHttpClient<RssService>();
+        services.AddAppAuthServices(configuration);
 
         var jwt = configuration.GetSection("Jwt");
         services.Configure<JwtSettings>(jwt);
@@ -57,6 +49,21 @@ public static class ApplicationServiceRegistration
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+        return services;
+    }
+
+    public static IServiceCollection AddAppAuthServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAuthUserService, AuthUserService>();
+        services.AddScoped<IAppUserService, AppUserService>();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
+
+        services.AddHttpClient<RssService>();
 
         return services;
     }

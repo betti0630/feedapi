@@ -1,0 +1,20 @@
+﻿@page "/login"
+@using AttrectoTest.BlazorServer.Client.Models
+@using Microsoft.AspNetCore.Authentication
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication.Cookies
+
+<h3>Login</h3>
+
+<EditForm Enhance FormName="LoginFrom" OnValidSubmit=LoginTask Model="LoginReq">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value=LoginReq.UserName></InputText>
+
+    <InputText @bind-Value=LoginReq.Password></InputText>
+
+    <button type="submit">Login</button>
+</EditForm>
+
+
