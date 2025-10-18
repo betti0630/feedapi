@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AttrectoTest.Application.Shared\AttrectoTest.Application.Shared.csproj" />
     <ProjectReference Include="..\AttrectoTest.Domain\AttrectoTest.Domain.csproj" />
   </ItemGroup>
 
