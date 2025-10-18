@@ -1,6 +1,6 @@
-using AttrectoTest.Persistence;
-using AttrectoTest.Application;
-using AttrectoTest.Infrastructure;
+using AttrectoTest.Aim.Persistence;
+using AttrectoTest.Aim.Application;
+using AttrectoTest.Aim.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 
 using Serilog;

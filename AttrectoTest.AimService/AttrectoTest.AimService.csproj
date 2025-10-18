@@ -17,9 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Infrastructure\AttrectoTest.Infrastructure.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Aim.Application\AttrectoTest.Aim.Application.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Aim.Infrastructure\AttrectoTest.Aim.Infrastructure.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Aim.Persistence\AttrectoTest.Aim.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
