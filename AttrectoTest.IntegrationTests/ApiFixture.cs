@@ -1,4 +1,4 @@
-using AttrectoTest.Application.Identity.Dtos.Auth;
+using AttrectoTest.Aim.Application.Identity.Dtos.Auth;
 
 using Microsoft.Extensions.Configuration;
 
