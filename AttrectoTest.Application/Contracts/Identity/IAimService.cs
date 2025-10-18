@@ -3,5 +3,6 @@ namespace AttrectoTest.Application.Contracts.Identity;
 
 public interface IAimService
 {
-    Task<string> GetAimDataAsync(string id, CancellationToken ct = default);
+    Task<int> GetUserIdByUserName(string userName, CancellationToken ct = default);
+    Task<string> GetUserNameByUserId(int userId, CancellationToken ct = default);
 }

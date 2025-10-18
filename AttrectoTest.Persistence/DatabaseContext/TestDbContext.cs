@@ -45,7 +45,6 @@ internal class TestDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    public DbSet<AppUser> AppUsers => Set<AppUser>();
     public DbSet<Feed> Feeds => Set<Feed>();
     public DbSet<FeedLike> FeedLikes => Set<FeedLike>();
     public DbSet<Comment> Comments => Set<Comment>();

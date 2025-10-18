@@ -15,9 +15,15 @@ public class AimGrpcService : IAimService
         _client = new AimService.AimServiceClient(channel);
     }
 
-    public async Task<string> GetAimDataAsync(string id, CancellationToken ct = default)
+    public async Task<int> GetUserIdByUserName(string userName, CancellationToken ct = default)
     {
-        var result = await _client.GetAimDataAsync(new AimRequest { Id = id }, cancellationToken: ct);
-        return result.Name;
+        var result = await _client.GetUserIdByUserNameAsync(new GetUserIdByUserNameRequest { UserName = userName }, cancellationToken: ct);
+        return result.UserId;
+    }
+
+    public async Task<string> GetUserNameByUserId(int userId, CancellationToken ct = default)
+    {
+        var result = await _client.GetUserDataAsync(new GetUserDataRequest { UserId = userId }, cancellationToken: ct);
+        return result.UserName;
     }
 }

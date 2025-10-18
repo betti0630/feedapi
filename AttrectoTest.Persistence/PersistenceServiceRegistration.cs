@@ -54,7 +54,7 @@ public static class PersistenceServiceRegistration
                 }
                 db.Database.Migrate();
                 Console.WriteLine("Migration is successful.");
-                var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
+                var userService = scope.ServiceProvider.GetRequiredService<IAimService>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
                 var seeder = new Seed.DbSeeder(dbContext, userService);
                 seeder.SeedAsync().Wait();

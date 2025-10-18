@@ -16,10 +16,6 @@ public class Feed : BaseEntity
     public string Content { get; set; } = null!;
 
     [Required]
-    [ForeignKey(nameof(AuthorId))]
-    public AppUser Author { get; set; } = null!;
-
-    [Required]
     public int AuthorId { get; set; }
 
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;

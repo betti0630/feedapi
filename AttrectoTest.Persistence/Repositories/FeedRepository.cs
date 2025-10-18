@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Domain;
 using AttrectoTest.Persistence.DatabaseContext;
 
@@ -15,13 +16,13 @@ internal class FeedRepository(IDbContextFactory<TestDbContext> contextFactory) :
     public override IQueryable<Feed> List()
     {
         var dbContext = CreateNewContext();
-        return dbContext.Set<Feed>().Include(f => f.Author).AsNoTracking().AsQueryable();
+        return dbContext.Set<Feed>().AsNoTracking().AsQueryable();
     }
 
     public override async Task<Feed?> GetByAsync(Expression<Func<Feed, bool>> predicate, CancellationToken cancellationToken = default)
     {
         await using var dbContext = _contextFactory.CreateDbContext();
-        return await dbContext.Set<Feed>().Include(f => f.Author).AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
+        return await dbContext.Set<Feed>().AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken: cancellationToken);
     }
 
     public async Task<int> GetLikesCountAsync(int feedId, CancellationToken cancellationToken = default)

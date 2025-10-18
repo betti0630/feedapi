@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Mappers;
@@ -9,9 +10,9 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
-internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHandler<GetFeedQuery, FeedDto>
+internal class GetFeedQueryHandler(IFeedRepository feedRepository, IAimService aimService) : IRequestHandler<GetFeedQuery, FeedDto>
 {
-    public Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
+    public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {
         var feeds = feedRepository.List();
 
@@ -31,7 +32,7 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository) : IRequestHan
             throw new NotFoundException(nameof(Feed), request.Id);
         }
 
-        var result = feed.MapFeedToDto(item.likeCount, item.isLiked, request.UserId);
-        return Task.FromResult(result);
+        var result = await feed.MapFeedToDto(item.likeCount, item.isLiked, request.UserId, aimService);
+        return result;
     }
 }

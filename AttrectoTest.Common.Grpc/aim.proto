@@ -5,14 +5,24 @@ option csharp_namespace = "AttrectoTest.Common.Grpc.Aim";
 package aim;
 
 service AimService {
-    rpc GetAimData (AimRequest) returns (AimResponse);
+    rpc GetUserIdByUserName (GetUserIdByUserNameRequest) returns (GetUserIdByUserNameResponse);
+    rpc GetUserData (GetUserDataRequest) returns (GetUserDataResponse);
 }
 
-message AimRequest {
-    string id = 1;
+message GetUserIdByUserNameRequest {
+    string userName = 1;
 }
 
-message AimResponse {
-    string name = 1;
-    double score = 2;
+message GetUserIdByUserNameResponse {
+    int32 userId = 1;
+}
+
+message GetUserDataRequest {
+    int32 userId = 1;
+}
+
+message GetUserDataResponse {
+    int32 userId = 1;
+    string userName = 2;
+    string roles = 3;
 }

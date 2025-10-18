@@ -55,10 +55,7 @@ public static class ApplicationServiceRegistration
 
     public static IServiceCollection AddAppAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
-        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IAuthUserService, AuthUserService>();
-        services.AddScoped<IAppUserService, AppUserService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
