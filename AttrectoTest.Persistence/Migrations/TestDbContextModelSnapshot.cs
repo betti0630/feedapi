@@ -22,31 +22,6 @@ namespace AttrectoTest.Persistence.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("AttrectoTest.Domain.AppUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("RolesCsv")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppUsers");
-                });
-
             modelBuilder.Entity("AttrectoTest.Domain.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -80,8 +55,6 @@ namespace AttrectoTest.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FeedId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -127,8 +100,6 @@ namespace AttrectoTest.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.ToTable("Feeds", (string)null);
 
                     b.UseTptMappingStrategy();
@@ -143,8 +114,6 @@ namespace AttrectoTest.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FeedId", "UserId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FeedLikes");
                 });
@@ -180,26 +149,7 @@ namespace AttrectoTest.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AttrectoTest.Domain.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Feed");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AttrectoTest.Domain.Feed", b =>
-                {
-                    b.HasOne("AttrectoTest.Domain.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("AttrectoTest.Domain.FeedLike", b =>
@@ -210,15 +160,7 @@ namespace AttrectoTest.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AttrectoTest.Domain.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Feed");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AttrectoTest.Domain.ImageFeed", b =>

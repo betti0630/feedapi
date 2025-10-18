@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Aim.Persistence.DatabaseContext;
 
-internal class TestDbContext : DbContext
+internal class AuthDbContext : DbContext
 {
     //private readonly IAuthUserService _authService;
 
-    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
+    public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
     {
         //_authService = authService;
     }

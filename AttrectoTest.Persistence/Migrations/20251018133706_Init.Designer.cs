@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AttrectoTest.Persistence.Migrations
 {
     [DbContext(typeof(TestDbContext))]
-    [Migration("20250913225457_Add_Image_And_Video_Feed")]
-    partial class Add_Image_And_Video_Feed
+    [Migration("20251018133706_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace AttrectoTest.Persistence.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("AttrectoTest.Domain.AppUser", b =>
+            modelBuilder.Entity("AttrectoTest.Domain.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,21 +33,33 @@ namespace AttrectoTest.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("RolesCsv")
+                    b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("FeedId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppUsers");
+                    b.HasIndex("FeedId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("AttrectoTest.Domain.Feed", b =>
@@ -75,6 +87,9 @@ namespace AttrectoTest.Persistence.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
@@ -88,20 +103,31 @@ namespace AttrectoTest.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.ToTable("Feeds", (string)null);
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("AttrectoTest.Domain.FeedLike", b =>
+                {
+                    b.Property<int>("FeedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FeedId", "UserId");
+
+                    b.ToTable("FeedLikes");
                 });
 
             modelBuilder.Entity("AttrectoTest.Domain.ImageFeed", b =>
                 {
                     b.HasBaseType("AttrectoTest.Domain.Feed");
 
-                    b.Property<byte[]>("ImageData")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("longblob");
+                        .HasColumnType("longtext");
 
                     b.ToTable("ImageFeeds", (string)null);
                 });
@@ -118,15 +144,26 @@ namespace AttrectoTest.Persistence.Migrations
                     b.ToTable("VideoFeeds", (string)null);
                 });
 
-            modelBuilder.Entity("AttrectoTest.Domain.Feed", b =>
+            modelBuilder.Entity("AttrectoTest.Domain.Comment", b =>
                 {
-                    b.HasOne("AttrectoTest.Domain.AppUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
+                    b.HasOne("AttrectoTest.Domain.Feed", "Feed")
+                        .WithMany("Comments")
+                        .HasForeignKey("FeedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("Feed");
+                });
+
+            modelBuilder.Entity("AttrectoTest.Domain.FeedLike", b =>
+                {
+                    b.HasOne("AttrectoTest.Domain.Feed", "Feed")
+                        .WithMany("Likes")
+                        .HasForeignKey("FeedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Feed");
                 });
 
             modelBuilder.Entity("AttrectoTest.Domain.ImageFeed", b =>
@@ -145,6 +182,13 @@ namespace AttrectoTest.Persistence.Migrations
                         .HasForeignKey("AttrectoTest.Domain.VideoFeed", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AttrectoTest.Domain.Feed", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

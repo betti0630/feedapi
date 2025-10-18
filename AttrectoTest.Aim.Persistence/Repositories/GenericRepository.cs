@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 namespace AttrectoTest.Aim.Persistence.Repositories;
 
-internal class GenericRepository<T>(IDbContextFactory<TestDbContext> contextFactory) : IGenericRepository<T> where T : AppEntity
+internal class GenericRepository<T>(IDbContextFactory<AuthDbContext> contextFactory) : IGenericRepository<T> where T : AppEntity
 {
-    protected readonly IDbContextFactory<TestDbContext> _contextFactory = contextFactory;
+    protected readonly IDbContextFactory<AuthDbContext> _contextFactory = contextFactory;
 
     public virtual async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
     {

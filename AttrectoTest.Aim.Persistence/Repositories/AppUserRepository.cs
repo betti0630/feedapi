@@ -10,7 +10,7 @@ namespace AttrectoTest.Aim.Persistence.Repositories;
 internal class AppUserRepository : GenericRepository<AppUser>, IGenericRepository<AppUser>
 {
 
-    public AppUserRepository(IDbContextFactory<TestDbContext> contextFactory) : base(contextFactory)
+    public AppUserRepository(IDbContextFactory<AuthDbContext> contextFactory) : base(contextFactory)
     {
     }
 
