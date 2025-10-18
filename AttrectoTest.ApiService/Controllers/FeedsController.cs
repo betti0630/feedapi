@@ -54,9 +54,9 @@ namespace AttrectoTest.ApiService.Controllers
         /// </summary>
         /// <returns>OK</returns>
         [HttpGet("{feedId}")]
-        public async Task<ActionResult<FeedDto>> Get(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<FeedDto>> Get(int feedId, CancellationToken cancellationToken)
         {
-            var query = new GetFeedQuery { Id = id };
+            var query = new GetFeedQuery { Id = feedId };
             var response = await mediator.Send(query, cancellationToken);
             return Ok(response);
         }

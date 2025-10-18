@@ -16,4 +16,8 @@
     <ProjectReference Include="..\AttrectoTest.Aim.Domain\AttrectoTest.Aim.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

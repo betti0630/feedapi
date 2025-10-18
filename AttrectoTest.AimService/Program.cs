@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Builder;
 
 using Serilog;
 using AttrectoTest.AimService.Middleware;
+using AttrectoTest.AimService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddGrpc();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
     .WriteTo.Console()
@@ -100,5 +102,7 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 app.UseStaticFiles();
 
 app.Services.RunDatabaseMigrations();
+
+app.MapGrpcService<AimGrpcService>();
 
 app.Run();

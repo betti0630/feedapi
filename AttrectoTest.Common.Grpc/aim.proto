@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "AttrectoTest.Common.Grpc.Aim";
+
+package aim;
+
+service AimService {
+    rpc GetAimData (AimRequest) returns (AimResponse);
+}
+
+message AimRequest {
+    string id = 1;
+}
+
+message AimResponse {
+    string name = 1;
+    double score = 2;
+}

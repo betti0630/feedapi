@@ -1,7 +1,9 @@
 using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.ApiService.Middleware;
+using AttrectoTest.ApiService.Services;
 using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application;
+using AttrectoTest.Application.Contracts.Identity;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
 
@@ -79,6 +81,8 @@ builder.Services.AddOpenApiDocument(config =>
 builder.Services.ConfigureQuartz(builder.Configuration);
 
 builder.Services.ConfigureHealthCheck(builder.Configuration);
+
+builder.Services.AddSingleton<IAimService>(new AimGrpcService("https://localhost:7190"));
 
 var app = builder.Build();
 
