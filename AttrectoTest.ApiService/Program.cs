@@ -1,3 +1,4 @@
+using AttrectoTest.ApiService.Configuration;
 using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.ApiService.Middleware;
 using AttrectoTest.ApiService.Services;
@@ -82,7 +83,13 @@ builder.Services.ConfigureQuartz(builder.Configuration);
 
 builder.Services.ConfigureHealthCheck(builder.Configuration);
 
-builder.Services.AddSingleton<IAimService>(new AimGrpcService("https://localhost:7190"));
+var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSettings>();
+
+builder.Services.Configure<ApiSettings>(
+    builder.Configuration.GetSection("ApiSettings"));
+
+
+builder.Services.AddSingleton<IAimService>(new AimGrpcService(apiSettings.AimBaseUrl));
 
 var app = builder.Build();
 
