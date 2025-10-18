@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.BlazorWasm.Services.Base;
+﻿namespace AttrectoTest.BlazorWasm.Services.AimBase;
 
 public partial class AuthClient : IAuthClient
 {

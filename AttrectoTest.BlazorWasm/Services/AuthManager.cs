@@ -1,6 +1,6 @@
 ﻿using AttrectoTest.Blazor.Shared.Contracts;
 using AttrectoTest.BlazorWasm.Providers;
-using AttrectoTest.BlazorWasm.Services.Base;
+using AttrectoTest.BlazorWasm.Services.AimBase;
 
 using Blazored.SessionStorage;
 
