@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.ApiService", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Persistence", "AttrectoTest.Persistence\AttrectoTest.Persistence.csproj", "{3CD49EF8-F43A-4254-A0D6-71FE04D9404A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C2F7B46D-8B16-462B-95AE-94429A557B00}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Domain", "AttrectoTest.Domain\AttrectoTest.Domain.csproj", "{86DD8C8E-3A11-44E3-B251-1AC3C7A958CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Application", "AttrectoTest.Application\AttrectoTest.Application.csproj", "{11263E33-E7A3-4DDC-B9F0-FEB8C618290A}"

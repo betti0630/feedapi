@@ -1,13 +1,26 @@
-using AttrectoTest.Aim.Persistence;
 using AttrectoTest.Aim.Application;
 using AttrectoTest.Aim.Infrastructure;
-using Microsoft.AspNetCore.Builder;
-
-using Serilog;
+using AttrectoTest.Aim.Persistence;
 using AttrectoTest.AimService.Middleware;
 using AttrectoTest.AimService.Services;
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
+if (builder.Environment.IsProduction() || builder.Environment.IsEnvironment("Docker"))
+{
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        // Az 8080-as portot a gRPC fogja használni HTTP/2-n
+        options.ListenAnyIP(8080, o => o.Protocols = HttpProtocols.Http2);
+
+        // Az 8081-es porton a REST API (Swagger, controller, health, stb.)
+        options.ListenAnyIP(8081, o => o.Protocols = HttpProtocols.Http1AndHttp2);
+    });
+}
 builder.Services.AddGrpc();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
@@ -79,7 +92,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Add OpenAPI 3.0 document serving middleware
     // Available at: http://localhost:<port>/swagger/v1/swagger.json

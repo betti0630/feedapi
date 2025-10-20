@@ -2,6 +2,7 @@
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Persistence.DatabaseContext;
 using AttrectoTest.Persistence.Repositories;
+using AttrectoTest.Persistence.Seed;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IFeedRepository, FeedRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<IDbSeeder, DbSeeder>();
         return services;
     }
 
@@ -50,14 +52,14 @@ public static class PersistenceServiceRegistration
                 if (db.Database.GetPendingMigrations().Count() == 0)
                 {
                     Console.WriteLine("No pending migrations.");
-                    break;
+                } else { 
+                    db.Database.Migrate();
+                    Console.WriteLine("Migration is successful.");
                 }
-                db.Database.Migrate();
-                Console.WriteLine("Migration is successful.");
-                var userService = scope.ServiceProvider.GetRequiredService<IAimService>();
-                var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-                var seeder = new Seed.DbSeeder(dbContext, userService);
-                seeder.SeedAsync().Wait();
+                //var userService = scope.ServiceProvider.GetRequiredService<IAimService>();
+                //var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+                //var seeder = new Seed.DbSeeder(dbContext, userService);
+                //seeder.SeedAsync().Wait();
                 break;
             } else {
                 retries--;

@@ -2,6 +2,7 @@
 using AttrectoTest.Aim.Application.Contracts.Persistence;
 using AttrectoTest.Aim.Persistence.DatabaseContext;
 using AttrectoTest.Aim.Persistence.Repositories;
+using AttrectoTest.Aim.Persistence.Seed;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ public static class PersistenceServiceRegistration
 ));
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IDbSeeder,DbSeeder>();
         return services;
     }
 
@@ -52,10 +54,10 @@ public static class PersistenceServiceRegistration
                 }
                 db.Database.Migrate();
                 Console.WriteLine("Migration is successful.");
-                var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
-                var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-                var seeder = new Seed.DbSeeder(dbContext, userService);
-                seeder.SeedAsync().Wait();
+                //var userService = scope.ServiceProvider.GetRequiredService<IAppUserService>();
+                //var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+                //var seeder = new Seed.DbSeeder(dbContext, userService);
+                //seeder.SeedAsync().Wait();
                 break;
             } else {
                 retries--;

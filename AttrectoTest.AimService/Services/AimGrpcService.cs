@@ -14,6 +14,11 @@ public class AimGrpcService : AttrectoTest.Common.Grpc.Aim.AimService.AimService
         _appUserService = appUserService;
     }
 
+    public override Task<PingResponse> Ping(PingRequest request, ServerCallContext context)
+    {
+        return Task.FromResult(new PingResponse { Success = true });
+    }
+
     public override async Task<GetUserIdByUserNameResponse> GetUserIdByUserName(GetUserIdByUserNameRequest request, ServerCallContext context)
     {
         var userId = await _appUserService.GetUserIdByUserName(request.UserName);

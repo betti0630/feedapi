@@ -5,8 +5,17 @@ option csharp_namespace = "AttrectoTest.Common.Grpc.Aim";
 package aim;
 
 service AimService {
+    rpc Ping (PingRequest) returns (PingResponse);  
     rpc GetUserIdByUserName (GetUserIdByUserNameRequest) returns (GetUserIdByUserNameResponse);
     rpc GetUserData (GetUserDataRequest) returns (GetUserDataResponse);
+}
+
+message PingRequest {
+
+}
+
+message PingResponse {
+    bool success = 1;
 }
 
 message GetUserIdByUserNameRequest {

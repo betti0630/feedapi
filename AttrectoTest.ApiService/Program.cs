@@ -106,7 +106,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.MapDefaultEndpoints();
 
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Add OpenAPI 3.0 document serving middleware
     // Available at: http://localhost:<port>/swagger/v1/swagger.json

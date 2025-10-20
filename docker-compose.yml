@@ -1,19 +1,32 @@
-
 services:
   mariadb:
     image: mariadb:11
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: attrectotest
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_USER: myuser
+      MARIADB_PASSWORD: mypassword
     ports:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      
-  apiservice:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  aim_apiservice:
+    build:
+      context: .
+      dockerfile: AttrectoTest.AimService/Dockerfile
+    ports:
+      - "5002:8081" //http
+      - "5102:8080" //gRpc
+    depends_on:
+      - mariadb
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_aim;User=myuser;Password=mypassword;
+    networks:
+      - backend
+
+  feed_apiservice:
     build:
       context: .
       dockerfile: AttrectoTest.ApiService/Dockerfile
@@ -21,16 +34,24 @@ services:
       - "5001:8080"
     depends_on:
       - mariadb
+      - aim_apiservice
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrectotest;User=myuser;Password=mypassword;
-
-
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
+      - ApiSettings__AimBaseUrl=http://aim_apiservice:8080
+    networks:
+      - backend
+      
   webfrontend:
     build: ./WebApp/attrectoweb
+    depends_on:
+      - feed_apiservice
     ports:
       - "3001:80"
-    depends_on:
-      - apiservice
-  
+    networks:
+      - backend
+      
+networks:
+  backend:
+
 volumes:
   mariadb_data:
