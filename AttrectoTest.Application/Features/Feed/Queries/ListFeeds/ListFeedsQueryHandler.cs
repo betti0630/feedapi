@@ -12,7 +12,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService, IAimService aimService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService, IIamService iamService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
@@ -28,7 +28,7 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService 
             })
             .ToList();
         var items0 = await Task.WhenAll(feedData.Select(async f =>
-            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, aimService)
+            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService)
         ));
         var items = items0.ToList();
         if (request.IncludeExternal ?? false)

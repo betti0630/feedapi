@@ -52,6 +52,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\AttrectoTest.Common.Grpc\aim.proto" GrpcServices="Client" />
+		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Client" />
 	</ItemGroup>
 </Project>

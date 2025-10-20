@@ -7,7 +7,7 @@ namespace AttrectoTest.Application.Features.Feed.Mappers;
 
 public static class FeedMapper
 {
-    public static async Task<FeedDto> MapFeedToDto(this Domain.Feed feed, int likeCount, bool isLiked, int userId, IAimService aimService)
+    public static async Task<FeedDto> MapFeedToDto(this Domain.Feed feed, int likeCount, bool isLiked, int userId, IIamService iamService)
     {
         FeedDto dto = feed switch
         {
@@ -21,7 +21,7 @@ public static class FeedMapper
         dto.Title = feed.Title;
         dto.Content = feed.Content;
         dto.AuthorId = feed.AuthorId;
-        dto.AuthorUserName = await aimService.GetUserNameByUserId(feed.AuthorId);
+        dto.AuthorUserName = await iamService.GetUserNameByUserId(feed.AuthorId);
         dto.PublishedAt = feed.PublishedAt;
         dto.IsOwnFeed = feed.AuthorId == userId;
         dto.LikeCount = likeCount;

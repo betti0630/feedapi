@@ -12,17 +12,17 @@ services:
       - mariadb_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
 
-  aim_apiservice:
+  iam_apiservice:
     build:
       context: .
       dockerfile: AttrectoTest.AimService/Dockerfile
     ports:
-      - "5002:8081" //http
-      - "5102:8080" //gRpc
+      - "5002:8081" # http
+      - "5102:8080" # gRpc
     depends_on:
       - mariadb
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_aim;User=myuser;Password=mypassword;
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_iam;User=myuser;Password=mypassword;
     networks:
       - backend
 
@@ -34,10 +34,10 @@ services:
       - "5001:8080"
     depends_on:
       - mariadb
-      - aim_apiservice
+      - iam_apiservice
     environment:
       - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
-      - ApiSettings__AimBaseUrl=http://aim_apiservice:8080
+      - ApiSettings__AimBaseUrl=http://iam_apiservice:8080
     networks:
       - backend
       

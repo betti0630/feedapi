@@ -16,6 +16,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="aim.proto" GrpcServices="None" />
+		<Protobuf Include="iam.proto" GrpcServices="None" />
 	</ItemGroup>
 </Project>

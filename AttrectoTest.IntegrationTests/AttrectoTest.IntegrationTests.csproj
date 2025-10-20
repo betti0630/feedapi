@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AttrectoTest.Aim.Application\AttrectoTest.Aim.Application.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Iam.Application\AttrectoTest.Iam.Application.csproj" />
     <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
   </ItemGroup>
 

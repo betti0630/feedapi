@@ -2,5 +2,5 @@
 
 public class ApiSettings
 {
-    public string AimBaseUrl { get; set; } = string.Empty;
+    public string IamBaseUrl { get; set; } = string.Empty;
 }

@@ -1,0 +1,6 @@
+@AttrectoTest.IamService_HostAddress = http://localhost:5197
+
+GET {{AttrectoTest.IamService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

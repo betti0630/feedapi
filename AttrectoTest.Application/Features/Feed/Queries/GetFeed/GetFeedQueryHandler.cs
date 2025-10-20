@@ -10,7 +10,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
-internal class GetFeedQueryHandler(IFeedRepository feedRepository, IAimService aimService) : IRequestHandler<GetFeedQuery, FeedDto>
+internal class GetFeedQueryHandler(IFeedRepository feedRepository, IIamService iamService) : IRequestHandler<GetFeedQuery, FeedDto>
 {
     public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {
@@ -32,7 +32,7 @@ internal class GetFeedQueryHandler(IFeedRepository feedRepository, IAimService a
             throw new NotFoundException(nameof(Feed), request.Id);
         }
 
-        var result = await feed.MapFeedToDto(item.likeCount, item.isLiked, request.UserId, aimService);
+        var result = await feed.MapFeedToDto(item.likeCount, item.isLiked, request.UserId, iamService);
         return result;
     }
 }

@@ -63,7 +63,7 @@ public static class ConfigurationHelper
                 tags: new[] { "mariadb" });
 
         services.AddHealthChecks()
-        .AddCheck<AimApiHealthCheck>("aim_api_grpc", tags: new[] { "aimapi" });
+        .AddCheck<IamApiHealthCheck>("iam_api_grpc", tags: new[] { "iamapi" });
 
         var urls = configuration["ASPNETCORE_URLS"] ?? "http://localhost:5000";
 

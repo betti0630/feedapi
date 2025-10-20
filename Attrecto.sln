@@ -25,21 +25,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Blazor.Shared"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.BlazorWasm", "AttrectoTest.BlazorWasm\AttrectoTest.BlazorWasm.csproj", "{360CC0BF-EB9E-41CC-8356-5993C56F6265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.AimService", "AttrectoTest.AimService\AttrectoTest.AimService.csproj", "{77261041-6209-4A7A-808E-E25C8CDB4321}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.IamService", "AttrectoTest.IamService\AttrectoTest.IamService.csproj", "{77261041-6209-4A7A-808E-E25C8CDB4321}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Application.Shared", "AttrectoTest.Application.Shared\AttrectoTest.Application.Shared.csproj", "{D247F9EF-74D0-424C-9B63-622CDC493096}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aim", "Aim", "{88133F7F-E7F3-4A90-8E6C-313B50497CE5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Iam", "Iam", "{88133F7F-E7F3-4A90-8E6C-313B50497CE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{6CFC61A5-DD7E-4AC0-863C-C42BB1C1269F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Aim.Domain", "AttrectoTest.Aim.Domain\AttrectoTest.Aim.Domain.csproj", "{0FBE940A-D5BD-2A22-93DA-A47434A0F297}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Iam.Domain", "AttrectoTest.Iam.Domain\AttrectoTest.Iam.Domain.csproj", "{0FBE940A-D5BD-2A22-93DA-A47434A0F297}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Aim.Application", "AttrectoTest.Aim.Application\AttrectoTest.Aim.Application.csproj", "{413D3019-BB9E-D3F4-E27F-8B692E747AF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Iam.Application", "AttrectoTest.Iam.Application\AttrectoTest.Iam.Application.csproj", "{413D3019-BB9E-D3F4-E27F-8B692E747AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Aim.Persistence", "AttrectoTest.Aim.Persistence\AttrectoTest.Aim.Persistence.csproj", "{C03D2F2F-A42C-0F46-C7AB-0C396FE0CC65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Iam.Persistence", "AttrectoTest.Iam.Persistence\AttrectoTest.Iam.Persistence.csproj", "{C03D2F2F-A42C-0F46-C7AB-0C396FE0CC65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Aim.Infrastructure", "AttrectoTest.Aim.Infrastructure\AttrectoTest.Aim.Infrastructure.csproj", "{2E157DC1-965F-3DCC-C87D-6F74F71F3AE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Iam.Infrastructure", "AttrectoTest.Iam.Infrastructure\AttrectoTest.Iam.Infrastructure.csproj", "{2E157DC1-965F-3DCC-C87D-6F74F71F3AE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Common.Grpc", "AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj", "{B747F3A9-06AC-4B1B-9DBF-CDA7CC1DE19D}"
 EndProject

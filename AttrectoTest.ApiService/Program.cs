@@ -89,7 +89,7 @@ builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
 
-builder.Services.AddSingleton<IAimService>(new AimGrpcService(apiSettings.AimBaseUrl));
+builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
 
 var app = builder.Build();
 

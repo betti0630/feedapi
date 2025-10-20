@@ -4,7 +4,7 @@ using AttrectoTest.BlazorWasm.Configuration;
 using AttrectoTest.BlazorWasm.Handlers;
 using AttrectoTest.BlazorWasm.Providers;
 using AttrectoTest.BlazorWasm.Services;
-using AttrectoTest.BlazorWasm.Services.AimBase;
+using AttrectoTest.BlazorWasm.Services.IamBase;
 using AttrectoTest.BlazorWasm.Services.Base;
 
 using Blazored.SessionStorage;
@@ -29,7 +29,7 @@ var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSetting
 builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
-builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.AimBaseUrl))
+builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamBaseUrl))
     .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
 builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.BaseUrl))
     .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
