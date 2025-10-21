@@ -11,6 +11,8 @@ using AttrectoTest.BlazorServer.Services.IamBase;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
 
+using Blazored.SessionStorage;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -41,6 +43,8 @@ builder.Services.AddAppAuthServices(builder.Configuration);
 
 builder.Services.AddMemoryCache();
 
+
+builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IFeedService, FeedService>();
 
