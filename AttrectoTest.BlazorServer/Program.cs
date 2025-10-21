@@ -34,6 +34,8 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthorizationCore();
 
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddInfrastructureServices();
