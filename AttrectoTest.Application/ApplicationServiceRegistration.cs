@@ -1,7 +1,6 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
 using AttrectoTest.Application.Features.Feed.Mappers;
 using AttrectoTest.Application.Helpers;
-using AttrectoTest.Application.Identity;
 using AttrectoTest.Application.Models;
 using AttrectoTest.Application.Services;
 using AttrectoTest.Domain;
@@ -55,11 +54,6 @@ public static class ApplicationServiceRegistration
 
     public static IServiceCollection AddAppAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IAuthUserService, AuthUserService>();
-        services.AddScoped<IAppUserService, AppUserService>();
-
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
 

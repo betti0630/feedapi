@@ -13,6 +13,4 @@ public class Comment : BaseEntity
     public Feed Feed { get; set; } = null!;
 
     public int UserId { get; set; }
-    [ForeignKey(nameof(UserId))]
-    public AppUser User { get; set; } = null!;
 }

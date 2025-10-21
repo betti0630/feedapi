@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Application.Contracts.Persistence;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Mappers;
@@ -11,22 +12,25 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService, IIamService iamService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
         feeds = AddPaging<Domain.Feed>(feeds, request);
 
-        var items = feeds
+        var feedData = feeds
             .Select(f => new
             {
                 feed = f,
                 likeCount = f.Likes.Count(),
                 isLiked = f.Likes.Count(c => c.UserId == request.UserId) > 0
             })
-            .ToList()
-            .Select(f => f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId)).ToList();
+            .ToList();
+        var items0 = await Task.WhenAll(feedData.Select(async f =>
+            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService)
+        ));
+        var items = items0.ToList();
         if (request.IncludeExternal ?? false)
         {
             var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);

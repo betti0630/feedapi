@@ -53,7 +53,7 @@ public static class ConfigurationHelper
     public static IServiceCollection ConfigureHealthCheck(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+           .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
 
         services.AddHealthChecks()
             .AddMySql(
@@ -62,14 +62,24 @@ public static class ConfigurationHelper
                 name: "mariadb",
                 tags: new[] { "mariadb" });
 
-        services
-            .AddHealthChecksUI(opt =>
-            {
-                opt.SetEvaluationTimeInSeconds(30); 
-                opt.MaximumHistoryEntriesPerEndpoint(50);
-                opt.AddHealthCheckEndpoint("DB", "/health");
-            })
-            .AddInMemoryStorage();
+        services.AddHealthChecks()
+        .AddCheck<IamApiHealthCheck>("iam_api_grpc", tags: new[] { "iamapi" });
+
+        var urls = configuration["ASPNETCORE_URLS"] ?? "http://localhost:5000";
+
+        var firstUrl = urls.Split(';', StringSplitOptions.RemoveEmptyEntries).First().Trim();
+
+        var safeUrl = firstUrl.Replace("0.0.0.0", "localhost");
+
+        //services
+        //    .AddHealthChecksUI(opt =>
+        //    {
+        //        opt.SetEvaluationTimeInSeconds(30); 
+        //        opt.MaximumHistoryEntriesPerEndpoint(50);
+        //        var safeUrl = urls.TrimEnd('/');
+        //        opt.AddHealthCheckEndpoint("FeedAPI", $"{safeUrl}/health");
+        //    })
+        //    .AddInMemoryStorage();
 
         return services;
     }
@@ -93,7 +103,7 @@ public static class ConfigurationHelper
             Predicate = r => r.Tags.Contains("live")
         });
 
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         {
             app.MapHealthChecksUI(options =>
             {

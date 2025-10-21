@@ -1,7 +1,10 @@
+using AttrectoTest.ApiService.Configuration;
 using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.ApiService.Middleware;
+using AttrectoTest.ApiService.Services;
 using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application;
+using AttrectoTest.Application.Contracts.Identity;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Persistence;
 
@@ -80,6 +83,14 @@ builder.Services.ConfigureQuartz(builder.Configuration);
 
 builder.Services.ConfigureHealthCheck(builder.Configuration);
 
+var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSettings>();
+
+builder.Services.Configure<ApiSettings>(
+    builder.Configuration.GetSection("ApiSettings"));
+
+
+builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+
 var app = builder.Build();
 
 
@@ -95,7 +106,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.MapDefaultEndpoints();
 
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // Add OpenAPI 3.0 document serving middleware
     // Available at: http://localhost:<port>/swagger/v1/swagger.json
