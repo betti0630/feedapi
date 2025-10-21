@@ -1,34 +1,4 @@
 ﻿@page "/login"
-@rendermode InteractiveServer
+@using AttrectoTest.Blazor.Shared.Components.Login
 
-@using AttrectoTest.Blazor.Shared.Contracts
-@using AttrectoTest.BlazorServer.Providers
-@using Microsoft.AspNetCore.Components.Authorization
-@inject IAuthManager AuthManger
-@inject AuthenticationStateProvider AuthProvider
-@inject NavigationManager NavManager
-
-<h3>Login</h3>
-
-<input @bind="Username" placeholder="Username" />
-<input @bind="Password" type="password" placeholder="Password" />
-<button @onclick="ClickLogin">Login</button>
-
-@code {
-    private string Username = "";
-    private string Password = "";
-
-    private async Task ClickLogin()
-    {
-        var rersult = await AuthManger.Login(Username, Password);
-        if (rersult)
-        {
-            // await ((CustomAuthStateProvider)AuthProvider).MarkUserAsAuthenticated(token);
-            NavManager.NavigateTo("/");
-        }
-        else
-        {
-            // handle error
-        }
-    }
-}
+<LoginForm></LoginForm>
