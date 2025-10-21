@@ -1,0 +1,21 @@
+﻿@page "/"
+@using AttrectoTest.Blazor.Shared.Components.Feeds
+@using AttrectoTest.Blazor.Shared.Components.Login
+@using Microsoft.AspNetCore.Components.Authorization
+
+<div class="relative min-h-screen bg-gray-100">
+    <AuthorizeView>
+        <Authorized>
+            <div class="flex justify-center pt-16">
+                <FeedList></FeedList>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <RedirectToLogin />
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code {
+
+}
