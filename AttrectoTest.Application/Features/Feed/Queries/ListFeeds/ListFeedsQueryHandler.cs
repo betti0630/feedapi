@@ -23,29 +23,29 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService 
             .Select(f => new
             {
                 feed = f,
-                likeCount = f.Likes.Count(),
-                isLiked = f.Likes.Count(c => c.UserId == request.UserId) > 0
+                likeCount = f.Likes.Count,
+                isLiked = f.Likes.Any(c => c.UserId == request.UserId)
             })
             .ToList();
         var items0 = await Task.WhenAll(feedData.Select(async f =>
-            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService)
-        ));
+            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
+        )).ConfigureAwait(false);
         var items = items0.ToList();
         if (request.IncludeExternal ?? false)
         {
-            var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken);
+            var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken).ConfigureAwait(false);
             items.AddRange(rssItems);
         }
 
         items = [.. (request.Sort switch
         {
-            ListSort.CreatedAt_asc => items.OrderBy(x => x.PublishedAt),
-            ListSort.CreatedAt_desc => items.OrderByDescending(x => x.PublishedAt),
-            ListSort.Likes_desc => items.OrderByDescending(x => x.LikeCount),
-            ListSort.Likes_asc => items.OrderBy(x => x.LikeCount),
+            ListSort.CreatedAtAsc => items.OrderBy(x => x.PublishedAt),
+            ListSort.CreatedAtDesc => items.OrderByDescending(x => x.PublishedAt),
+            ListSort.LikesDesc => items.OrderByDescending(x => x.LikeCount),
+            ListSort.LikesAsc => items.OrderBy(x => x.LikeCount),
             _ => throw new BadRequestException("Invalid sort option."),
         })];
         var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
-        return result;      
+        return result;
     }
 }

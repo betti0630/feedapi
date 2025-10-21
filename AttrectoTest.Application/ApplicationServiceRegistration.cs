@@ -28,6 +28,7 @@ public static class ApplicationServiceRegistration
 
     public static IServiceCollection AddAppAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
+        ArgumentNullException.ThrowIfNull(configuration);
         services.AddAppAuthServices(configuration);
 
         var jwt = configuration.GetSection("Jwt");

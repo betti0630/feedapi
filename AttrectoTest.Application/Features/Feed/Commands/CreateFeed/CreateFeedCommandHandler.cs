@@ -6,7 +6,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger) : 
+internal sealed class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger) : 
     IRequestHandler<CreateFeedCommand, CreateFeedCommandResponse>,
     IRequestHandler<CreateImageFeedCommand, CreateFeedCommandResponse>,
     IRequestHandler<CreateVideoFeedCommand, CreateFeedCommandResponse>
@@ -14,14 +14,14 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
     public async Task<CreateFeedCommandResponse> Handle(CreateFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
         if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
         }
         
         var feed = CreateFeedFromRequest<Domain.Feed>(request);
-        await feedRepository.CreateAsync(feed, cancellationToken);
+        await feedRepository.CreateAsync(feed, cancellationToken).ConfigureAwait(false);
         logger.LogInformation("Feed {FeedId} created successfully by user {AuthorId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
@@ -29,7 +29,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
     public async Task<CreateFeedCommandResponse> Handle(CreateImageFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
         if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
@@ -37,7 +37,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         
         var feed = CreateFeedFromRequest<Domain.ImageFeed>(request);
         feed.ImageUrl = request.ImageUrl;
-        await feedRepository.CreateAsync(feed, cancellationToken);
+        await feedRepository.CreateAsync(feed, cancellationToken).ConfigureAwait(false);
         logger.LogInformation("Image feed {FeedId} created successfully by user {AuthorId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }
@@ -45,7 +45,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
     public async Task<CreateFeedCommandResponse> Handle(CreateVideoFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new CreateVideoFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
         if (validationResult.Errors.Count != 0)
         {
             throw new BadRequestException("Invalid feed", validationResult);
@@ -54,7 +54,7 @@ internal class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         var feed = CreateFeedFromRequest<Domain.VideoFeed>(request);
         feed.ImageUrl = request.ImageUrl;
         feed.VideoUrl = request.VideoUrl;
-        await feedRepository.CreateAsync(feed, cancellationToken);
+        await feedRepository.CreateAsync(feed, cancellationToken).ConfigureAwait(false);
         logger.LogInformation("Video feed {FeedId} created successfully by user {AuthorId}.", feed.Id, request.UserId);
         return MapToResponse(feed);
     }

@@ -7,15 +7,15 @@ public enum ListSort
 {
 
     [EnumMember(Value = @"createdAt_desc")]
-    CreatedAt_desc = 0,
+    CreatedAtDesc = 0,
 
     [EnumMember(Value = @"createdAt_asc")]
-    CreatedAt_asc = 1,
+    CreatedAtAsc = 1,
 
     [EnumMember(Value = @"likes_desc")]
-    Likes_desc = 2,
+    LikesDesc = 2,
 
     [EnumMember(Value = @"likes_asc")]
-    Likes_asc = 3,
+    LikesAsc = 3,
 
 }

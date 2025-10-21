@@ -26,6 +26,7 @@ public class UserBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TRe
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
         ClaimsPrincipal? user = null;
 
         if (_currentUserService != null)
@@ -44,6 +45,6 @@ public class UserBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TRe
         }
         request.UserName = user?.FindFirstValue(ClaimTypes.Name);
 
-        return await next(cancellationToken);
+        return await next(cancellationToken).ConfigureAwait(false);
     }
 }

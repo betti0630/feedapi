@@ -20,7 +20,7 @@ public class RssService(HttpClient httpClient, IMemoryCache cache)
 
         var feedUrl = "https://www.lovemeow.com/feeds/feed.rss";
 
-        using var stream = await httpClient.GetStreamAsync(feedUrl, cancellationToken);
+        using var stream = await httpClient.GetStreamAsync(feedUrl, cancellationToken).ConfigureAwait(false);
         using var xmlReader = XmlReader.Create(stream);
 
         var feed = SyndicationFeed.Load(xmlReader);

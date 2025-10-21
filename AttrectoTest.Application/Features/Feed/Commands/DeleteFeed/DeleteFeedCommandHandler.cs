@@ -2,24 +2,23 @@
 using AttrectoTest.Application.Contracts.Logging;
 using AttrectoTest.Application.Contracts.Persistence;
 using AttrectoTest.Application.Exceptions;
-using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
 using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 
-internal class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger) : IRequestHandler<DeleteFeedCommand>
+internal sealed class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger) : IRequestHandler<DeleteFeedCommand>
 {
     public async Task Handle(DeleteFeedCommand request, CancellationToken cancellationToken)
     {
         var validator = new DeleteFeedCommandValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken).ConfigureAwait(false);
 
         if (validationResult.Errors.Count != 0) { 
             throw new BadRequestException("Invalid feed", validationResult);
         }
 
-        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
+        var feed = await feedRepository.GetByIdAsync(request.Id, cancellationToken).ConfigureAwait(false) ?? throw new NotFoundException(nameof(Domain.Feed), request.Id);
         if (feed.IsDeleted)
         {
             throw new BadRequestException("Cannot delete a deleted feed.");
@@ -31,7 +30,7 @@ internal class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogg
         }
 
         feed.IsDeleted = true;
-        await feedRepository.UpdateAsync(feed, cancellationToken);
+        await feedRepository.UpdateAsync(feed, cancellationToken).ConfigureAwait(false);
         logger.LogInformation("Feed {FeedId} deleted successfully by user {AuthorId}.", feed.Id, request.UserId);
     }
 }

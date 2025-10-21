@@ -60,7 +60,7 @@ public class FeedService : IFeedService
             IncludeExternal =  false,
             Page = 1,
             PageSize = 100,
-            Sort = ListSort.CreatedAt_desc
+            Sort = ListSort.CreatedAtDesc
         };
         var result = await _mediator.Send(query);
         var model = new FeedListModel();
