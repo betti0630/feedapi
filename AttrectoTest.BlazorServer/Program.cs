@@ -13,7 +13,6 @@ using AttrectoTest.Persistence;
 
 using Blazored.SessionStorage;
 
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -26,10 +25,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-//builder.Services.AddCascadingAuthenticationState();
-//builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 builder.Services.AddAuthorizationCore();
@@ -55,12 +50,10 @@ var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSetting
 builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
-
-
-builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamBaseUrl));
-// .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
-
-builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+if (apiSettings != null) { 
+    builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamBaseUrl));
+    builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+}
 
 builder.Services.AddScoped(sp =>
 {

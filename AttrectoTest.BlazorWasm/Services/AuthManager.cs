@@ -39,7 +39,7 @@ namespace AttrectoTest.BlazorWasm.Services
                 ((JwtAuthStateProvider)_authStateProvider).NotifyUserAuthentication(jwtToken);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

@@ -3,11 +3,10 @@ using AttrectoTest.Iam.Application.Contracts.Identity;
 
 using Grpc.Core;
 
-using static AttrectoTest.Common.Grpc.Iam.IamService;
 
 namespace AttrectoTest.IamService.Services;
 
-public class IamGrpcService : IamServiceBase
+public class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServiceBase
 {
     private readonly IAppUserService _appUserService;
 

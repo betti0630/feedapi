@@ -46,7 +46,7 @@ public class FeedService : BaseHttpService, IFeedService
             await _client.LikePOSTAsync(feedId);
             return true;
         }
-        catch (ApiException ex)
+        catch (ApiException)
         {
             return false;
         }
@@ -59,7 +59,7 @@ public class FeedService : BaseHttpService, IFeedService
             await _client.LikeDELETEAsync(feedId);
             return true;
         }
-        catch (ApiException ex)
+        catch (ApiException)
         {
             return false;
         }

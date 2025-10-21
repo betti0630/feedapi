@@ -26,7 +26,7 @@
 
 @code {
     private bool _isLoading = true;
-    [Inject] AuthenticationStateProvider AuthProvider { get; set; }
+    [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
 
 
     protected override async Task OnInitializedAsync()

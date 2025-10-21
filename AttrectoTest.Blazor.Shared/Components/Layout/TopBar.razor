@@ -35,5 +35,7 @@
     private void Logout()
     {
         Auth.Logout();
+        NavigationManager.NavigateTo("/", forceLoad: true);
+
     }
 }

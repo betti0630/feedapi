@@ -1,36 +1,21 @@
-﻿using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Blazor.Shared.Contracts;
+﻿using AttrectoTest.Blazor.Shared.Contracts;
 using AttrectoTest.BlazorServer.Providers;
 using AttrectoTest.BlazorServer.Services.IamBase;
 
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-using Newtonsoft.Json.Linq;
-
-using System.Security.Claims;
-
-
-
-namespace AttrecotTest.BlazorServer.Services;
+namespace AttrectoTest.BlazorServer.Services;
 
 public class AuthManager : IAuthManager
 {
     private readonly IAuthClient _authClient;
-    private readonly NavigationManager _nav;
-    private readonly IHttpContextAccessor _httpContext;
     private readonly AuthenticationStateProvider _authProvider;
 
 
-    public AuthManager(IAuthClient authClient,
-        IHttpContextAccessor httpContextAccessor, HttpClient httpClient, NavigationManager nav,
-        AuthenticationStateProvider authProvider, IHttpContextAccessor httpContext)
+    public AuthManager(IAuthClient authClient, AuthenticationStateProvider authProvider)
     {
 
         _authClient = authClient;
-        _nav = nav;
-        _httpContext = httpContext;
         _authProvider = authProvider;
     }
 
@@ -49,7 +34,7 @@ public class AuthManager : IAuthManager
             var jwtToken = response.Access_token;
             await ((CustomAuthStateProvider)_authProvider).MarkUserAsAuthenticated(jwtToken);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -59,6 +44,6 @@ public class AuthManager : IAuthManager
     public async Task Logout()
     {
         await ((CustomAuthStateProvider)_authProvider).MarkUserAsLoggedOut();
-        _nav.NavigateTo("/", forceLoad: true);
+
     }
 }

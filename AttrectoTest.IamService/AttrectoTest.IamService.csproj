@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Server" />
+		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Server" Namespace="AttrectoTest.IamService.Grpc" OutputDir="Generated\Grpc"/>
 	</ItemGroup>
 
 </Project>

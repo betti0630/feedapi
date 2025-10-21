@@ -2,7 +2,7 @@
 
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
 
         Navigation.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}", forceLoad: true);
