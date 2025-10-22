@@ -1,7 +1,6 @@
 ﻿using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 using AttrectoTest.Application.Features.Feed.Commands.UpdateFeed;
 using AttrectoTest.Application.Features.Feed.Dtos;
-using AttrectoTest.Application.Identity.Dtos.Auth;
 
 using System.Net;
 using System.Net.Http.Headers;

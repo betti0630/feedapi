@@ -1,4 +1,5 @@
-﻿using AttrectoTest.Application.Features.Base;
+﻿using AttrectoTest.Application.Contracts.Identity;
+using AttrectoTest.Application.Features.Base;
 
 using MediatR;
 
@@ -9,18 +10,39 @@ using System.Security.Claims;
 
 namespace AttrectoTest.Application.Helpers;
 
-public class UserBehavior<TRequest, TResponse>(IHttpContextAccessor httpContextAccessor) : IPipelineBehavior<TRequest, TResponse>
+public class UserBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : UserRequest
 {
+    private readonly IHttpContextAccessor? _httpContextAccessor;
+    private readonly ICurrentUserService? _currentUserService;
+
+    public UserBehavior(
+        IHttpContextAccessor? httpContextAccessor = null,
+        ICurrentUserService? currentUserService = null)
+    {
+        _httpContextAccessor = httpContextAccessor;
+        _currentUserService = currentUserService;
+    }
+
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var httpContext = httpContextAccessor.HttpContext;
-        var userId = httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        ClaimsPrincipal? user = null;
+
+        if (_currentUserService != null)
+        {
+            user = _currentUserService.User;
+        }
+
+        if (user == null && _httpContextAccessor != null) {
+            var httpContext = _httpContextAccessor.HttpContext;
+            user = httpContext?.User;
+        }
+        var userId = user?.FindFirstValue(ClaimTypes.NameIdentifier);
         if (int.TryParse(userId, out int uid))
         {
             request.UserId = uid;
         }
-        request.UserName = httpContext?.User?.FindFirstValue(ClaimTypes.Name);
+        request.UserName = user?.FindFirstValue(ClaimTypes.Name);
 
         return await next(cancellationToken);
     }

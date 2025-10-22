@@ -1,0 +1,23 @@
+﻿@using AttrectoTest.BlazorServer.Providers
+@using Microsoft.AspNetCore.Components.Authorization
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Program).Assembly" >
+        <Found Context="routeData">
+            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    [Inject] private AuthenticationStateProvider AuthProvider { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // kliensoldali inicializáció: próbáljuk beolvasni a sessionStorage-t
+            await ((CustomAuthStateProvider)AuthProvider).InitializeAsync();
+        }
+    }
+}

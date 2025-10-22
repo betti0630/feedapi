@@ -11,8 +11,6 @@ using AttrectoTest.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,8 +86,9 @@ var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSetting
 builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
-
-builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+if (apiSettings != null) { 
+    builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+}
 
 var app = builder.Build();
 

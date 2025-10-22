@@ -51,7 +51,4 @@
     <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Client" />
-	</ItemGroup>
 </Project>

@@ -6,7 +6,7 @@ namespace AttrectoTest.Blazor.Shared.Components.Feeds;
 
 public partial class FeedList
 {
-    [Inject] protected IFeedService FeedService { get; set; }
+    [Inject] protected IFeedService FeedService { get; set; } = default!;
 
     private FeedListModel? _model;
 
