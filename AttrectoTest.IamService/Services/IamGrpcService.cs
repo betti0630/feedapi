@@ -6,7 +6,7 @@ using Grpc.Core;
 
 namespace AttrectoTest.IamService.Services;
 
-public class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServiceBase
+internal class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServiceBase
 {
     private readonly IAppUserService _appUserService;
 

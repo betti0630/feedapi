@@ -10,7 +10,7 @@ using static AttrectoTest.Common.Grpc.Iam.IamService;
 
 namespace AttrectoTest.ApiService.Helpers;
 
-public class IamApiHealthCheck : IHealthCheck
+internal class IamApiHealthCheck : IHealthCheck
 {
     private readonly ApiSettings _apiSettings;
 

@@ -47,7 +47,7 @@ public static class PersistenceServiceRegistration
         {
             if (db.Database.CanConnect())
             {
-                if (db.Database.GetPendingMigrations().Count() == 0)
+                if (!db.Database.GetPendingMigrations().Any())
                 {
                     Console.WriteLine("No pending migrations.");
                     break;

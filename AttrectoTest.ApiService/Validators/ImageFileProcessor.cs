@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AttrectoTest.ApiService.Validators;
 
-internal class ImageFileProcessor(IWebHostEnvironment env) : IImageFileProcessor
+internal sealed class ImageFileProcessor(IWebHostEnvironment env) : IImageFileProcessor
 {
     public async Task<byte[]> ValidateAndGetContentOfImage(IFormFile file, CancellationToken cancellationToken) {
         CheckFile(file);

@@ -2,14 +2,13 @@
 using AttrectoTest.Application.Exceptions;
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Application.Features.Feed.Queries.Base;
-using AttrectoTest.Domain;
 
 using MediatR;
 
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListComments;
 
-internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
+internal sealed class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
 {
     public Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)
     {
@@ -26,10 +25,10 @@ internal class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBa
         var comments = feedItem.comments.AsQueryable();
         comments = AddPaging(comments, request);
        
-        var items = comments.ToList()
+        var items = comments
             .Select(comment => new CommentDto(feed.Id, comment.Id, comment.Content, comment.DateCreated, comment.DateModified, comment.UserId, request.UserId))
             .ToList();
-        var result = new PagedComments(items, request.Page, request.PageSize, feedItem.comments.Count);
+        var result = new PagedComments(items.AsReadOnly(), request.Page, request.PageSize, feedItem.comments.Count);
         return Task.FromResult(result);
     }
 }

@@ -13,10 +13,12 @@ using FluentValidation.AspNetCore;
 
 using Serilog;
 
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
-    .WriteTo.Console()
+    .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .ReadFrom.Configuration(context.Configuration));
 
 
@@ -25,7 +27,8 @@ builder.AddServiceDefaults();
 
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddPersistenceServices(builder.Configuration);
 
 builder.Services.AddScoped<IImageFileProcessor, ImageFileProcessor>();
 
@@ -86,8 +89,8 @@ var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSetting
 builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
-if (apiSettings != null) { 
-    builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+if (apiSettings != null && Uri.TryCreate(apiSettings.IamBaseUrl, new UriCreationOptions(), out Uri? iamBaseUrl)) { 
+    builder.Services.AddSingleton<IIamService>(new IamGrpcService(iamBaseUrl));
 }
 
 var app = builder.Build();

@@ -1,6 +1,6 @@
 ﻿namespace AttrectoTest.ApiService.Configuration;
 
-public class ApiSettings
+internal class ApiSettings
 {
     public string IamBaseUrl { get; set; } = string.Empty;
 }

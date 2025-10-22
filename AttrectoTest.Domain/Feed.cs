@@ -20,10 +20,10 @@ public class Feed : BaseEntity
 
     public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
 
-    public bool IsDeleted { get; set; } = false;
+    public bool IsDeleted { get; set; }
 
-    public ICollection<FeedLike> Likes { get; set; } = [];
+    public ICollection<FeedLike> Likes { get; } = [];
 
-    public ICollection<Comment> Comments { get; set; } = [];
+    public ICollection<Comment> Comments { get; } = [];
 
 }

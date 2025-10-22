@@ -2,6 +2,8 @@
 using AttrectoTest.Application.Features.Feed.Dtos;
 using AttrectoTest.Domain;
 
+using MediatR;
+
 
 namespace AttrectoTest.Application.Features.Feed.Mappers;
 
@@ -9,6 +11,8 @@ public static class FeedMapper
 {
     public static async Task<FeedDto> MapFeedToDto(this Domain.Feed feed, int likeCount, bool isLiked, int userId, IIamService iamService)
     {
+        ArgumentNullException.ThrowIfNull(iamService);
+        ArgumentNullException.ThrowIfNull(feed);
         FeedDto dto = feed switch
         {
             VideoFeed => new VideoFeedDto(),
@@ -21,7 +25,7 @@ public static class FeedMapper
         dto.Title = feed.Title;
         dto.Content = feed.Content;
         dto.AuthorId = feed.AuthorId;
-        dto.AuthorUserName = await iamService.GetUserNameByUserId(feed.AuthorId);
+        dto.AuthorUserName = await iamService.GetUserNameByUserId(feed.AuthorId).ConfigureAwait(false);
         dto.PublishedAt = feed.PublishedAt;
         dto.IsOwnFeed = feed.AuthorId == userId;
         dto.LikeCount = likeCount;

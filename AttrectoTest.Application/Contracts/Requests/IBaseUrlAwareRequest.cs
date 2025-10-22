@@ -8,5 +8,5 @@ namespace AttrectoTest.Application.Contracts.Requests;
 
 public interface IBaseUrlAwareRequest
 {
-    string? BaseUrl { get; set; }
+    System.Uri? BaseUrl { get; set; }
 }

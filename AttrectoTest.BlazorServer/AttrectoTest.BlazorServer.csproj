@@ -7,19 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.72.0">
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="Blazored.SessionStorage" />
+    <PackageReference Include="Grpc.Net.Client"  />
+    <PackageReference Include="Grpc.Tools" >
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Shared.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Common.csproj" />
     <ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
     <ProjectReference Include="..\AttrectoTest.Infrastructure\AttrectoTest.Infrastructure.csproj" />
     <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />

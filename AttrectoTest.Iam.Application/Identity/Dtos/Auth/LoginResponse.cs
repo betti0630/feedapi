@@ -4,13 +4,13 @@ namespace AttrectoTest.Iam.Application.Identity.Dtos.Auth
 {
     public record LoginResponse
     {
-        public LoginResponse(string @access_token)
+        public LoginResponse(string accessToken)
         {
-            Access_token = @access_token;
+            AccessToken = accessToken;
         }
 
         [Required(AllowEmptyStrings = true)]
-        public string Access_token { get; set; }
+        public string AccessToken { get; set; }
 
     }
 

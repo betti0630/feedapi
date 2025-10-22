@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace AttrectoTest.BlazorServer.Services;
 
-public class CurrentUserService : ICurrentUserService
+internal class CurrentUserService : ICurrentUserService
 {
     private readonly AuthenticationStateProvider _authStateProvider;
 

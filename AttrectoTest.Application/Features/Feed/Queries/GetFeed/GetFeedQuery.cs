@@ -9,5 +9,5 @@ namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 public record GetFeedQuery : UserRequest, IRequest<FeedDto>, IBaseUrlAwareRequest
 {
     public int Id { get; set; }
-    public string? BaseUrl { get; set; }
+    public System.Uri? BaseUrl { get; set; }
 }

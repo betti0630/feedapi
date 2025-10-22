@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AttrectoTest.Iam.Application.Identity;
 
-internal class AuthService(IAuthUserService authUserService,
+internal sealed class AuthService(IAuthUserService authUserService,
     IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db,
     IAppLogger<AuthService> logger) : IAuthService
 {

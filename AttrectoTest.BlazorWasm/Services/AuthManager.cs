@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
+﻿using AttrectoTest.Blazor.Common.Contracts;
 using AttrectoTest.BlazorWasm.Providers;
 using AttrectoTest.BlazorWasm.Services.IamBase;
 
@@ -6,48 +6,53 @@ using Blazored.SessionStorage;
 
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace AttrectoTest.BlazorWasm.Services
+namespace AttrectoTest.BlazorWasm.Services;
+
+internal class AuthManager : IAuthManager
 {
-    public class AuthManager : IAuthManager
+    private readonly IAuthClient _authClient;
+    private readonly ISessionStorageService _sessionStorage;
+    private readonly AuthenticationStateProvider _authStateProvider;
+    private readonly ILogger<AuthManager> _logger;
+
+
+    public AuthManager(IAuthClient authClient, ISessionStorageService sessionStorage, AuthenticationStateProvider authStateProvider,
+        ILogger<AuthManager> logger)
     {
-        private readonly IAuthClient _authClient;
-        private readonly ISessionStorageService _sessionStorage;
-        private readonly AuthenticationStateProvider _authStateProvider;
+        _authClient = authClient;
+        _sessionStorage = sessionStorage;
+        _authStateProvider = authStateProvider;
+        _logger = logger;
+    }
 
-
-        public AuthManager(IAuthClient authClient, ISessionStorageService sessionStorage, AuthenticationStateProvider authStateProvider)
+    public async Task<bool> Login(string userName, string password)
+    {
+        try
         {
-            _authClient = authClient;
-            _sessionStorage = sessionStorage;
-            _authStateProvider = authStateProvider;
-        }
+            var request = new LoginRequest { UserName = userName, Password = password };
+            var response = await _authClient.LoginAsync(request);
 
-        public async Task<bool> Login(string userName, string password)
-        {
-            try
-            {
-                var request = new LoginRequest { UserName = userName, Password = password };
-                var response = await _authClient.LoginAsync(request);
-
-                if (response.Access_token == string.Empty)
-                {
-                    return false;
-                }
-
-                var jwtToken = response.Access_token;
-                await _sessionStorage.SetItemAsync("jwt", jwtToken);
-                ((JwtAuthStateProvider)_authStateProvider).NotifyUserAuthentication(jwtToken);
-                return true;
-            }
-            catch (Exception)
+            if (string.IsNullOrEmpty(response.AccessToken))
             {
                 return false;
             }
-        }
 
-        public async Task Logout()
-        {
-            await ((JwtAuthStateProvider)_authStateProvider).NotifyUserLogout();
+            var jwtToken = response.AccessToken;
+            await _sessionStorage.SetItemAsync("jwt", jwtToken);
+            ((JwtAuthStateProvider)_authStateProvider).NotifyUserAuthentication(jwtToken);
+            return true;
         }
+        #pragma warning disable CA1031
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return false;
+        }
+        #pragma warning restore CA1031
+    }
+
+    public async Task Logout()
+    {
+        await ((JwtAuthStateProvider)_authStateProvider).NotifyUserLogout();
     }
 }

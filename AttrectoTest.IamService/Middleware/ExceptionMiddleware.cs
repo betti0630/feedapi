@@ -7,7 +7,7 @@ using System.Net;
 
 namespace AttrectoTest.IamService.Middleware
 {
-    public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    internal class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
     {
         public async Task InvokeAsync(HttpContext httpContext)
         {

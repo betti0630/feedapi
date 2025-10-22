@@ -12,12 +12,14 @@ public class BaseUrlBehavior<TRequest, TResponse>(IHttpContextAccessor httpConte
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(next);
+
         var httpRequest = httpContextAccessor.HttpContext?.Request;
         if (httpRequest != null)
         {
             var baseUrl = $"{httpRequest.Scheme}://{httpRequest.Host}";
-            request.BaseUrl = baseUrl;
+            request.BaseUrl = new Uri(baseUrl);
         }
-        return await next(cancellationToken);
+        return await next(cancellationToken).ConfigureAwait(false);
     }
 }

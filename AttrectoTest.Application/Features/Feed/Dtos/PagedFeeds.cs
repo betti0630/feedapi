@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
 
 namespace AttrectoTest.Application.Features.Feed.Dtos;
 
-public class PagedFeeds(List<FeedDto> @items, int? @page, int? @pageSize, int @total) : PagedDto<FeedDto>(items, page, pageSize, total)
+public class PagedFeeds(ReadOnlyCollection<FeedDto> @items, int? @page, int? @pageSize, int @total) : PagedDto<FeedDto>(items, page, pageSize, total)
 {
 }

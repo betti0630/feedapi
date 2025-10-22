@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Persistence.DatabaseContext;
 
-internal class TestDbContext : DbContext
+internal sealed class TestDbContext : DbContext
 {
     //private readonly IAuthUserService _authService;
 

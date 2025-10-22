@@ -13,7 +13,7 @@ namespace AttrectoTest.Application.Features.Feed.Queries.Base;
 
 internal abstract class ListBaseQueryHandler<T> where T : ListBaseQuery
 {
-    protected IQueryable<EntityType> AddPaging<EntityType>(IQueryable<EntityType> query, T request) where EntityType : BaseEntity
+    protected static IQueryable<EntityType> AddPaging<EntityType>(IQueryable<EntityType> query, T request) where EntityType : BaseEntity
     {
         if (request.Page.HasValue && request.PageSize.HasValue)
         {

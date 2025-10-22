@@ -5,13 +5,13 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.PurgeFeed;
 
-internal class PurgeFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<PurgeFeedCommandHandler> logger) : IRequestHandler<PurgeFeedCommand>
+internal sealed class PurgeFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<PurgeFeedCommandHandler> logger) : IRequestHandler<PurgeFeedCommand>
 {
     public async Task Handle(PurgeFeedCommand request, CancellationToken cancellationToken)
     {
         var feed = feedRepository.List().Where(f => f.IsDeleted).ToList();
         foreach(var entry in feed) {
-            await feedRepository.DeleteAsync(entry, cancellationToken);
+            await feedRepository.DeleteAsync(entry, cancellationToken).ConfigureAwait(false);
         }
         logger.LogInformation("Feeds delete was successful");
     }

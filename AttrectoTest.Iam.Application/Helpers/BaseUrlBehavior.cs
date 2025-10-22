@@ -12,6 +12,9 @@ public class BaseUrlBehavior<TRequest, TResponse>(IHttpContextAccessor httpConte
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         var httpRequest = httpContextAccessor.HttpContext?.Request;
         if (httpRequest != null)
         {

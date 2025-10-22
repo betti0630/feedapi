@@ -2,7 +2,7 @@ using AttrecotTest.BlazorServer.Services;
 
 using AttrectoTest.Application;
 using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Blazor.Shared.Contracts;
+using AttrectoTest.Blazor.Common.Contracts;
 using AttrectoTest.BlazorServer.Components;
 using AttrectoTest.BlazorServer.Configuration;
 using AttrectoTest.BlazorServer.Providers;
@@ -35,7 +35,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddAppAuthServices(builder.Configuration);
 
 builder.Services.AddMemoryCache();

@@ -1,5 +1,5 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
-using AttrectoTest.Blazor.Shared.Models;
+﻿using AttrectoTest.Blazor.Common.Contracts;
+using AttrectoTest.Blazor.Common.Models;
 using AttrectoTest.BlazorWasm.Configuration;
 using AttrectoTest.BlazorWasm.Services.Base;
 
@@ -9,14 +9,16 @@ using Microsoft.Extensions.Options;
 
 namespace AttrectoTest.BlazorWasm.Services;
 
-public class FeedService : BaseHttpService, IFeedService
+internal class FeedService : BaseHttpService, IFeedService
 {
-    protected readonly IFeedsClient _client;
+    private readonly IFeedsClient _client;
     private readonly IMapper _mapper;
     private readonly ApiSettings _settings;
 
     public FeedService(IFeedsClient client, IMapper mapper, IOptions<ApiSettings> settings) 
     {
+        ArgumentNullException.ThrowIfNull(settings);
+
         _client = client;
         _mapper = mapper;
         _settings = settings.Value;
