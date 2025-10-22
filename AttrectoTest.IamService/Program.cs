@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 using Serilog;
 
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsProduction() || builder.Environment.IsEnvironment("Docker"))
 {
@@ -24,7 +26,7 @@ if (builder.Environment.IsProduction() || builder.Environment.IsEnvironment("Doc
 builder.Services.AddGrpc();
 
 builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
-    .WriteTo.Console()
+    .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
     .ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddHttpContextAccessor();

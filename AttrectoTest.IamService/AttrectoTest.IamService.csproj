@@ -33,4 +33,7 @@
 		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Server" Namespace="AttrectoTest.IamService.Grpc" OutputDir="Generated\Grpc"/>
 	</ItemGroup>
 
+    <PropertyGroup>
+        <NoWarn>CS0436</NoWarn>
+    </PropertyGroup>
 </Project>

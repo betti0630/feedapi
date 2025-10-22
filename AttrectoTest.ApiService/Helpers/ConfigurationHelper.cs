@@ -13,7 +13,7 @@ using Quartz;
 
 namespace AttrectoTest.ApiService.Helpers;
 
-public static class ConfigurationHelper
+internal static class ConfigurationHelper
 {
     public static IServiceCollection ConfigureQuartz(this IServiceCollection services, IConfiguration configuration)
     {

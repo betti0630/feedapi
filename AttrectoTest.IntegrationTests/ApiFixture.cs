@@ -29,7 +29,7 @@ public sealed class ApiFixture : IDisposable
         var response = await Client.PostAsJsonAsync("/api/auth/login", loginRequest);
         response.EnsureSuccessStatusCode();
 
-        var token = (await response.Content.ReadFromJsonAsync<LoginResponse>())?.Access_token;
+        var token = (await response.Content.ReadFromJsonAsync<LoginResponse>())?.AccessToken;
         Assert.False(string.IsNullOrEmpty(token));
 
         var authClient = new HttpClient { BaseAddress = Client.BaseAddress };

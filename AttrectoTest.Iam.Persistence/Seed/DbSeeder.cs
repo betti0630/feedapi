@@ -5,7 +5,7 @@ using AttrectoTest.Iam.Application.Contracts.Identity;
 
 namespace AttrectoTest.Iam.Persistence.Seed;
 
-internal class DbSeeder(AuthDbContext dbContext, IAppUserService userService) : IDbSeeder
+internal sealed class DbSeeder(AuthDbContext dbContext, IAppUserService userService) : IDbSeeder
 {
     public async Task SeedAsync()
     {

@@ -24,12 +24,12 @@ internal class AuthManager : IAuthManager
         var request = new LoginRequest { UserName = userName, Password = password };
         var response = await _authClient.LoginAsync(request);
 
-        if (string.IsNullOrEmpty(response.Access_token))
+        if (string.IsNullOrEmpty(response.AccessToken))
         {
             return false;
         }
 
-        var jwtToken = response.Access_token;
+        var jwtToken = response.AccessToken;
         await ((CustomAuthStateProvider)_authProvider).MarkUserAsAuthenticated(jwtToken);
         return true;
     }

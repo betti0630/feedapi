@@ -7,7 +7,7 @@ using Quartz;
 
 namespace AttrectoTest.ApiService.Jobs;
 
-public class PurgeFeedsJob(IMediator mediator) : IJob
+internal class PurgeFeedsJob(IMediator mediator) : IJob
 {
     public async Task Execute(IJobExecutionContext context)
     {

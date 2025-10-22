@@ -2,7 +2,7 @@
 
 namespace AttrectoTest.BlazorWasm.Services.Base;
 
-public class BaseHttpService
+internal class BaseHttpService
 {
     protected Response<Guid> ConvertApiExceptions<Guid>(ApiException ex)
     {

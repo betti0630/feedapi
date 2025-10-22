@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Persistence.Repositories;
 
-internal class CommentRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericQueryableRepository<Comment>(contextFactory), ICommentRepository
+internal sealed class CommentRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericQueryableRepository<Comment>(contextFactory), ICommentRepository
 {
    
 }

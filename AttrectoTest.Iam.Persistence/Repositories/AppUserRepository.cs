@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Iam.Persistence.Repositories;
 
-internal class AppUserRepository : GenericRepository<AppUser>, IGenericRepository<AppUser>
+internal sealed class AppUserRepository : GenericRepository<AppUser>, IGenericRepository<AppUser>
 {
 
     public AppUserRepository(IDbContextFactory<AuthDbContext> contextFactory) : base(contextFactory)

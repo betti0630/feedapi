@@ -14,6 +14,9 @@ public class UserBehavior<TRequest, TResponse>(IHttpContextAccessor httpContextA
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(next);
+
         var httpContext = httpContextAccessor.HttpContext;
         var userId = httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         if (int.TryParse(userId, out int uid))

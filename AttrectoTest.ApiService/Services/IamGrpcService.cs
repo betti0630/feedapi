@@ -7,11 +7,11 @@ using static AttrectoTest.Common.Grpc.Iam.IamService;
 
 namespace AttrectoTest.ApiService.Services;
 
-public class IamGrpcService : IIamService
+internal class IamGrpcService : IIamService
 {
     private readonly IamServiceClient _client;
 
-    public IamGrpcService(string iamApiUrl)
+    public IamGrpcService(Uri iamApiUrl)
     {
         var channel = GrpcChannel.ForAddress(iamApiUrl);
         _client = new IamServiceClient(channel);

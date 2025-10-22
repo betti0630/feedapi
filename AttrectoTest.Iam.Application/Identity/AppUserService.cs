@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AttrectoTest.Iam.Application.Identity;
 
-internal class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db) : IAppUserService
+internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db) : IAppUserService
 {
     public async Task AddNewUser(string userName, string password, string? roles, CancellationToken cancellationToken = default)
     {
@@ -50,7 +50,7 @@ internal class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepositor
 
     public async Task<int> GetUserIdByUserName(string userName, CancellationToken cancellationToken = default)
     {
-        var result = await db.GetByAsync(u => u.UserName.ToLower() == userName.Trim().ToLower(), cancellationToken);
+        var result = await db.GetByAsync(u => u.UserName.Equals(userName.Trim(), StringComparison.OrdinalIgnoreCase), cancellationToken);
         if (result == null) {
             throw new InvalidOperationException($"Not existing userName {userName}");
         }

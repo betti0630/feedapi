@@ -1,4 +1,4 @@
-using AttrectoTest.Blazor.Shared.Contracts;
+using AttrectoTest.Blazor.Common.Contracts;
 using AttrectoTest.BlazorWasm;
 using AttrectoTest.BlazorWasm.Configuration;
 using AttrectoTest.BlazorWasm.Handlers;

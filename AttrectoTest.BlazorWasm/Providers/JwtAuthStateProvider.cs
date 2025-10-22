@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace AttrectoTest.BlazorWasm.Providers
 {
-    public class JwtAuthStateProvider : AuthenticationStateProvider
+    internal class JwtAuthStateProvider : AuthenticationStateProvider
     {
         private readonly ISessionStorageService _sessionStorage;
 
