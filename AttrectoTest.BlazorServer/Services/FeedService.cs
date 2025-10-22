@@ -85,7 +85,7 @@ internal class FeedService : IFeedService
     {
         var query = new ListFeedsQuery
         {
-            IncludeExternal =  false,
+            IncludeExternal =  true,
             Page = 1,
             PageSize = 100,
             Sort = ListSort.CreatedAtDesc

@@ -27,7 +27,7 @@ internal class FeedService : BaseHttpService, IFeedService
 
     public async Task<FeedListModel> GetFeeds()
     {
-        var feeds = await _client.GetAsync(1, 100, ListSort.CreatedAtDesc, false);
+        var feeds = await _client.GetAsync(1, 100, ListSort.CreatedAtDesc, true);
         var model = new FeedListModel();
         model.Items = _mapper.Map<List<FeedItemModel>>(feeds.Items.ToList());
         foreach (var feed in model.Items)

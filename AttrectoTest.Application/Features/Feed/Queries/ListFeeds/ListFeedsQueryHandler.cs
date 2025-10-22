@@ -16,49 +16,74 @@ internal sealed class ListFeedsQueryHandler(IFeedRepository feedRepository, RssS
 {
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
+
+
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
-        var feedsWithLikes = feeds
-            .Select(f => new
+
+        IQueryable<FeedWithLikes> feedsWithLikes = feeds
+            .Select(f => new FeedWithLikes
             {
-                feed = f,
-                likeCount = f.Likes.Count,
-                isLiked = f.Likes.Any(c => c.UserId == request.UserId)
+                Feed = f,
+                LikeCount = f.Likes.Count,
+                IsLiked = f.Likes.Any(c => c.UserId == request.UserId)
             });
 
-        var feedsOrdered = request.Sort switch
+        IQueryable<FeedWithLikes> feedsOrdered = request.Sort switch
         {
-            ListSort.CreatedAtAsc => feedsWithLikes.OrderBy(x => x.feed.PublishedAt),
-            ListSort.CreatedAtDesc => feedsWithLikes.OrderByDescending(x => x.feed.PublishedAt),
-            ListSort.LikesDesc => feedsWithLikes.OrderByDescending(x => x.likeCount),
-            ListSort.LikesAsc => feedsWithLikes.OrderBy(x => x.likeCount),
+            ListSort.CreatedAtAsc => feedsWithLikes.OrderBy(x => x.Feed.PublishedAt),
+            ListSort.CreatedAtDesc => feedsWithLikes.OrderByDescending(x => x.Feed.PublishedAt),
+            ListSort.LikesDesc => feedsWithLikes.OrderByDescending(x => x.LikeCount),
+            ListSort.LikesAsc => feedsWithLikes.OrderBy(x => x.LikeCount),
             _ => throw new BadRequestException("Invalid sort option.")
         };
 
-        List<FeedDto>? items = null;
+        IQueryable<FeedWithLikes> feedsPaged = feedsOrdered;
         if (request.Page.HasValue && request.PageSize.HasValue)
         {
             var skip = (request.Page.Value - 1) * request.PageSize.Value;
-            var feedsPaged = feedsOrdered.Skip(skip).Take(request.PageSize.Value);
-            var feedData = feedsPaged.ToList();
-            var items0 = await Task.WhenAll(feedData.Select(async f =>
-                await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
-            )).ConfigureAwait(false);
-            items = items0.ToList();
-        } else { 
-            var feedData = feedsOrdered.ToList();
-            var items0 = await Task.WhenAll(feedData.Select(async f =>
-                await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
-            )).ConfigureAwait(false);
-            items = items0.ToList();
+            feedsPaged = feedsOrdered.Skip(skip).Take(request.PageSize.Value);
         }
+
+
+        List<FeedWithLikes> feedData = feedsPaged.ToList();
+
+    
+        FeedDto[]? items0 = await Task.WhenAll(feedData.Select(async f =>
+            await f.Feed.MapFeedToDto(f.LikeCount, f.IsLiked, request.UserId, iamService).ConfigureAwait(false)
+        )).ConfigureAwait(false);
+        List<FeedDto>? items = items0.ToList();
+
+        List<RssFeedDto>? rssItems = null;
         if (request.IncludeExternal ?? false)
         {
-            var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken).ConfigureAwait(false);
+            rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken).ConfigureAwait(false);
             items.AddRange(rssItems);
+            items = request.Sort switch
+            {
+                ListSort.CreatedAtAsc => items.OrderBy(x => x.PublishedAt).ToList(),
+                ListSort.CreatedAtDesc => items.OrderByDescending(x => x.PublishedAt).ToList(),
+                ListSort.LikesDesc => items.OrderByDescending(x => x.LikeCount).ToList(),
+                ListSort.LikesAsc => items.OrderBy(x => x.LikeCount).ToList(),
+                _ => throw new BadRequestException("Invalid sort option.")
+            };
+            if (request.Page.HasValue && request.PageSize.HasValue)
+            {
+                var skip = (request.Page.Value - 1) * request.PageSize.Value;
+                items = items.Skip(skip).Take(request.PageSize.Value).ToList();
+            }
+
         }
+
 
 
         var result = new PagedFeeds(items.AsReadOnly(), request.Page, request.PageSize, items.Count);
         return result;
+    }
+
+    private class FeedWithLikes
+    {
+        public Domain.Feed Feed { get; set; }
+        public int LikeCount { get; set; }
+        public bool IsLiked { get; set; }
     }
 }
