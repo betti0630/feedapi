@@ -8,7 +8,6 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListComments;
 
-#pragma warning disable CA1812
 internal sealed class ListCommentsQueryHandler(IFeedRepository feedRepository) : ListBaseQueryHandler<ListCommentsQuery>, IRequestHandler<ListCommentsQuery, PagedComments>
 {
     public Task<PagedComments> Handle(ListCommentsQuery request, CancellationToken cancellationToken)

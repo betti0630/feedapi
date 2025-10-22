@@ -12,7 +12,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 
-internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService, IIamService iamService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
+internal sealed class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService rssService, IIamService iamService) : ListBaseQueryHandler<ListFeedsQuery>, IRequestHandler<ListFeedsQuery, PagedFeeds>
 {
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {

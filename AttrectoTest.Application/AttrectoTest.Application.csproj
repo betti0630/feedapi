@@ -7,7 +7,7 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <AnalysisLevel>latest</AnalysisLevel>
       <AnalysisMode>All</AnalysisMode>
-      <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+      <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
       <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
@@ -31,4 +31,8 @@
     <ProjectReference Include="..\AttrectoTest.Domain\AttrectoTest.Domain.csproj" />
   </ItemGroup>
 
+    <PropertyGroup>
+        <NoWarn>CA1812,CA1056</NoWarn>
+    </PropertyGroup>
+    
 </Project>

@@ -5,7 +5,6 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteComment;
 
-#pragma warning disable CA1812
 internal sealed class DeleteCommentCommandHandler(IFeedRepository feedRepository, ICommentRepository commentRepository) : IRequestHandler<DeleteCommentCommand>
 {
     public async Task Handle(DeleteCommentCommand request, CancellationToken cancellationToken)

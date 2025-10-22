@@ -7,7 +7,6 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
 
-#pragma warning disable CA1812
 internal sealed class DeleteLikeCommandHandler(IFeedRepository feedRepository, IAppLogger<AddLikeCommandHandler> logger) : IRequestHandler<DeleteLikeCommand>
 {
     public async Task Handle(DeleteLikeCommand request, CancellationToken cancellationToken)

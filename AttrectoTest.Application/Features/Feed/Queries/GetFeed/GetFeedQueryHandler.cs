@@ -10,8 +10,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Queries.GetFeed;
 
-#pragma warning disable CA1812
-internal class GetFeedQueryHandler(IFeedRepository feedRepository, IIamService iamService) : IRequestHandler<GetFeedQuery, FeedDto>
+internal sealed class GetFeedQueryHandler(IFeedRepository feedRepository, IIamService iamService) : IRequestHandler<GetFeedQuery, FeedDto>
 {
     public async Task<FeedDto> Handle(GetFeedQuery request, CancellationToken cancellationToken)
     {

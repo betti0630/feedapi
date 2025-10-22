@@ -6,7 +6,6 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 
-#pragma warning disable CA1812
 internal sealed class CreateFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<CreateFeedCommandHandler> logger) : 
     IRequestHandler<CreateFeedCommand, CreateFeedCommandResponse>,
     IRequestHandler<CreateImageFeedCommand, CreateFeedCommandResponse>,
