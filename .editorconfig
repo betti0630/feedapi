@@ -72,3 +72,6 @@ tab_width = 4
 indent_size = 4
 dotnet_diagnostic.CA1716.severity = silent
 dotnet_diagnostic.CA2007.severity = suggestion
+
+[Migrations/*.cs]
+dotnet_diagnostic.CA1062.severity = none

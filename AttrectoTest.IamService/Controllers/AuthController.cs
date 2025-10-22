@@ -7,7 +7,9 @@ namespace AttrectoTest.IamService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+#pragma warning disable CA1515 // Consider making public types internal
 public class AuthController(IAuthService authService, IAppUserService userService) : ControllerBase
+#pragma warning restore CA1515 // Consider making public types internal
 {
 
     /// <summary>
@@ -18,6 +20,7 @@ public class AuthController(IAuthService authService, IAppUserService userServic
     [AllowAnonymous]
     public async Task<ActionResult<LoginResponse>> Login([FromBody]LoginRequest request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
         if (!await authService.ValidateUser(request.UserName, request.Password, cancellationToken))
         {
             return Unauthorized();
@@ -33,6 +36,7 @@ public class AuthController(IAuthService authService, IAppUserService userServic
     [HttpPost, Route("register", Name = "register")]
     public async Task<ActionResult<string>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(request);
         await userService.AddNewUser(request.UserName, request.Password, "User", cancellationToken);
         return CreatedAtRoute("register", request.UserName, "User created");    
     }
