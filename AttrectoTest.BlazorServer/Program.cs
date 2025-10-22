@@ -2,7 +2,7 @@ using AttrecotTest.BlazorServer.Services;
 
 using AttrectoTest.Application;
 using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Blazor.Shared.Contracts;
+using AttrectoTest.Blazor.Common.Contracts;
 using AttrectoTest.BlazorServer.Components;
 using AttrectoTest.BlazorServer.Configuration;
 using AttrectoTest.BlazorServer.Providers;

@@ -1,6 +1,6 @@
-﻿using AttrectoTest.Blazor.Shared.Models;
+﻿using AttrectoTest.Blazor.Common.Models;
 
-namespace AttrectoTest.Blazor.Shared.Contracts;
+namespace AttrectoTest.Blazor.Common.Contracts;
 
 public interface IFeedService
 {

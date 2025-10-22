@@ -1,10 +1,10 @@
 ﻿using AttrectoTest.Application.Features.Feed.Dtos;
-using AttrectoTest.Blazor.Shared.Models;
+using AttrectoTest.Blazor.Common.Models;
 using AutoMapper;
 
 namespace AttrectoTest.BlazorServer.Services;
 
-public class MapperProfile : Profile
+internal class MapperProfile : Profile
 {
     public MapperProfile() { 
         CreateMap<FeedDto, FeedItemModel>().ReverseMap();

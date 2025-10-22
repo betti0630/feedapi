@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Shared.csproj" />
+    <ProjectReference Include="..\AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Common.csproj" />
     <ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
     <ProjectReference Include="..\AttrectoTest.Infrastructure\AttrectoTest.Infrastructure.csproj" />
     <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />

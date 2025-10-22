@@ -15,7 +15,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     public async Task GetFeeds_WithoutToken_ShouldReturn401()
     {
         // Act
-        var response = await fixture.Client.GetAsync("/api/feeds");
+        var response = await fixture.Client.GetAsync(new Uri("/api/feeds", UriKind.Relative));
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -25,10 +25,10 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     public async Task GetFeeds_WithValidToken_ShouldReturn200()
     {
 
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         // Act
-        var response = await client.GetAsync("/api/feeds");
+        var response = await client.GetAsync(new Uri("/api/feeds", UriKind.Relative));
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -41,7 +41,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task PostFeed_ShouldReturnCreatedId()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         var newFeed = new CreateFeedCommand() { Title= "Test feed", Content = "Hello from test" };
 
@@ -58,7 +58,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task GetFeed_ValidId_ShouldReturn200()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         // először létrehozunk egy feedet
         var create = new CreateFeedCommand() { Title = "Title1", Content = "Content1" } ;
@@ -66,7 +66,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
                         .Content.ReadFromJsonAsync<CreateFeedCommandResponse>();
 
         Assert.NotNull(created);
-        var response = await client.GetAsync($"/api/feeds/{created.Id}");
+        var response = await client.GetAsync(new Uri($"/api/feeds/{created.Id}", UriKind.Relative));
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -78,9 +78,9 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task GetFeed_InvalidId_ShouldReturn404()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
-        var response = await client.GetAsync("/api/feeds/999999");
+        var response = await client.GetAsync(new Uri("/api/feeds/999999", UriKind.Relative));
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -88,7 +88,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task PatchFeed_ValidUpdate_ShouldReturn200()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         var created = await (await client.PostAsJsonAsync("/api/feeds",
             new CreateFeedCommand() {Title = "Old title", Content = "Old content" }))
@@ -101,7 +101,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var updated = await (await client.GetAsync($"/api/feeds/{created.Id}"))
+        var updated = await (await client.GetAsync(new Uri($"/api/feeds/{created.Id}", UriKind.Relative)))
             .Content.ReadFromJsonAsync<UpdateFeedCommandResponse>();
 
         Assert.NotNull(updated);
@@ -111,7 +111,7 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task PatchFeed_InvalidUpdate_ShouldReturn400()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         var created = await (await client.PostAsJsonAsync("/api/feeds",
             new CreateFeedCommand() { Title = "Good title", Content = "Good content" }))
@@ -130,17 +130,17 @@ public class FeedApiTests(ApiFixture fixture) : IClassFixture<ApiFixture>
     [Fact]
     public async Task DeleteFeed_ShouldReturn404AfterDeletion()
     {
-        var client = await fixture.GetAuthenticatedClient();
+        using var client = await fixture.GetAuthenticatedClient();
 
         var created = await (await client.PostAsJsonAsync("/api/feeds",
             new CreateFeedCommand() { Title = "Delete me", Content = "To be removed" }))
             .Content.ReadFromJsonAsync<CreateFeedCommandResponse>();
         Assert.NotNull(created);
 
-        var deleteResponse = await client.DeleteAsync($"/api/feeds/{created.Id}");
+        var deleteResponse = await client.DeleteAsync(new Uri($"/api/feeds/{created.Id}", UriKind.Relative));
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
 
-        var secondGet = await client.GetAsync($"/api/feeds/{created.Id}");
+        var secondGet = await client.GetAsync(new Uri($"/api/feeds/{created.Id}", UriKind.Relative));
         Assert.Equal(HttpStatusCode.NotFound, secondGet.StatusCode);
     }
 }

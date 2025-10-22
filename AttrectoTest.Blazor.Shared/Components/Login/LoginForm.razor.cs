@@ -1,8 +1,8 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
+﻿using AttrectoTest.Blazor.Common.Contracts;
 
 using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.Blazor.Shared.Components.Login;
+namespace AttrectoTest.Blazor.Common.Components.Login;
 
 public partial class LoginForm
 {

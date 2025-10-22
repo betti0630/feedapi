@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.Blazor.Shared.Contracts;
+﻿namespace AttrectoTest.Blazor.Common.Contracts;
 
 public interface IAuthManager
 {

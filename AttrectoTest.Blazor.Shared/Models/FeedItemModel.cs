@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.Blazor.Shared.Models;
+﻿namespace AttrectoTest.Blazor.Common.Models;
 
 public class FeedItemModel
 {

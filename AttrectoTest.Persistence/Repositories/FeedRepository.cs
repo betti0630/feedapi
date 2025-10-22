@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace AttrectoTest.Persistence.Repositories;
 
-internal class FeedRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericQueryableRepository<Feed>(contextFactory), IFeedRepository, IDisposable
+internal sealed class FeedRepository(IDbContextFactory<TestDbContext> contextFactory) : GenericQueryableRepository<Feed>(contextFactory), IFeedRepository, IDisposable
 {
     public override IQueryable<Feed> List()
     {

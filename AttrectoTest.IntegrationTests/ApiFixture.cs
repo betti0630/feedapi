@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace AttrectoTest.IntegrationTests;
 
-public class ApiFixture : IDisposable
+public sealed class ApiFixture : IDisposable
 {
     public HttpClient Client { get; }
 

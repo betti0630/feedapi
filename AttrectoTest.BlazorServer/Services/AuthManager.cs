@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
+﻿using AttrectoTest.Blazor.Common.Contracts;
 using AttrectoTest.BlazorServer.Providers;
 using AttrectoTest.BlazorServer.Services.IamBase;
 
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace AttrectoTest.BlazorServer.Services;
 
-public class AuthManager : IAuthManager
+internal class AuthManager : IAuthManager
 {
     private readonly IAuthClient _authClient;
     private readonly AuthenticationStateProvider _authProvider;
@@ -21,23 +21,16 @@ public class AuthManager : IAuthManager
 
     public async Task<bool> Login(string userName, string password)
     {
-        try
-        {
-            var request = new LoginRequest { UserName = userName, Password = password };
-            var response = await _authClient.LoginAsync(request);
+        var request = new LoginRequest { UserName = userName, Password = password };
+        var response = await _authClient.LoginAsync(request);
 
-            if (response.Access_token == string.Empty)
-            {
-                return false;
-            }
-
-            var jwtToken = response.Access_token;
-            await ((CustomAuthStateProvider)_authProvider).MarkUserAsAuthenticated(jwtToken);
-        }
-        catch (Exception)
+        if (string.IsNullOrEmpty(response.Access_token))
         {
             return false;
         }
+
+        var jwtToken = response.Access_token;
+        await ((CustomAuthStateProvider)_authProvider).MarkUserAsAuthenticated(jwtToken);
         return true;
     }
 

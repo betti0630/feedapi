@@ -7,7 +7,7 @@ using static AttrectoTest.Common.Grpc.Iam.IamService;
 
 namespace AttrectoTest.BlazorServer.Services;
 
-public class IamGrpcService : IIamService
+internal class IamGrpcService : IIamService
 {
     private readonly IamServiceClient _client;
 

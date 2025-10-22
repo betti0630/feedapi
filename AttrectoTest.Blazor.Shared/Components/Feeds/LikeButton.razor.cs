@@ -1,8 +1,8 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
+﻿using AttrectoTest.Blazor.Common.Contracts;
 
 using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.Blazor.Shared.Components.Feeds;
+namespace AttrectoTest.Blazor.Common.Components.Feeds;
 
 public partial class LikeButton : ComponentBase
 {

@@ -1,9 +1,9 @@
-﻿using AttrectoTest.Blazor.Shared.Contracts;
-using AttrectoTest.Blazor.Shared.Models;
+﻿using AttrectoTest.Blazor.Common.Contracts;
+using AttrectoTest.Blazor.Common.Models;
 
 using Microsoft.AspNetCore.Components;
 
-namespace AttrectoTest.Blazor.Shared.Components.Feeds;
+namespace AttrectoTest.Blazor.Common.Components.Feeds;
 
 public partial class FeedItem : ComponentBase
 {

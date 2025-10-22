@@ -7,14 +7,14 @@ using System.Security.Claims;
 
 namespace AttrectoTest.BlazorServer.Providers;
 
-public class CustomAuthStateProvider : AuthenticationStateProvider
+internal class CustomAuthStateProvider : AuthenticationStateProvider, IDisposable
 {
     private readonly ISessionStorageService _sessionStorage;
     private const string TOKEN_KEY = "authToken";
     private readonly ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
 
     private string? _token;
-    private bool _initialized = false;
+    private bool _initialized;
     private readonly SemaphoreSlim _initLock = new(1, 1);
 
     public CustomAuthStateProvider(ISessionStorageService sessionStorage)
@@ -33,10 +33,12 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
                 var identity = new ClaimsIdentity(jwt.Claims, "jwt");
                 return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
             }
+            #pragma warning disable CA1031
             catch
             {
                 return Task.FromResult(new AuthenticationState(_anonymous));
             }
+            #pragma warning restore CA1031
         }
 
         return Task.FromResult(new AuthenticationState(_anonymous));
@@ -71,10 +73,12 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
             catch (InvalidOperationException)
             {
             }
+            #pragma warning disable CA1031
             catch
             {
                 try { await _sessionStorage.RemoveItemAsync(TOKEN_KEY); } catch { }
             }
+            #pragma warning restore CA1031
 
             _initialized = true;
         }
@@ -114,5 +118,10 @@ public class CustomAuthStateProvider : AuthenticationStateProvider
         }
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
+    }
+
+    public void Dispose()
+    {
+        _initLock?.Dispose();
     }
 }

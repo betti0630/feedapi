@@ -3,8 +3,8 @@ using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
 using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
 using AttrectoTest.Application.Models;
-using AttrectoTest.Blazor.Shared.Contracts;
-using AttrectoTest.Blazor.Shared.Models;
+using AttrectoTest.Blazor.Common.Contracts;
+using AttrectoTest.Blazor.Common.Models;
 using AttrectoTest.Domain;
 
 using AutoMapper;
@@ -20,7 +20,7 @@ using System.Threading;
 
 namespace AttrecotTest.BlazorServer.Services;
 
-public class FeedService : IFeedService
+internal class FeedService : IFeedService
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;

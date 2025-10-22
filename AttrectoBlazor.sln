@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.IntegrationTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{9C28790E-B097-4CE6-9810-4041E3D9C35F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Blazor.Shared", "AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Shared.csproj", "{C7D0BFE5-0FCE-EBB9-5A5D-AF7E73204AD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.Blazor.Common", "AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Common.csproj", "{C7D0BFE5-0FCE-EBB9-5A5D-AF7E73204AD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttrectoTest.BlazorServer", "AttrectoTest.BlazorServer\AttrectoTest.BlazorServer.csproj", "{C4035389-35E3-44C9-B5D5-09E2D2FB9B33}"
 EndProject

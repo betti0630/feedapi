@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web"  />
   </ItemGroup>
 
+	<PropertyGroup>
+		<NoWarn>CA1056</NoWarn>
+	</PropertyGroup>
+
 </Project>

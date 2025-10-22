@@ -70,3 +70,5 @@ dotnet_naming_style.pascal_case.capitalization = pascal_case
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4
 indent_size = 4
+dotnet_diagnostic.CA1716.severity = silent
+dotnet_diagnostic.CA2007.severity = suggestion

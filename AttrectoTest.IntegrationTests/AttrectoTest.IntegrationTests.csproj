@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -31,4 +31,7 @@
 		</None>
 	</ItemGroup>
 
+	<PropertyGroup>
+		<NoWarn>CA1707,CA1515</NoWarn>
+	</PropertyGroup>
 </Project>

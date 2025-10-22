@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AttrectoTest.Persistence.Seed;
 
-internal class DbSeeder(TestDbContext dbContext, IIamService userService) : IDbSeeder
+internal sealed class DbSeeder(TestDbContext dbContext, IIamService userService) : IDbSeeder
 {
     public async Task SeedAsync()
     {
