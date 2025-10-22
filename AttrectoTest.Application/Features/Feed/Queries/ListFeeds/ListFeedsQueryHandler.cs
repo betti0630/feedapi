@@ -17,34 +17,47 @@ internal sealed class ListFeedsQueryHandler(IFeedRepository feedRepository, RssS
     public async Task<PagedFeeds> Handle(ListFeedsQuery request, CancellationToken cancellationToken)
     {
         var feeds = feedRepository.List().Where(x => !x.IsDeleted);
-        feeds = AddPaging<Domain.Feed>(feeds, request);
-
-        var feedData = feeds
+        var feedsWithLikes = feeds
             .Select(f => new
             {
                 feed = f,
                 likeCount = f.Likes.Count,
                 isLiked = f.Likes.Any(c => c.UserId == request.UserId)
-            })
-            .ToList();
-        var items0 = await Task.WhenAll(feedData.Select(async f =>
-            await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
-        )).ConfigureAwait(false);
-        var items = items0.ToList();
+            });
+
+        var feedsOrdered = request.Sort switch
+        {
+            ListSort.CreatedAtAsc => feedsWithLikes.OrderBy(x => x.feed.PublishedAt),
+            ListSort.CreatedAtDesc => feedsWithLikes.OrderByDescending(x => x.feed.PublishedAt),
+            ListSort.LikesDesc => feedsWithLikes.OrderByDescending(x => x.likeCount),
+            ListSort.LikesAsc => feedsWithLikes.OrderBy(x => x.likeCount),
+            _ => throw new BadRequestException("Invalid sort option.")
+        };
+
+        List<FeedDto>? items = null;
+        if (request.Page.HasValue && request.PageSize.HasValue)
+        {
+            var skip = (request.Page.Value - 1) * request.PageSize.Value;
+            var feedsPaged = feedsOrdered.Skip(skip).Take(request.PageSize.Value);
+            var feedData = feedsPaged.ToList();
+            var items0 = await Task.WhenAll(feedData.Select(async f =>
+                await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
+            )).ConfigureAwait(false);
+            items = items0.ToList();
+        } else { 
+            var feedData = feedsOrdered.ToList();
+            var items0 = await Task.WhenAll(feedData.Select(async f =>
+                await f.feed.MapFeedToDto(f.likeCount, f.isLiked, request.UserId, iamService).ConfigureAwait(false)
+            )).ConfigureAwait(false);
+            items = items0.ToList();
+        }
         if (request.IncludeExternal ?? false)
         {
             var rssItems = await rssService.GetLoveMeowFeedAsync(cancellationToken).ConfigureAwait(false);
             items.AddRange(rssItems);
         }
 
-        items = [.. (request.Sort switch
-        {
-            ListSort.CreatedAtAsc => items.OrderBy(x => x.PublishedAt),
-            ListSort.CreatedAtDesc => items.OrderByDescending(x => x.PublishedAt),
-            ListSort.LikesDesc => items.OrderByDescending(x => x.LikeCount),
-            ListSort.LikesAsc => items.OrderBy(x => x.LikeCount),
-            _ => throw new BadRequestException("Invalid sort option."),
-        })];
+
         var result = new PagedFeeds(items.AsReadOnly(), request.Page, request.PageSize, items.Count);
         return result;
     }
