@@ -2,5 +2,5 @@
 
 public class VideoFeedCreateDto: ImageFeedCreateDto
 {
-    public string VideoUrl { get; set; } = default!;
+    public System.Uri VideoUrl { get; set; } = default!;
 }

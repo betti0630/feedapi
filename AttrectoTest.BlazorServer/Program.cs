@@ -35,7 +35,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddAppAuthServices(builder.Configuration);
 
 builder.Services.AddMemoryCache();

@@ -6,6 +6,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.CreateComment;
 
+#pragma warning disable CA1812
 internal sealed class CreateCommentCommandHandler(IFeedRepository feedRepository, ICommentRepository commentRepository) : IRequestHandler<CreateCommentCommand, CommentDto>
 {
     public async Task<CommentDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)

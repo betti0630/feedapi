@@ -45,7 +45,7 @@ internal class ListFeedsQueryHandler(IFeedRepository feedRepository, RssService 
             ListSort.LikesAsc => items.OrderBy(x => x.LikeCount),
             _ => throw new BadRequestException("Invalid sort option."),
         })];
-        var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
+        var result = new PagedFeeds(items.AsReadOnly(), request.Page, request.PageSize, items.Count);
         return result;
     }
 }

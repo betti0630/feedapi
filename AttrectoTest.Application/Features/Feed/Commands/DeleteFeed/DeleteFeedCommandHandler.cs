@@ -7,6 +7,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 
+#pragma warning disable CA1812
 internal sealed class DeleteFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<DeleteFeedCommandHandler> logger) : IRequestHandler<DeleteFeedCommand>
 {
     public async Task Handle(DeleteFeedCommand request, CancellationToken cancellationToken)

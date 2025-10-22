@@ -11,5 +11,5 @@ public record ListFeedsQuery : ListBaseQuery, IRequest<PagedFeeds>, IBaseUrlAwar
 {
     public bool? IncludeExternal { get; set; }
     public ListSort? Sort { get; set; }
-    public string? BaseUrl { get; set; }
+    public System.Uri? BaseUrl { get; set; }
 }

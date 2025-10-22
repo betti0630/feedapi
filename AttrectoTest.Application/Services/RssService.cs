@@ -1,13 +1,15 @@
 ﻿using AttrectoTest.Application.Features.Feed.Dtos;
+using AttrectoTest.Application.Models;
 
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 using System.ServiceModel.Syndication;
 using System.Xml;
 
 namespace AttrectoTest.Application.Services;
 
-public class RssService(HttpClient httpClient, IMemoryCache cache)
+public class RssService(HttpClient httpClient, IMemoryCache cache, IOptions<RssSettings> rssSettings)
 {
     public async Task<List<RssFeedDto>> GetLoveMeowFeedAsync(CancellationToken cancellationToken)
     {
@@ -18,7 +20,7 @@ public class RssService(HttpClient httpClient, IMemoryCache cache)
             return cached!;
         }
 
-        var feedUrl = "https://www.lovemeow.com/feeds/feed.rss";
+        var feedUrl = rssSettings.Value.FeedUrl;
 
         using var stream = await httpClient.GetStreamAsync(feedUrl, cancellationToken).ConfigureAwait(false);
         using var xmlReader = XmlReader.Create(stream);

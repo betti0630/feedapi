@@ -7,6 +7,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.AddLike;
 
+#pragma warning disable CA1812
 internal sealed class AddLikeCommandHandler(IFeedRepository feedRepository, IAppLogger<AddLikeCommandHandler> logger) : IRequestHandler<AddLikeCommand>
 {
     public async Task Handle(AddLikeCommand request, CancellationToken cancellationToken)

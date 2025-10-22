@@ -5,6 +5,7 @@ using MediatR;
 
 namespace AttrectoTest.Application.Features.Feed.Commands.PurgeFeed;
 
+#pragma warning disable CA1812
 internal sealed class PurgeFeedCommandHandler(IFeedRepository feedRepository, IAppLogger<PurgeFeedCommandHandler> logger) : IRequestHandler<PurgeFeedCommand>
 {
     public async Task Handle(PurgeFeedCommand request, CancellationToken cancellationToken)
