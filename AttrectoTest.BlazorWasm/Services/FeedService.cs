@@ -27,7 +27,7 @@ internal class FeedService : BaseHttpService, IFeedService
 
     public async Task<FeedListModel> GetFeeds()
     {
-        var feeds = await _client.GetAsync(1, 100, ListSort.CreatedAt_desc, false);
+        var feeds = await _client.GetAsync(1, 100, ListSort.CreatedAtDesc, false);
         var model = new FeedListModel();
         model.Items = _mapper.Map<List<FeedItemModel>>(feeds.Items.ToList());
         foreach (var feed in model.Items)
@@ -72,4 +72,34 @@ internal class FeedService : BaseHttpService, IFeedService
         await _client.DeleteAsync(feedId);
     }
 
+    public async Task AddFeed(FeedEditModel feed)
+    {
+        FileParameter? fileParameter = null;
+        if (feed.ImageContent != null)
+        {
+            var stream = new MemoryStream(feed.ImageContent);
+
+            fileParameter = new FileParameter(stream, feed.ImageFileName, "image/jpeg");
+        }
+        if (!string.IsNullOrEmpty(feed.VideoUrl))
+        {
+            await _client.CreateVideoFeedAsync(feed.VideoUrl, feed.Title, feed.Content, fileParameter);
+
+        }
+        else if (!string.IsNullOrEmpty(feed.ImageUrl))
+        {
+            await _client.CreateImageFeedAsync(feed.Title, feed.Content, fileParameter);
+        }
+        else
+        {
+            var command = new CreateFeedCommand()
+            {
+                Title = feed.Title,
+                Content = feed.Content
+            };
+            await _client.PostAsync(command);
+        }
+
+    }
 }
+

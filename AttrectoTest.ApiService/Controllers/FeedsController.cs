@@ -67,7 +67,7 @@ public class FeedsController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>Created</returns>
     [HttpPost]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateFeedCommandResponse))]
     [ProducesResponseType(400)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CreateFeedCommandResponse>> Post([FromBody] CreateFeedCommand feed, CancellationToken cancellationToken)
@@ -82,6 +82,7 @@ public class FeedsController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>Created</returns>
     [HttpPost("image")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateFeedCommandResponse))]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<CreateFeedCommandResponse>> CreateImageFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] ImageFeedCreateDto feed, CancellationToken cancellationToken)
     {
@@ -105,6 +106,7 @@ public class FeedsController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>Created</returns>
     [HttpPost("video")]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateFeedCommandResponse))]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<CreateFeedCommandResponse>> CreateVideoFeed([FromServices] IImageFileProcessor imageFileProcessor, [FromForm] VideoFeedCreateDto feed, CancellationToken cancellationToken)
     {

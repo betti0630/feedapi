@@ -27,4 +27,15 @@ public partial class FeedList
             }
         }
     }
+
+    private bool IsModalVisible;
+
+    void OpenNewFeedModal() => IsModalVisible = true;
+
+    async void CloseNewFeedModal() {
+        IsModalVisible = false;
+        _model = await FeedService.GetFeeds();
+        StateHasChanged();
+    }
+
 }

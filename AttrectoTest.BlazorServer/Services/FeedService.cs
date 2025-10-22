@@ -1,4 +1,5 @@
 ﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
+using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
 using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
 using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
@@ -31,6 +32,33 @@ internal class FeedService : IFeedService
         _mediator = mediator;
         _mapper = mapper;
         _navigationManager = navigationManager;
+    }
+
+    public async Task AddFeed(FeedEditModel feed)
+    {
+        CreateFeedCommand command;
+        if (!string.IsNullOrEmpty(feed.VideoUrl))
+        {
+            command = new CreateVideoFeedCommand
+            {
+                VideoUrl = feed.VideoUrl,
+                ImageUrl = feed.ImageUrl
+            };
+        } else if (!string.IsNullOrEmpty(feed.ImageUrl))
+        {
+            command = new CreateImageFeedCommand
+            {
+                ImageUrl = feed.ImageUrl,
+            };
+        }
+        else
+        {
+            command = new CreateFeedCommand();
+        }
+
+        command.Title = feed.Title;
+        command.Content = feed.Content;
+        await _mediator.Send(command);
     }
 
     public async Task<bool> AddLike(int feedId)
