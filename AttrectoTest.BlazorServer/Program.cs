@@ -80,6 +80,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.Services.RunDatabaseMigrations();
+//app.Services.RunDatabaseMigrations();
 
 app.Run();

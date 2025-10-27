@@ -12,10 +12,6 @@ COPY . .
 WORKDIR "/src/AttrectoTest.BlazorWasm"
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
-#FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
-#WORKDIR /app
-#COPY --from=build /app/publish/wwwroot ./wwwroot
-
 # Serve with nginx
 FROM nginx:alpine AS final
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html

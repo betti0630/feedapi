@@ -3,6 +3,8 @@ using AttrectoTest.Common.Grpc.Iam;
 
 using Grpc.Net.Client;
 
+using System.Net;
+
 using static AttrectoTest.Common.Grpc.Iam.IamService;
 
 namespace AttrectoTest.BlazorServer.Services;
@@ -13,7 +15,19 @@ internal class IamGrpcService : IIamService
 
     public IamGrpcService(string iamApiUrl)
     {
-        var channel = GrpcChannel.ForAddress(iamApiUrl);
+        var handler = new HttpClientHandler
+        {
+            // Ha self-signed cert van (pl. dev Docker környezet)
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        var channel = GrpcChannel.ForAddress(iamApiUrl, new GrpcChannelOptions
+        {
+            HttpHandler = handler,
+            HttpVersion = HttpVersion.Version20,
+            HttpVersionPolicy = HttpVersionPolicy.RequestVersionExact
+        });
+
         _client = new IamServiceClient(channel);
     }
 

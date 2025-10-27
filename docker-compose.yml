@@ -25,6 +25,10 @@ services:
       - mariadb
     environment:
       - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_iam;User=myuser;Password=mypassword;
+      - AllowedOrigins__0=http://react_frontend:80
+      - AllowedOrigins__1=http://localhost:3002
+      - AllowedOrigins__2=http://localhost:3003
+      - AllowedOrigins__3=http://feed_apiservice:8080
     networks:
       - backend
 
@@ -40,6 +44,8 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
       - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
+      - AllowedOrigins__0=http://react_frontend:80
+      - AllowedOrigins__1=http://localhost:3002
     networks:
       - backend
       
@@ -62,6 +68,21 @@ services:
       - "3002:80"
     networks:
       - backend
+      
+  blazor_server:
+    build:
+      context: .
+      dockerfile: AttrectoTest.BlazorServer/Dockerfile
+    depends_on:
+      - feed_apiservice
+      - iam_apiservice
+    ports:
+      - "3003:8080" 
+    environment:
+      - ApiSettings__BaseUrl=http://feed_apiservice:8080
+      - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
+    networks:
+      - backend      
       
 networks:
   backend:
