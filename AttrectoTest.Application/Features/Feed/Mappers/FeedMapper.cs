@@ -25,7 +25,7 @@ public static class FeedMapper
         dto.Title = feed.Title;
         dto.Content = feed.Content;
         dto.AuthorId = feed.AuthorId;
-        dto.AuthorUserName = await iamService.GetUserNameByUserId(feed.AuthorId).ConfigureAwait(false);
+        dto.AuthorUserName = await iamService.GetUserNameByUserId(feed.AuthorId);
         dto.PublishedAt = feed.PublishedAt;
         dto.IsOwnFeed = feed.AuthorId == userId;
         dto.LikeCount = likeCount;

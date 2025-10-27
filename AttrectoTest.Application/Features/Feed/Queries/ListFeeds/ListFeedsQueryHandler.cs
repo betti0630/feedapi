@@ -76,7 +76,7 @@ internal sealed class ListFeedsQueryHandler(IFeedRepository feedRepository, RssS
 
 
 
-        var result = new PagedFeeds(items.AsReadOnly(), request.Page, request.PageSize, items.Count);
+        var result = new PagedFeeds(items, request.Page, request.PageSize, items.Count);
         return result;
     }
 

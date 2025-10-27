@@ -131,11 +131,11 @@ public class FeedsController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>OK</returns>
     [HttpPatch("{feedId}")]
-    public async Task<ActionResult<FeedDto>> Patch(int id, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
+    public async Task<ActionResult<FeedDto>> Patch(int feedId, [FromBody] UpdateFeedCommand feed, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(feed);
 
-        if (id != feed.Id)
+        if (feedId != feed.Id)
         {
             throw new ArgumentException("Feed ID mismatch");
         }
