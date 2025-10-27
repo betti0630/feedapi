@@ -39,16 +39,27 @@ services:
       - iam_apiservice
     environment:
       - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
-      - ApiSettings__AimBaseUrl=http://iam_apiservice:8080
+      - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
     networks:
       - backend
       
-  webfrontend:
+  react_frontend:
     build: ./WebApp/attrectoweb
     depends_on:
       - feed_apiservice
     ports:
       - "3001:80"
+    networks:
+      - backend
+      
+  blazor_wasm:
+    build:
+      context: .
+      dockerfile: AttrectoTest.BlazorWasm/Dockerfile
+    depends_on:
+      - feed_apiservice
+    ports:
+      - "3002:80"
     networks:
       - backend
       
