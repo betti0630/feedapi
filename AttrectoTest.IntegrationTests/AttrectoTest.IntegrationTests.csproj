@@ -10,14 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector"  />
-    <PackageReference Include="Microsoft.NET.Test.Sdk"  />
-    <PackageReference Include="xunit"  />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AttrectoTest.Iam.Application\AttrectoTest.Iam.Application.csproj" />
     <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
   </ItemGroup>
 

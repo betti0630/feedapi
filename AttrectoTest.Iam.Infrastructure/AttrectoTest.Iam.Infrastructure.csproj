@@ -7,7 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="Grpc.Core.Api" />
+    <PackageReference Include="Grpc.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AttrectoTest.Iam.Application\AttrectoTest.Iam.Application.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Server" />
+    </ItemGroup>
 
 </Project>

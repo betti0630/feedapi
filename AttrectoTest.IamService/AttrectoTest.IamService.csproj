@@ -7,10 +7,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Grpc.AspNetCore" />
-		<PackageReference Include="Grpc.Tools" >
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" >
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,10 +23,6 @@
 		<ProjectReference Include="..\AttrectoTest.Iam.Infrastructure\AttrectoTest.Iam.Infrastructure.csproj" />
 		<ProjectReference Include="..\AttrectoTest.Iam.Persistence\AttrectoTest.Iam.Persistence.csproj" />
 		<ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Protobuf Include="..\AttrectoTest.Common.Grpc\iam.proto" GrpcServices="Server" Namespace="AttrectoTest.IamService.Grpc" OutputDir="Generated\Grpc"/>
 	</ItemGroup>
 
     <PropertyGroup>

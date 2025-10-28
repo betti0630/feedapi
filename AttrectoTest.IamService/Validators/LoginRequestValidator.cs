@@ -4,7 +4,7 @@ using AttrectoTest.Iam.Application.Identity.Dtos.Auth;
 
 namespace AttrectoTest.IamService.Validators;
 
-internal class LoginRequestValidator : AbstractValidator<LoginRequest>
+internal sealed class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
     public LoginRequestValidator()
     {

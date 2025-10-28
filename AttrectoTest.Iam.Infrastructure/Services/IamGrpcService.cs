@@ -4,9 +4,9 @@ using AttrectoTest.Iam.Application.Contracts.Identity;
 using Grpc.Core;
 
 
-namespace AttrectoTest.IamService.Services;
+namespace AttrectoTest.Iam.Infrastructure.Services;
 
-internal class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServiceBase
+public class IamGrpcService : IamService.IamServiceBase
 {
     private readonly IAppUserService _appUserService;
 
@@ -22,6 +22,7 @@ internal class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServi
 
     public override async Task<GetUserIdByUserNameResponse> GetUserIdByUserName(GetUserIdByUserNameRequest request, ServerCallContext context)
     {
+        ArgumentNullException.ThrowIfNull(request);
         var userId = await _appUserService.GetUserIdByUserName(request.UserName);
         return new GetUserIdByUserNameResponse
         {
@@ -31,6 +32,7 @@ internal class IamGrpcService : AttrectoTest.Common.Grpc.Iam.IamService.IamServi
 
     public override async Task<GetUserDataResponse> GetUserData(GetUserDataRequest request, ServerCallContext context)
     {
+        ArgumentNullException.ThrowIfNull(request);
         var userData = await _appUserService.GetUserData(request.UserId);
         return new GetUserDataResponse
         {

@@ -1,8 +1,8 @@
 using AttrectoTest.Iam.Application;
 using AttrectoTest.Iam.Infrastructure;
+using AttrectoTest.Iam.Infrastructure.Services;
 using AttrectoTest.Iam.Persistence;
 using AttrectoTest.IamService.Middleware;
-using AttrectoTest.IamService.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Server.Kestrel.Core;

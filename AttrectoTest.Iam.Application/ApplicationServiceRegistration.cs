@@ -61,9 +61,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAppUserService, AppUserService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UserBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BaseUrlBehavior<,>));
-
-        
+                
         return services;
     }
 }

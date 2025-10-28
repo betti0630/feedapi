@@ -1,0 +1,37 @@
+﻿@using AttrectoTest.BlazorWeb.Providers
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+<CascadingAuthenticationState>
+    <CascadingValue Value="this">
+        <ChildContent />
+    </CascadingValue>
+</CascadingAuthenticationState>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+    [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        if (!state.User.Identity?.IsAuthenticated ?? true)
+        {
+            // Próbáljuk újrainicializálni (hátha most már van token)
+            if (AuthProvider is CustomAuthStateProvider custom)
+                await custom.InitializeAsync();
+
+            state = await AuthProvider.GetAuthenticationStateAsync();
+        }
+        var authState = await AuthenticationStateTask;
+        var user = authState.User;
+
+        // csak ha már betöltött az állapot és tényleg nincs user
+        if (user?.Identity is { IsAuthenticated: false })
+        {
+            var returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+            Navigation.NavigateTo(
+                $"login?returnUrl={Uri.EscapeDataString("/" + returnUrl)}",
+                forceLoad: true);
+        }
+    }
+}
