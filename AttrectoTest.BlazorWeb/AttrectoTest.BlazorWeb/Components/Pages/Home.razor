@@ -1,0 +1,49 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using AttrectoTest.Blazor.Common.Components.Feeds
+@using AttrectoTest.Blazor.Common.Components.Login
+@using AttrectoTest.BlazorWeb.Providers
+@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
+<div class="relative min-h-screen bg-gray-100">
+     <AuthorizeView>
+        <Authorized>
+            <div class="flex justify-center pt-16">
+                <FeedList></FeedList>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            @if (_isLoading)
+            {
+                <p>Loading user...</p>
+            }
+            else
+            {
+                @* <RedirectToLogin /> *@
+             }
+        </NotAuthorized>
+    </AuthorizeView> 
+</div>
+</CascadingAuthenticationState>
+
+@code {
+    private bool _isLoading = true;
+    [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        if (!state.User.Identity?.IsAuthenticated ?? true)
+        {
+            // Próbáljuk újrainicializálni (hátha most már van token)
+            if (AuthProvider is CustomAuthStateProvider custom)
+                await custom.InitializeAsync();
+
+            state = await AuthProvider.GetAuthenticationStateAsync();
+        }
+
+        _isLoading = false;
+    }
+
+}
