@@ -29,21 +29,21 @@
 
 @code {
     private bool _isLoading = true;
-    [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
+    // [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var state = await AuthProvider.GetAuthenticationStateAsync();
-        if (!state.User.Identity?.IsAuthenticated ?? true)
-        {
-            // Próbáljuk újrainicializálni (hátha most már van token)
-            if (AuthProvider is CustomAuthStateProvider custom)
-                await custom.InitializeAsync();
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var state = await AuthProvider.GetAuthenticationStateAsync();
+    //     if (!state.User.Identity?.IsAuthenticated ?? true)
+    //     {
+    //         // Próbáljuk újrainicializálni (hátha most már van token)
+    //         if (AuthProvider is CustomAuthStateProvider custom)
+    //             await custom.InitializeAsync();
 
-            state = await AuthProvider.GetAuthenticationStateAsync();
-        }
+    //         state = await AuthProvider.GetAuthenticationStateAsync();
+    //     }
 
-        _isLoading = false;
-    }
+    //     _isLoading = false;
+    // }
 
 }

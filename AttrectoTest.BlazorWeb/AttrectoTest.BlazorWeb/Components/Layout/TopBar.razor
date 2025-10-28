@@ -1,6 +1,9 @@
 ﻿@using AttrectoTest.Blazor.Common.Contracts
+@using AttrectoTest.BlazorWeb.Providers
 @using Microsoft.AspNetCore.Components.Authorization
+@rendermode RenderMode.InteractiveServer
 
+<CascadingAuthenticationState>
 <AuthorizeView>
     <Authorized>
         <div class="flex items-center gap-6">
@@ -22,10 +25,26 @@
             </button>
     </NotAuthorized>
 </AuthorizeView>
+</CascadingAuthenticationState>
 
 @code {
     [Inject] IAuthManager Auth { get; set; } = default!;
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] AuthenticationStateProvider AuthProvider { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthProvider.GetAuthenticationStateAsync();
+        if (!state.User.Identity?.IsAuthenticated ?? true)
+        {
+            // Próbáljuk újrainicializálni (hátha most már van token)
+            if (AuthProvider is CustomAuthStateProvider custom)
+                await custom.InitializeAsync();
+
+            state = await AuthProvider.GetAuthenticationStateAsync();
+        }
+
+    }
 
     private void Login()
     {
