@@ -1,11 +1,11 @@
 using AttrectoTest.ApiService.Configuration;
 using AttrectoTest.ApiService.Helpers;
 using AttrectoTest.ApiService.Middleware;
-using AttrectoTest.ApiService.Services;
 using AttrectoTest.ApiService.Validators;
 using AttrectoTest.Application;
 using AttrectoTest.Application.Contracts.Identity;
 using AttrectoTest.Infrastructure;
+using AttrectoTest.Infrastructure.Services;
 using AttrectoTest.Persistence;
 
 using FluentValidation;

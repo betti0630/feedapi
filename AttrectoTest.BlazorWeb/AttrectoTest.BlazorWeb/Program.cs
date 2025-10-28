@@ -9,6 +9,7 @@ using AttrectoTest.BlazorWeb.Handlers;
 using AttrectoTest.BlazorWeb.Providers;
 using AttrectoTest.BlazorWeb.Services;
 using AttrectoTest.Infrastructure;
+using AttrectoTest.Infrastructure.Services;
 using AttrectoTest.Persistence;
 
 using Blazored.SessionStorage;
@@ -60,7 +61,9 @@ builder.Services.Configure<ApiSettings>(
 if (apiSettings != null)
 {
     builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamBaseUrl));
-    builder.Services.AddSingleton<IIamService>(new IamGrpcService(apiSettings.IamBaseUrl));
+    if (Uri.TryCreate(apiSettings.IamBaseUrl, new UriCreationOptions(), out Uri? iamBaseUrl)) { 
+        builder.Services.AddSingleton<IIamService>(new IamGrpcService(iamBaseUrl));
+    }
 }
 
 builder.Services.AddScoped(sp =>

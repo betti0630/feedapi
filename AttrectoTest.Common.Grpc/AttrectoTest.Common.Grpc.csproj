@@ -16,6 +16,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="iam.proto" GrpcServices="Client" Namespace="AttrectoTest.Common.Grpc"/>
+		<Protobuf Include="iam.proto" GrpcServices="Both" />
 	</ItemGroup>
 </Project>

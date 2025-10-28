@@ -9,11 +9,6 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper" />
         <PackageReference Include="Blazored.SessionStorage" />
-        <PackageReference Include="Grpc.Net.Client" />
-        <PackageReference Include="Grpc.Tools">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
         <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>    
     
