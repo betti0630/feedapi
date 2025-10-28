@@ -8,14 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" />
-    <PackageReference Include="Grpc.Net.Client"  />
-    <PackageReference Include="Grpc.Tools" >
+    <PackageReference Include="Grpc.Net.Client" />
+    <PackageReference Include="Grpc.Tools">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
 	<ItemGroup>
+		<Protobuf Include="notification.proto" GrpcServices="Both" />
 		<Protobuf Include="iam.proto" GrpcServices="Both" />
 	</ItemGroup>
 </Project>
