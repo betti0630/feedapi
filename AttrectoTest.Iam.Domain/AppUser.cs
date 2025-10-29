@@ -12,4 +12,16 @@ public class AppUser : AppEntity
     [Required]
     public string PasswordHash { get; set; } = default!;
     public string? RolesCsv { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string FirstName { get; set; } = default!;
+    [Required]
+    [MaxLength(100)]
+    public string LastName { get; set; } = default!;
+    [Required]
+    [MaxLength(100)]
+    public string Email { get; set; } = default!;
+    [Required]
+    public bool ValidatedEmail { get; set;} = false;
+
 }

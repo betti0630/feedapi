@@ -21,9 +21,9 @@ internal class SendRegistrationEmailRequestHandler(IIamService iamService, IEmai
         }
 
         await emailService.SendEmailAsync(
-              to: "beata.dudas@gmail.com",
+              to: userData.Email,
               subject: "Welcome!",
-              body: "Köszönjük, hogy regisztráltál!"
+              body: $"Köszönjük {userData.FirstName}, hogy regisztráltál!"
           );
 
         return new SendRegistrationEmailResponse

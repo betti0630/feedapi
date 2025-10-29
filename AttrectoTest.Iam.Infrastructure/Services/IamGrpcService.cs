@@ -39,6 +39,9 @@ public class IamGrpcService : IamService.IamServiceBase
             UserId = userData.Id,
             UserName = userData.UserName,
             Roles = userData.RolesCsv,
+            FirstName = userData.FirstName,
+            LastName = userData.LastName,
+            Email = userData.Email
         };
     }
 

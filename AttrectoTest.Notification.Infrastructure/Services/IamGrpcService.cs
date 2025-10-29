@@ -39,7 +39,10 @@ public class IamGrpcService : IIamService
             return new UserData
             {
                 Id = result.UserId,
-                UserName = result.UserName
+                UserName = result.UserName,
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                Email = result.Email
             };
         } catch (Exception ex)
         {

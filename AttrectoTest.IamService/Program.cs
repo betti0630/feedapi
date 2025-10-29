@@ -31,7 +31,7 @@ builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 

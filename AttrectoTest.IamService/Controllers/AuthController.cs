@@ -37,7 +37,7 @@ public class AuthController(IAuthService authService, IAppUserService userServic
     public async Task<ActionResult<string>> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);
-        await userService.AddNewUser(request.UserName, request.Password, "User", cancellationToken);
+        await userService.AddNewUser(request.UserName, request.Password, request.FirstName, request.LastName, request.Email, "User", cancellationToken);
         return CreatedAtRoute("register", request.UserName, "User created");    
     }
 

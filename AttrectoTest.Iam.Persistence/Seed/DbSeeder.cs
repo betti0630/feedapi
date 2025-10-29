@@ -13,16 +13,16 @@ internal sealed class DbSeeder(AuthDbContext dbContext, IAppUserService userServ
         {
             return; // DB has been seeded
         }
-        var users = new List<(string UserName, string Password, string Role)>
+        var users = new List<(string UserName, string Password, string FirstName, string LastName, string email, string Role)>
         {
-            ("alice", "Passw0rd!", "User"),
-            ("bob", "Passw0rd!", "User"),
-            ("admin", "AdminPassw0rd!", "Admin")
+            ("alice", "Passw0rd!", "Alice", "Johnson", "testalice@mail.com", "User"),
+            ("bob", "Passw0rd!", "Bob", "Miller", "testbob@mail.com", "User"),
+            ("admin", "AdminPassw0rd!", "Adam", "Novak", "admin@mail.com", "Admin")
         };
         
-        foreach (var (userName, password, role) in users)
+        foreach (var (userName, password, firstName, lastName, email, role) in users)
         {
-            await userService.AddNewUser(userName, password, role);
+            await userService.AddNewUser(userName, password, firstName, lastName, email, role);
         }
         var Alice = await dbContext.AppUsers.FirstAsync(u => u.UserName == "alice");
         var Bob = await dbContext.AppUsers.FirstAsync(u => u.UserName == "bob");

@@ -34,4 +34,7 @@ message GetUserDataResponse {
     int32 userId = 1;
     string userName = 2;
     string roles = 3;
+    string firstName = 4;
+    string lastName = 5;
+    string email = 6;
 }

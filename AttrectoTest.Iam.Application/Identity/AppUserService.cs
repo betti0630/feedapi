@@ -1,4 +1,5 @@
 ﻿using AttrectoTest.Iam.Application.Contracts.Identity;
+using AttrectoTest.Iam.Application.Contracts.Notification;
 using AttrectoTest.Iam.Application.Contracts.Persistence;
 using AttrectoTest.Iam.Application.Identity.Dtos;
 using AttrectoTest.Iam.Domain;
@@ -7,9 +8,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AttrectoTest.Iam.Application.Identity;
 
-internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db) : IAppUserService
+internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db,
+    INotificationService notificationService) : IAppUserService
 {
-    public async Task AddNewUser(string userName, string password, string? roles, CancellationToken cancellationToken = default)
+    public async Task AddNewUser(string userName, string password, string firstName, string lastName, string email, string? roles, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(userName))
         {
@@ -42,10 +44,14 @@ internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRe
         var user = new AppUser
         {
             UserName = userName,
-            RolesCsv = roles
+            RolesCsv = roles,
+            FirstName = firstName,
+            LastName = lastName,
+            Email = email
         };
         user.PasswordHash = hasher.HashPassword(user, password);
         await db.CreateAsync(user, cancellationToken);
+        await notificationService.SendRegistrationEmail(user.Id);
     }
 
     public async Task<int> GetUserIdByUserName(string userName, CancellationToken cancellationToken = default)
@@ -68,7 +74,10 @@ internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRe
         {
             Id = userId,
             UserName = result.UserName,
-            RolesCsv = result.RolesCsv
+            RolesCsv = result.RolesCsv,
+            FirstName=result.FirstName,
+            LastName=result.LastName,
+            Email = result.Email
         };
     }
 }
