@@ -1,0 +1,12 @@
+﻿namespace AttrectoTest.Notification.Application.Contracts;
+
+public interface IIamService
+{
+    Task<UserData?> GetUserDataByUserId(int userId, CancellationToken ct = default);
+}
+
+public class UserData
+{
+    public int Id { get; set; }
+    public string UserName { get; set; } = string.Empty;
+}

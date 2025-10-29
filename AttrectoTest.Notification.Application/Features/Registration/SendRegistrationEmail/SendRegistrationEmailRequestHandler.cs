@@ -5,10 +5,21 @@ using MediatR;
 
 namespace AttrectoTest.Notification.Application.Features.Registration.SendRegistrationEmail;
 
-internal class SendRegistrationEmailRequestHandler(IEmailService emailService) : IRequestHandler<SendRegistrationEmailRequest, SendRegistrationEmailResponse>
+internal class SendRegistrationEmailRequestHandler(IIamService iamService, IEmailService emailService) : IRequestHandler<SendRegistrationEmailRequest, SendRegistrationEmailResponse>
 {
     public async Task<SendRegistrationEmailResponse> Handle(SendRegistrationEmailRequest request, CancellationToken cancellationToken)
     {
+        var userData = await iamService.GetUserDataByUserId(request.UserId, cancellationToken);
+
+        if (userData == null)
+        {
+            return new SendRegistrationEmailResponse
+            {
+                Success = false,
+                Message = $"Not valid userId"
+            };
+        }
+
         await emailService.SendEmailAsync(
               to: "beata.dudas@gmail.com",
               subject: "Welcome!",
@@ -18,7 +29,7 @@ internal class SendRegistrationEmailRequestHandler(IEmailService emailService) :
         return new SendRegistrationEmailResponse
         {
             Success = true,
-            Message = $"Registration email sent to {request.UserId}"
+            Message = $"Registration email sent to {userData.UserName}"
         };
     }
 }

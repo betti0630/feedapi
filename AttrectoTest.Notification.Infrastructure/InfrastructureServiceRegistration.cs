@@ -24,6 +24,14 @@ public static class InfrastructureServiceRegistration
             tokenPath: emailSettings.TokenPath
         );
         services.AddSingleton<IEmailService>( emailService );
+
+        var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
+
+        if (apiSettings != null && Uri.TryCreate(apiSettings.IamBaseUrl, new UriCreationOptions(), out Uri? iamBaseUrl))
+        {
+            services.AddSingleton<IIamService>(new IamGrpcService(iamBaseUrl));
+        }
+
         return services;
     }
 }
