@@ -32,5 +32,4 @@ public record RegisterRequest
     [Required]
     [StringLength(100, MinimumLength = 3)]
     public string Email { get; }
-
 }

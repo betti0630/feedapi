@@ -41,6 +41,12 @@ public class AuthController(IAuthService authService, IAppUserService userServic
         return CreatedAtRoute("register", request.UserName, "User created");    
     }
 
+    [HttpGet("verify")]
+    public async Task<ActionResult<int>> VerifyEmail(string token, CancellationToken cancellationToken)
+    {
+        var userId = await userService.MarkEmailAsVerified(token, cancellationToken);
+        return Ok(userId);
+    }
 }
 
 

@@ -26,7 +26,9 @@ public class NotificationServiceImpl : AttrectoTest.Common.Grpc.Notification.Not
         ArgumentNullException.ThrowIfNull(request);
         var appRequest = new SendRegistrationEmailRequest
         {
-            UserId = request.UserId
+            UserId = request.UserId,
+            Token = request.Token,
+            VerificationLink = request.VerificationLink,
         };
         var response = await _mediator.Send(appRequest);
 

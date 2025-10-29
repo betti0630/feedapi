@@ -1,6 +1,7 @@
 ﻿namespace AttrectoTest.Iam.Infrastructure.Model;
 
-internal class ApiSettings
+public class ApiSettings
 {
     public string NotificationUrl { get; set; } = string.Empty;
+    public string EmailVerificationUrl { get; set; } = string.Empty;
 }

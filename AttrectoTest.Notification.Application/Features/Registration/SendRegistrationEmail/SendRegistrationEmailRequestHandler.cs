@@ -20,10 +20,14 @@ internal class SendRegistrationEmailRequestHandler(IIamService iamService, IEmai
             };
         }
 
+        var verificationLink = $"{request.VerificationLink}{request.Token}";
+
+        var body = CreateEmailBody(userData.FirstName, verificationLink);
+
         await emailService.SendEmailAsync(
               to: userData.Email,
-              subject: "Welcome!",
-              body: $"Köszönjük {userData.FirstName}, hogy regisztráltál!"
+              subject: "Email verfication",
+              body: body
           );
 
         return new SendRegistrationEmailResponse
@@ -31,5 +35,26 @@ internal class SendRegistrationEmailRequestHandler(IIamService iamService, IEmai
             Success = true,
             Message = $"Registration email sent to {userData.UserName}"
         };
+    }
+
+    private string CreateEmailBody(string firstName, string verificationLink) { 
+        return $@"
+        <p>Hello {firstName},</p>
+        <p>Thank you for registering with us! Please confirm your email address by clicking the link below.</p>
+        <p>
+            <a href='{verificationLink}' style='
+                background-color:#4CAF50;
+                color:white;
+                padding:10px 20px;
+                text-decoration:none;
+                border-radius:5px;
+                display:inline-block;
+            '>Verify Email</a>
+        </p>
+        <p>This link will expire in <strong>24 hours</strong>.</p>
+        <p>If you did not create an account, you can safely ignore this message.</p>
+        <br/>
+        <p>Best regards,<br/>The MyApp Team</p>
+    ";
     }
 }

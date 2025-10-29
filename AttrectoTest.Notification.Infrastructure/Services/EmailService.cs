@@ -42,7 +42,7 @@ public class EmailService : IEmailService
         message.From.Add(MailboxAddress.Parse(_fromEmail));
         message.To.Add(MailboxAddress.Parse(to));
         message.Subject = subject;
-        message.Body = new TextPart("plain") { Text = body };
+        message.Body = new TextPart("html") { Text = body };
 
         using var memoryStream = new MemoryStream();
         await message.WriteToAsync(memoryStream);

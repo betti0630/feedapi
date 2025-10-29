@@ -18,6 +18,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
         var apiSettings = configuration.GetSection("ApiSettings").Get<ApiSettings>();
+        services.Configure<ApiSettings>(configuration.GetSection("ApiSettings"));
 
         if (apiSettings != null && Uri.TryCreate(apiSettings.NotificationUrl, new UriCreationOptions(), out Uri? iamBaseUrl))
         {

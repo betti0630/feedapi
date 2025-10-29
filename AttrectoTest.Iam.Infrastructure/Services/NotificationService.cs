@@ -32,9 +32,13 @@ internal class NotificationService : INotificationService
     }
 
 
-    public async Task SendRegistrationEmail(int userId)
+    public async Task SendRegistrationEmail(int userId, string token, string verificationLink)
     {
-        var request = new RegistrationEmailRequest { UserId = userId };
+        var request = new RegistrationEmailRequest { 
+            UserId = userId,
+            Token = token,
+            VerificationLink = verificationLink
+        };
         await _client.SendRegistrationEmailAsync(request);
     }
 }

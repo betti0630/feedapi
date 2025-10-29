@@ -1,15 +1,24 @@
-﻿using AttrectoTest.Iam.Application.Contracts.Identity;
+﻿using AttrectoTest.Application.Exceptions;
+using AttrectoTest.Iam.Application.Contracts.Identity;
 using AttrectoTest.Iam.Application.Contracts.Notification;
 using AttrectoTest.Iam.Application.Contracts.Persistence;
 using AttrectoTest.Iam.Application.Identity.Dtos;
+using AttrectoTest.Iam.Application.Models;
 using AttrectoTest.Iam.Domain;
+using AttrectoTest.Iam.Infrastructure.Model;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AttrectoTest.Iam.Application.Identity;
 
 internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db,
-    INotificationService notificationService) : IAppUserService
+    INotificationService notificationService, IOptions<JwtSettings> jwtSettings, IOptions<ApiSettings> apiSettings) : IAppUserService
 {
     public async Task AddNewUser(string userName, string password, string firstName, string lastName, string email, string? roles, CancellationToken cancellationToken = default)
     {
@@ -51,7 +60,56 @@ internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRe
         };
         user.PasswordHash = hasher.HashPassword(user, password);
         await db.CreateAsync(user, cancellationToken);
-        await notificationService.SendRegistrationEmail(user.Id);
+        var token = GenerateEmailVerificationToken(user.Id);
+        await notificationService.SendRegistrationEmail(user.Id, token, apiSettings.Value.EmailVerificationUrl);
+    }
+
+    private string GenerateEmailVerificationToken(int userId)
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
+        {
+        new Claim("userId", userId.ToString()),
+        new Claim("type", "emailVerification")
+    };
+
+        var token = new JwtSecurityToken(
+            jwtSettings.Value.Issuer,
+            jwtSettings.Value.Audience,
+            claims,
+            expires: DateTime.UtcNow.AddHours(24),
+            signingCredentials: credentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private int ValidateAndGetUserIdFromEmailVerificationToken(string token)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var parameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings.Value.Issuer,
+            ValidAudience = jwtSettings.Value.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key))
+        };
+
+        try
+        {
+            var principal = handler.ValidateToken(token, parameters, out _);
+            var tokenUserId = principal.FindFirst("userId")?.Value;
+            return Int32.Parse(tokenUserId);
+        }
+        catch
+        {
+            throw new BadRequestException("Invalid token");
+        }
     }
 
     public async Task<int> GetUserIdByUserName(string userName, CancellationToken cancellationToken = default)
@@ -79,5 +137,17 @@ internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRe
             LastName=result.LastName,
             Email = result.Email
         };
+    }
+
+    public async Task<int> MarkEmailAsVerified(string token, CancellationToken cancellationToken = default)
+    {
+        var userId = ValidateAndGetUserIdFromEmailVerificationToken(token);
+        var user = await db.GetByIdAsync(userId, cancellationToken);
+        if (user == null) {
+            throw new BadRequestException("Invalid User");
+        }
+        user.ValidatedEmail = true;
+        await db.UpdateAsync(user, cancellationToken);
+        return user.Id;
     }
 }

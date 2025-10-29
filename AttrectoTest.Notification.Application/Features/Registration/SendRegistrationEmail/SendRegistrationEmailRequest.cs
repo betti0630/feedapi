@@ -5,6 +5,8 @@ namespace AttrectoTest.Notification.Application.Features.Registration.SendRegist
 public class SendRegistrationEmailRequest : IRequest<SendRegistrationEmailResponse>
 {
     public int UserId { get; set;}
+    public string Token { get; set; }
+    public string VerificationLink { get; set; }
 }
 
 public class SendRegistrationEmailResponse

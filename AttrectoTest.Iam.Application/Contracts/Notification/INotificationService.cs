@@ -2,5 +2,5 @@
 
 public interface INotificationService
 {
-    Task SendRegistrationEmail(int userId);
+    Task SendRegistrationEmail(int userId, string token, string verificationLink);
 }
