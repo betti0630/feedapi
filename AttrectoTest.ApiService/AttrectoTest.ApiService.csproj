@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
     <ProjectReference Include="..\AttrectoTest.Infrastructure\AttrectoTest.Infrastructure.csproj" />
     <ProjectReference Include="..\AttrectoTest.Persistence\AttrectoTest.Persistence.csproj" />
   </ItemGroup>

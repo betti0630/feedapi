@@ -1,11 +1,11 @@
-﻿using AttrectoTest.Common.Grpc.Notification;
+﻿using Grpc.Common.Notification;
 using AttrectoTest.Iam.Application.Contracts.Notification;
 
 using Grpc.Net.Client;
 
 using System.Net;
 
-using static AttrectoTest.Common.Grpc.Notification.NotificationService;
+using static Grpc.Common.Notification.NotificationService;
 
 namespace AttrectoTest.Iam.Infrastructure.Services;
 

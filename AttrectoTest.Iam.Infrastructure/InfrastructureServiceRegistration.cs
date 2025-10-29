@@ -1,5 +1,4 @@
-﻿using AttrectoTest.Common.Grpc.Iam;
-using AttrectoTest.Iam.Application.Contracts.Logging;
+﻿using AttrectoTest.Iam.Application.Contracts.Logging;
 using AttrectoTest.Iam.Application.Contracts.Notification;
 using AttrectoTest.Iam.Infrastructure.Logging;
 using AttrectoTest.Iam.Infrastructure.Model;

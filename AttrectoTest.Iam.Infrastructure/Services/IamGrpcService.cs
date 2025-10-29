@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Common.Grpc.Iam;
+﻿using Grpc.Common.Iam;
 using AttrectoTest.Iam.Application.Contracts.Identity;
 
 using Grpc.Core;

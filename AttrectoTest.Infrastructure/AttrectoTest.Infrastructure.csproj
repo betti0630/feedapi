@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AttrectoTest.Grpc.Common" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AttrectoTest.Application\AttrectoTest.Application.csproj" />
-    <ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
   </ItemGroup>
 
 </Project>

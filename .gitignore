@@ -430,3 +430,5 @@ FodyWeavers.xsd
 AttrectoTest.ApiService/wwwroot/images/
 credentials_desktop.json
 token.json
+
+nuget.config

@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Common.Grpc.Notification;
+﻿using Grpc.Common.Notification;
 using AttrectoTest.Notification.Application.Contracts;
 using AttrectoTest.Notification.Application.Features.Registration.SendRegistrationEmail;
 
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AttrectoTest.NotificationService.Services;
 
-public class NotificationServiceImpl : AttrectoTest.Common.Grpc.Notification.NotificationService.NotificationServiceBase
+public class NotificationServiceImpl : Grpc.Common.Notification.NotificationService.NotificationServiceBase
 {
     private readonly ILogger<NotificationServiceImpl> _logger;
     private readonly IMediator _mediator;

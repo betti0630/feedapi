@@ -1,11 +1,11 @@
 ﻿using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Common.Grpc.Iam;
+using Grpc.Common.Iam;
 
 using Grpc.Net.Client;
 
 using System.Net;
 
-using static AttrectoTest.Common.Grpc.Iam.IamService;
+using static Grpc.Common.Iam.IamService;
 
 namespace AttrectoTest.Infrastructure.Services;
 
