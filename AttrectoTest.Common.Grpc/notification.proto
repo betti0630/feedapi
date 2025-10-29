@@ -19,7 +19,7 @@ message PingResponse {
 }
 
 message RegistrationEmailRequest {
-  string userId = 1;
+  int32 userId = 1;
 }
 
 message FeedNotificationRequest {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AttrectoTest.Notification.Infrastructure.Contracts;
+namespace AttrectoTest.Notification.Application.Contracts;
 
 public interface IEmailService
 {

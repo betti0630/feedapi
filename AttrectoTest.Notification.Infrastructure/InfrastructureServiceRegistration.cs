@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Notification.Infrastructure.Contracts;
+﻿using AttrectoTest.Notification.Application.Contracts;
 using AttrectoTest.Notification.Infrastructure.Models;
 using AttrectoTest.Notification.Infrastructure.Services;
 

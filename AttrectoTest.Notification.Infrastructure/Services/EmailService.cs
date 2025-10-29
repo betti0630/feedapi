@@ -1,4 +1,4 @@
-﻿using AttrectoTest.Notification.Infrastructure.Contracts;
+﻿using AttrectoTest.Notification.Application.Contracts;
 
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;

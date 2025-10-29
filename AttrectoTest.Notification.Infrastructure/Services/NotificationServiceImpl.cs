@@ -1,7 +1,10 @@
 ﻿using AttrectoTest.Common.Grpc.Notification;
-using AttrectoTest.Notification.Infrastructure.Contracts;
+using AttrectoTest.Notification.Application.Contracts;
+using AttrectoTest.Notification.Application.Features.Registration.SendRegistrationEmail;
 
 using Grpc.Core;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -10,27 +13,27 @@ namespace AttrectoTest.NotificationService.Services;
 public class NotificationServiceImpl : AttrectoTest.Common.Grpc.Notification.NotificationService.NotificationServiceBase
 {
     private readonly ILogger<NotificationServiceImpl> _logger;
-    private readonly IEmailService _emailService;
+    private readonly IMediator _mediator;
 
-    public NotificationServiceImpl(ILogger<NotificationServiceImpl> logger, IEmailService emailService)
+    public NotificationServiceImpl(ILogger<NotificationServiceImpl> logger, IMediator mediator)
     {
         _logger = logger;
-        _emailService = emailService;
+        _mediator = mediator;
     }
 
     public override async Task<NotificationResponse> SendRegistrationEmail(RegistrationEmailRequest request, ServerCallContext context)
     {
-
-        await _emailService.SendEmailAsync(
-            to: "beata.dudas@gmail.com",
-            subject: "Welcome!",
-            body: "Köszönjük, hogy regisztráltál!"
-        );
+        ArgumentNullException.ThrowIfNull(request);
+        var appRequest = new SendRegistrationEmailRequest
+        {
+            UserId = request.UserId
+        };
+        var response = await _mediator.Send(appRequest);
 
         return new NotificationResponse
         {
-            Success = true,
-            Message = $"Registration email sent to {request.UserId}"
+            Success = response.Success,
+            Message = response.Message
         };
     }
 
