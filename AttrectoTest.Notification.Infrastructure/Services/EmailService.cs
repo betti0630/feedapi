@@ -1,4 +1,6 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using AttrectoTest.Notification.Infrastructure.Contracts;
+
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
@@ -8,7 +10,7 @@ using MimeKit;
 
 namespace AttrectoTest.Notification.Infrastructure.Services;
 
-public class EmailService
+public class EmailService : IEmailService
 {
     private readonly GmailService _gmailService;
     private readonly string _fromEmail;

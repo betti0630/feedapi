@@ -10,7 +10,15 @@
     <PackageReference Include="Google.Apis.Auth" />
     <PackageReference Include="Google.Apis.Gmail.v1" />
     <PackageReference Include="Google.Apis.Oauth2.v2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     <PackageReference Include="MimeKit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AttrectoTest.Common.Grpc\AttrectoTest.Common.Grpc.csproj" />
   </ItemGroup>
 
 
