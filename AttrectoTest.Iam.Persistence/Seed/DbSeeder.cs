@@ -22,7 +22,7 @@ internal sealed class DbSeeder(AuthDbContext dbContext, IAppUserService userServ
         
         foreach (var (userName, password, firstName, lastName, email, role) in users)
         {
-            await userService.AddNewUser(userName, password, firstName, lastName, email, role);
+            await userService.SeedNewUser(userName, password, firstName, lastName, email, role);
         }
         var Alice = await dbContext.AppUsers.FirstAsync(u => u.UserName == "alice");
         var Bob = await dbContext.AppUsers.FirstAsync(u => u.UserName == "bob");

@@ -20,7 +20,16 @@ namespace AttrectoTest.Iam.Application.Identity;
 internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRepository<AppUser> db,
     INotificationService notificationService, IOptions<JwtSettings> jwtSettings, IOptions<ApiSettings> apiSettings) : IAppUserService
 {
+    public async Task SeedNewUser(string userName, string password, string firstName, string lastName, string email, string? roles, CancellationToken cancellationToken = default)
+    {
+        await AddNewUserInner(true, userName, password, firstName, lastName, email, roles, cancellationToken);
+    }
     public async Task AddNewUser(string userName, string password, string firstName, string lastName, string email, string? roles, CancellationToken cancellationToken = default)
+    { 
+        await AddNewUserInner(false, userName, password, firstName, lastName, email, roles, cancellationToken);
+    }
+
+    private async Task AddNewUserInner(bool isSeeded, string userName, string password, string firstName, string lastName, string email, string? roles, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(userName))
         {
@@ -59,9 +68,14 @@ internal sealed class AppUserService(IPasswordHasher<AppUser> hasher, IGenericRe
             Email = email
         };
         user.PasswordHash = hasher.HashPassword(user, password);
+        if (isSeeded) {
+            user.ValidatedEmail = true;
+        }
         await db.CreateAsync(user, cancellationToken);
-        var token = GenerateEmailVerificationToken(user.Id);
-        await notificationService.SendRegistrationEmail(user.Id, token, apiSettings.Value.EmailVerificationUrl);
+        if (!isSeeded) {
+            var token = GenerateEmailVerificationToken(user.Id);
+            await notificationService.SendRegistrationEmail(user.Id, token, apiSettings.Value.EmailVerificationUrl);
+        }
     }
 
     private string GenerateEmailVerificationToken(int userId)

@@ -22,11 +22,15 @@ public static class PersistenceServiceRegistration
         //));
 
         services.AddDbContextFactory<AuthDbContext>(options =>
-    options.UseMySql(
-        configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(11, 3, 0)),
-        b => b.MigrationsAssembly(typeof(AuthDbContext).Assembly.FullName)
-));
+            options.UseMySql(
+                configuration.GetConnectionString("DefaultConnection"),
+                new MySqlServerVersion(new Version(11, 3, 0)),
+                b => { 
+                    b.MigrationsAssembly(typeof(AuthDbContext).Assembly.FullName); 
+                    b.EnableStringComparisonTranslations(); 
+                }
+            )
+         );
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IDbSeeder,DbSeeder>();
