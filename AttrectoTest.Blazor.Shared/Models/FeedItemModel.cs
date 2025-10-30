@@ -10,6 +10,8 @@ public class FeedItemModel
 
     public string? AuthorUserName { get; set; }
 
+    public int AuthorId { get; set; }
+
     public bool IsOwnFeed { get; set; }
 
     public DateTimeOffset PublishedAt { get; set; } = DateTime.UtcNow;

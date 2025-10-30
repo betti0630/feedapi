@@ -6,17 +6,22 @@ using AttrectoTest.BlazorWeb.Client.Pages;
 using AttrectoTest.BlazorWeb.Components;
 using AttrectoTest.BlazorWeb.Configuration;
 using AttrectoTest.BlazorWeb.Handlers;
+using AttrectoTest.BlazorWeb.Hubs;
 using AttrectoTest.BlazorWeb.Providers;
 using AttrectoTest.BlazorWeb.Services;
+using AttrectoTest.BlazorWeb.Services.Notification;
 using AttrectoTest.Infrastructure;
 using AttrectoTest.Infrastructure.Services;
 using AttrectoTest.Persistence;
 
 using Blazored.SessionStorage;
 
+using Grpc.Common.Notification;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 using System.Reflection;
 
@@ -77,6 +82,9 @@ builder.Services.AddScoped(sp =>
     return client;
 });
 
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IFeedNotificationService, FeedNotificationService>();
 
 
 var app = builder.Build();
@@ -107,5 +115,7 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(
         typeof(AttrectoTest.BlazorWeb.Client._Imports).Assembly,
         typeof(AttrectoTest.Blazor.Common.Components.Layout.TopBar).Assembly);
+
+app.MapHub<FeedNotificationHub>("/hubs/notifications");
 
 app.Run();

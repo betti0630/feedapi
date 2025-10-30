@@ -1,4 +1,5 @@
 ﻿using AttrectoTest.Blazor.Common.Contracts;
+using AttrectoTest.BlazorWeb.Services.Notification;
 
 using Microsoft.AspNetCore.Components;
 
@@ -15,7 +16,12 @@ public partial class LikeButton : ComponentBase
     [Parameter]
     public bool IsLiked { get; set; }
 
+    [Parameter]
+    public int AuthorId { get; set; }
+
     [Inject] IFeedService FeedService { get; set; } = default!;
+
+    [Inject] IFeedNotificationService FeedNotificationService { get; set; } = default!;
 
     public async void ToggleLike()
     {
@@ -23,6 +29,11 @@ public partial class LikeButton : ComponentBase
             if (await FeedService.AddLike(FeedId)) {
                 IsLiked = true;
                 LikeCount++;
+                await FeedNotificationService.CreateAsync(new Notification
+                {
+                    UserId = AuthorId,
+                    Message = $"Valaki lájkolta a bejegyzésedet."
+                });
             }
         } else
         {

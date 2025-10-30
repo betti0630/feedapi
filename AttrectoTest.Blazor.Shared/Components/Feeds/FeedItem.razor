@@ -35,7 +35,7 @@
             FeedId=@Feed.Id
             IsLiked=@Feed.IsLiked
             LikeCount=@Feed.LikeCount
-          />
+            AuthorId=@Feed.AuthorId />
                 @if (Feed.IsOwnFeed)
                 {
                     <button @onclick=@HandleDelete
