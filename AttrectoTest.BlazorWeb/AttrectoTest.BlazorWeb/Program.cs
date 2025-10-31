@@ -108,4 +108,10 @@ app.MapRazorComponents<App>()
         typeof(AttrectoTest.BlazorWeb.Client._Imports).Assembly,
         typeof(AttrectoTest.Blazor.Common.Components.Layout.TopBar).Assembly);
 
+app.MapPost("/api/auth/login", async (LoginRequest req, IAuthManager auth, NavigationManager navigationManager) =>
+{
+    var ok = await auth.Login(req.UserName, req.Password);
+    return Results.Ok(ok);
+});
+
 app.Run();

@@ -1,7 +1,8 @@
 ﻿@using AttrectoTest.Blazor.Common.Contracts
+@using AttrectoTest.BlazorWeb.Client.Components
 @using AttrectoTest.BlazorWeb.Providers
 @using Microsoft.AspNetCore.Components.Authorization
-@rendermode RenderMode.InteractiveServer
+@* @rendermode RenderMode.InteractiveServer *@
 
 <CascadingAuthenticationState>
 <AuthorizeView>
@@ -18,11 +19,7 @@
         </div>
     </Authorized>
     <NotAuthorized>
-            <button
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-                @onclick="Login">
-                Login
-            </button>
+            <LoginButton></LoginButton>
     </NotAuthorized>
 </AuthorizeView>
 </CascadingAuthenticationState>

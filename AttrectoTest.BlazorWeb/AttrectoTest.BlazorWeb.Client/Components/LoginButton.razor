@@ -1,0 +1,20 @@
+﻿@using AttrectoTest.Blazor.Common.Contracts
+@using Microsoft.AspNetCore.Components.Authorization
+@rendermode RenderMode.InteractiveWebAssembly
+
+
+<button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        @onclick="Login">
+    Login
+</button>
+
+@code {
+
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
+
+
+    private void Login()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+}
