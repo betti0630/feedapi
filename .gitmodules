@@ -1,0 +1,9 @@
+[submodule "IAMService"]
+	path = IAMService
+	url = https://github.com/betti0630/IAMService.git
+[submodule "FeedService"]
+	path = FeedService
+	url = https://github.com/betti0630/FeedService.git
+[submodule "NotificationService"]
+	path = NotificationService
+	url = https://github.com/betti0630/NotificationService.git
