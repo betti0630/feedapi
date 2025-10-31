@@ -36,7 +36,7 @@ internal class FeedService : BaseHttpService, IFeedService
         {
             if (feed is ImageFeedItemModel imageFeed)
             {
-                var baseUri = new Uri(_settings.BaseUrl);
+                var baseUri = new Uri(_settings.FeedApiUrl);
                 imageFeed.ImageUrl = new Uri(baseUri, imageFeed.ImageUrl).ToString();
             }
         }

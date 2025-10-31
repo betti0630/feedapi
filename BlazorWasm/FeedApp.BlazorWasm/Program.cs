@@ -31,9 +31,9 @@ builder.Services.Configure<ApiSettings>(
     builder.Configuration.GetSection("ApiSettings"));
 
 if (apiSettings != null) { 
-    builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamBaseUrl))
+    builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamApiUrl))
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
-    builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.BaseUrl))
+    builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.FeedApiUrl))
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
 }
 
