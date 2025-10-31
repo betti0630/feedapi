@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AttrectoTest.Blazor.Shared\AttrectoTest.Blazor.Common.csproj" />
+    <ProjectReference Include="..\..\FeedApp.Blazor.Common\FeedApp.Blazor.Common.csproj" />
   </ItemGroup>
 
 </Project>

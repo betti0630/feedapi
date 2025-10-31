@@ -1,12 +1,12 @@
-﻿using AttrectoTest.Application.Features.Feed.Commands.AddLike;
-using AttrectoTest.Application.Features.Feed.Commands.CreateFeed;
-using AttrectoTest.Application.Features.Feed.Commands.DeleteFeed;
-using AttrectoTest.Application.Features.Feed.Commands.DeleteLike;
-using AttrectoTest.Application.Features.Feed.Queries.ListFeeds;
-using AttrectoTest.Application.Models;
-using AttrectoTest.Blazor.Common.Contracts;
-using AttrectoTest.Blazor.Common.Models;
-using AttrectoTest.Domain;
+﻿using FeedApp.Application.Features.Feeds.Commands.AddLike;
+using FeedApp.Application.Features.Feeds.Commands.CreateFeed;
+using FeedApp.Application.Features.Feeds.Commands.DeleteFeed;
+using FeedApp.Application.Features.Feeds.Commands.DeleteLike;
+using FeedApp.Application.Features.Feeds.Queries.ListFeeds;
+using FeedApp.Application.Models;
+using FeedApp.Blazor.Common.Contracts;
+using FeedApp.Blazor.Common.Models;
+using FeedApp.Domain;
 
 using AutoMapper;
 
@@ -19,7 +19,7 @@ using System.Runtime;
 using System.Threading;
 
 
-namespace AttrectoTest.BlazorWeb.Services;
+namespace FeedApp.BlazorWeb.Services;
 
 internal class FeedService : IFeedService
 {

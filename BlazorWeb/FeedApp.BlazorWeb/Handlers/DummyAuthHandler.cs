@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
-namespace AttrectoTest.BlazorWeb.Handlers;
+namespace FeedApp.BlazorWeb.Handlers;
 
 public class DummyAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {

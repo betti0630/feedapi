@@ -1,16 +1,15 @@
-using AttrectoTest.Application;
-using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Blazor.Common.Contracts;
-using AttrectoTest.BlazorServer.Services.IamBase;
-using AttrectoTest.BlazorWeb.Client.Pages;
-using AttrectoTest.BlazorWeb.Components;
-using AttrectoTest.BlazorWeb.Configuration;
-using AttrectoTest.BlazorWeb.Handlers;
-using AttrectoTest.BlazorWeb.Providers;
-using AttrectoTest.BlazorWeb.Services;
-using AttrectoTest.Infrastructure;
-using AttrectoTest.Infrastructure.Services;
-using AttrectoTest.Persistence;
+using FeedApp.Application;
+using FeedApp.Application.Contracts.Identity;
+using FeedApp.Blazor.Common.Contracts;
+using FeedApp.BlazorWeb.Client.Pages;
+using FeedApp.BlazorWeb.Components;
+using FeedApp.BlazorWeb.Configuration;
+using FeedApp.BlazorWeb.Handlers;
+using FeedApp.BlazorWeb.Providers;
+using FeedApp.BlazorWeb.Services;
+using FeedApp.Infrastructure;
+using FeedApp.Infrastructure.Services;
+using FeedApp.Persistence;
 
 using Blazored.SessionStorage;
 
@@ -19,6 +18,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 using System.Reflection;
+using AttrectoTest.BlazorServer.Services.IamBase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,7 +105,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(
-        typeof(AttrectoTest.BlazorWeb.Client._Imports).Assembly,
-        typeof(AttrectoTest.Blazor.Common.Components.Layout.TopBar).Assembly);
+        typeof(FeedApp.BlazorWeb.Client._Imports).Assembly,
+        typeof(FeedApp.Blazor.Common.Components.Layout.TopBar).Assembly);
 
 app.Run();

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace AttrectoTest.BlazorWeb.Providers;
+namespace FeedApp.BlazorWeb.Providers;
 
 internal class CustomAuthStateProvider : AuthenticationStateProvider, IDisposable
 {

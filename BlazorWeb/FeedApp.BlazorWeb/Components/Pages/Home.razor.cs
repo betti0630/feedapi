@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace AttrectoTest.BlazorWeb.Components.Pages
+namespace FeedApp.BlazorWeb.Components.Pages
 {
     [Authorize]
     public partial class Home
