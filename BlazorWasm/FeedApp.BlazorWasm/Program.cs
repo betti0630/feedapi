@@ -1,20 +1,22 @@
 using AttrectoTest.BlazorWasm;
-using AttrectoTest.BlazorWasm.Services.IamBase;
 using AttrectoTest.BlazorWasm.Services.Base;
+using AttrectoTest.BlazorWasm.Services.IamBase;
 
 using Blazored.SessionStorage;
+
+using FeedApp.Blazor.Common.Contracts;
+using FeedApp.BlazorWasm;
+using FeedApp.BlazorWasm.Configuration;
+using FeedApp.BlazorWasm.Handlers;
+using FeedApp.BlazorWasm.Providers;
+using FeedApp.BlazorWasm.Services;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 
 using System.Reflection;
-using FeedApp.Blazor.Common.Contracts;
-using FeedApp.BlazorWasm.Providers;
-using FeedApp.BlazorWasm.Handlers;
-using FeedApp.BlazorWasm.Services;
-using FeedApp.BlazorWasm.Configuration;
-using FeedApp.BlazorWasm;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -35,6 +37,11 @@ if (apiSettings != null) {
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
     builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.FeedApiUrl))
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
+}
+
+if (apiSettings != null && apiSettings.NotificationUrl != null)
+{
+    builder.Services.AddSingleton<IFeedNotificationService>(new FeedNotificationService(apiSettings.NotificationUrl));
 }
 
 builder.Services.AddScoped<IAuthManager, AuthManager>();
