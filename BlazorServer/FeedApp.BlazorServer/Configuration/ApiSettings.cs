@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.BlazorServer.Configuration;
+﻿namespace FeedApp.BlazorServer.Configuration;
 
 internal class ApiSettings
 {

@@ -1,10 +1,11 @@
-﻿using AttrectoTest.Blazor.Common.Contracts;
-using AttrectoTest.BlazorServer.Providers;
-using AttrectoTest.BlazorServer.Services.IamBase;
+﻿using FeedApp.Blazor.Common.Contracts;
+
+using FeedApp.BlazorServer.Providers;
 
 using Microsoft.AspNetCore.Components.Authorization;
+using AttrectoTest.BlazorServer.Services.IamBase;
 
-namespace AttrectoTest.BlazorServer.Services;
+namespace FeedApp.BlazorServer.Services;
 
 internal class AuthManager : IAuthManager
 {

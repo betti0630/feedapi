@@ -1,10 +1,10 @@
-﻿using AttrectoTest.Application.Contracts.Identity;
+﻿using FeedApp.Application.Contracts.Identity;
 
 using Microsoft.AspNetCore.Components.Authorization;
 
 using System.Security.Claims;
 
-namespace AttrectoTest.BlazorServer.Services;
+namespace FeedApp.BlazorServer.Services;
 
 internal class CurrentUserService : ICurrentUserService
 {

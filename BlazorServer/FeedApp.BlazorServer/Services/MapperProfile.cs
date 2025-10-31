@@ -1,8 +1,9 @@
-﻿using AttrectoTest.Application.Features.Feed.Dtos;
-using AttrectoTest.Blazor.Common.Models;
+﻿using FeedApp.Application.Features.Feeds.Dtos;
+using FeedApp.Blazor.Common.Models;
+
 using AutoMapper;
 
-namespace AttrectoTest.BlazorServer.Services;
+namespace FeedApp.BlazorServer.Services;
 
 internal class MapperProfile : Profile
 {

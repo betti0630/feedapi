@@ -1,17 +1,16 @@
-using AttrecotTest.BlazorServer.Services;
-
-using AttrectoTest.Application;
-using AttrectoTest.Application.Contracts.Identity;
-using AttrectoTest.Blazor.Common.Contracts;
-using AttrectoTest.BlazorServer.Components;
-using AttrectoTest.BlazorServer.Configuration;
-using AttrectoTest.BlazorServer.Providers;
-using AttrectoTest.BlazorServer.Services;
+using FeedApp.Application;
+using FeedApp.Application.Contracts.Identity;
+using FeedApp.Blazor.Common.Contracts;
+using FeedApp.BlazorServer.Components;
 using AttrectoTest.BlazorServer.Services.IamBase;
-using AttrectoTest.Infrastructure;
-using AttrectoTest.Persistence;
+using FeedApp.Infrastructure;
+using FeedApp.Persistence;
 
 using Blazored.SessionStorage;
+
+using FeedApp.BlazorServer.Configuration;
+using FeedApp.BlazorServer.Providers;
+using FeedApp.BlazorServer.Services;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
