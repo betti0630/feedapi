@@ -18,11 +18,14 @@
         </div>
     </Authorized>
     <NotAuthorized>
-            <button
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                @onclick="Registration">
+            Registration
+        </button>            
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
                 @onclick="Login">
-                Login
-            </button>
+            Login
+        </button>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -33,6 +36,11 @@
     private void Login()
     {
         NavigationManager.NavigateTo("/login");
+    }
+
+    private void Registration()
+    {
+        NavigationManager.NavigateTo("/register");
     }
 
     private void Logout()

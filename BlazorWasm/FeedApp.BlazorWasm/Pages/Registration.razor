@@ -1,0 +1,56 @@
+﻿@page "/register"
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3 class="text-xl font-semibold mb-4">Regisztráció</h3>
+
+<EditForm Model="@registerModel" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="space-y-3">
+        <div>
+            <label for="userName" class="block text-sm font-medium">Felhasználónév</label>
+            <InputText id="userName" class="border rounded p-2 w-full" @bind-Value="registerModel.UserName" />
+            <ValidationMessage For="@(() => registerModel.UserName)" />
+        </div>
+
+        <div>
+            <label for="password" class="block text-sm font-medium">Jelszó</label>
+            <InputText id="password" type="password" class="border rounded p-2 w-full" @bind-Value="registerModel.Password" />
+            <ValidationMessage For="@(() => registerModel.Password)" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <div>
+                <label for="firstName" class="block text-sm font-medium">Keresztnév</label>
+                <InputText id="firstName" class="border rounded p-2 w-full" @bind-Value="registerModel.FirstName" />
+                <ValidationMessage For="@(() => registerModel.FirstName)" />
+            </div>
+
+            <div>
+                <label for="lastName" class="block text-sm font-medium">Vezetéknév</label>
+                <InputText id="lastName" class="border rounded p-2 w-full" @bind-Value="registerModel.LastName" />
+                <ValidationMessage For="@(() => registerModel.LastName)" />
+            </div>
+        </div>
+
+        <div>
+            <label for="email" class="block text-sm font-medium">E-mail</label>
+            <InputText id="email" type="email" class="border rounded p-2 w-full" @bind-Value="registerModel.Email" />
+            <ValidationMessage For="@(() => registerModel.Email)" />
+        </div>
+
+        <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            Regisztráció
+        </button>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <p class="@messageClass">@message</p>
+        }
+    </div>
+</EditForm>
+
+
