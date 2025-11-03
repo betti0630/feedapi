@@ -65,5 +65,9 @@ public partial class Notification
             await hubConnection.DisposeAsync();
     }
 
-    private void ToggleNotifications() { }
+    private bool isOpen;
+
+    private void ToggleNotifications() { 
+        isOpen = !isOpen;    
+    }
 }

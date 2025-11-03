@@ -1,4 +1,4 @@
-﻿namespace AttrectoTest.BlazorWasm.Services.IamBase
+﻿namespace FeedApp.BlazorWasm.Services.IamBase
 {
     public partial interface IAuthClient
     {

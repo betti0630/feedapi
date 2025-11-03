@@ -1,0 +1,38 @@
+﻿@page "/verify"
+@using FeedApp.BlazorWasm.Services.IamBase
+@inject HttpClient Http
+
+@if(!string.IsNullOrEmpty(_errorMessage))
+{
+    <p>@_errorMessage</p>
+}
+
+@code {
+    [Parameter] 
+    [SupplyParameterFromQuery(Name = "token")]
+    public string? token { get; set; }
+
+    [Inject]
+    private IAuthClient AuthClient { get; set; }
+
+    [Inject] protected NavigationManager Nav { get; set; } = null!;
+
+    private string _errorMessage;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        int? userId = null;
+        if (!string.IsNullOrEmpty(token))
+        {
+            userId = await AuthClient.VerifyEmailAsync(token);
+        }
+        if (userId > 0)
+        {
+            Nav.NavigateTo("/");
+        } else
+        {
+            _errorMessage = "Verification error";
+        }
+        base.OnParametersSetAsync();
+    }
+}

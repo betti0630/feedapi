@@ -1,9 +1,8 @@
-﻿using AttrectoTest.BlazorWasm.Services.IamBase;
-
-using Blazored.SessionStorage;
+﻿using Blazored.SessionStorage;
 
 using FeedApp.Blazor.Common.Contracts;
 using FeedApp.BlazorWasm.Providers;
+using FeedApp.BlazorWasm.Services.IamBase;
 
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -11,7 +10,7 @@ namespace FeedApp.BlazorWasm.Services;
 
 internal class AuthManager : IAuthManager
 {
-    private readonly IAuthClient _authClient;
+    private readonly FeedApp.BlazorWasm.Services.IamBase.IAuthClient _authClient;
     private readonly ISessionStorageService _sessionStorage;
     private readonly AuthenticationStateProvider _authStateProvider;
     private readonly ILogger<AuthManager> _logger;

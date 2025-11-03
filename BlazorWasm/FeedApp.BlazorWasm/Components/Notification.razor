@@ -1,24 +1,36 @@
 ﻿@page "/notifications"
 @inject NavigationManager Navigation
 
-<div class="relative">
-    <button @onclick="ToggleNotifications">
-        <span class="icon-bell"></span>
-        @if (notifications.Any())
-        {
-            <span class="absolute top-0 right-20 rounded-full bg-red-600 text-white text-xs px-1">
-                @notifications.Count() (WS)
-            </span>
-        }
-    </button>    
-    <button @onclick="ToggleNotifications">
-        <span class="icon-bell"></span>
-        @if (messages.Any())
-        {
-            <span class="absolute top-0 right-0 rounded-full bg-green-600 text-white text-xs px-1">
-                @messages.Count() (GRPC)
-            </span>
-        }
-    </button>
+<div class="relative inline-block text-left">
+<button @onclick="ToggleNotifications">
+    <span class="icon-bell"></span>
+    <span class="rounded-full bg-red-600 text-white text-xs px-1">
+        @notifications.Count() (WS)
+    </span>
+</button>
+<button @onclick="ToggleNotifications">
+    <span class="icon-bell"></span>
+    <span class="rounded-full bg-green-600 text-white text-xs px-1">
+        @messages.Count() (GRPC)
+    </span>
+</button>
+    @if (isOpen)
+    {
+        <div class="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+            <ul class="divide-y divide-gray-200 max-h-60 overflow-y-auto">
+                @if (messages.Count == 0)
+                {
+                    <li class="p-3 text-gray-500 text-sm text-center">Nincs új értesítés</li>
+                }
+                else
+                {
+                    @foreach (var msg in messages)
+                    {
+                        <li class="p-3 hover:bg-gray-100 cursor-pointer text-sm">@msg.Message</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
 </div>
 

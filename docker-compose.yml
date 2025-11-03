@@ -16,8 +16,8 @@ services:
 
   iam_apiservice:
     build:
-      context: .
-      dockerfile: AttrectoTest.IamService/Dockerfile
+      context: ./IAMService
+      dockerfile: Iam.Service/Dockerfile
     ports:
       - "5002:8081" # http
       - "5102:8080" # gRpc
@@ -32,57 +32,57 @@ services:
     networks:
       - backend
 
-  feed_apiservice:
-    build:
-      context: .
-      dockerfile: AttrectoTest.ApiService/Dockerfile
-    ports:
-      - "5001:8080"
-    depends_on:
-      - mariadb
-      - iam_apiservice
-    environment:
-      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
-      - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
-      - AllowedOrigins__0=http://react_frontend:80
-      - AllowedOrigins__1=http://localhost:3002
-    networks:
-      - backend
+  # feed_apiservice:
+    # build:
+      # context: .
+      # dockerfile: AttrectoTest.ApiService/Dockerfile
+    # ports:
+      # - "5001:8080"
+    # depends_on:
+      # - mariadb
+      # - iam_apiservice
+    # environment:
+      # - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
+      # - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
+      # - AllowedOrigins__0=http://react_frontend:80
+      # - AllowedOrigins__1=http://localhost:3002
+    # networks:
+      # - backend
       
-  react_frontend:
-    build: ./WebApp/attrectoweb
-    depends_on:
-      - feed_apiservice
-    ports:
-      - "3001:80"
-    networks:
-      - backend
+  # react_frontend:
+    # build: ./WebApp/attrectoweb
+    # depends_on:
+      # - feed_apiservice
+    # ports:
+      # - "3001:80"
+    # networks:
+      # - backend
       
-  blazor_wasm:
-    build:
-      context: .
-      dockerfile: AttrectoTest.BlazorWasm/Dockerfile
-    depends_on:
-      - feed_apiservice
-    ports:
-      - "3002:80"
-    networks:
-      - backend
+  # blazor_wasm:
+    # build:
+      # context: .
+      # dockerfile: AttrectoTest.BlazorWasm/Dockerfile
+    # depends_on:
+      # - feed_apiservice
+    # ports:
+      # - "3002:80"
+    # networks:
+      # - backend
       
-  blazor_server:
-    build:
-      context: .
-      dockerfile: AttrectoTest.BlazorServer/Dockerfile
-    depends_on:
-      - feed_apiservice
-      - iam_apiservice
-    ports:
-      - "3003:8080" 
-    environment:
-      - ApiSettings__BaseUrl=http://feed_apiservice:8080
-      - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
-    networks:
-      - backend      
+  # blazor_server:
+    # build:
+      # context: .
+      # dockerfile: AttrectoTest.BlazorServer/Dockerfile
+    # depends_on:
+      # - feed_apiservice
+      # - iam_apiservice
+    # ports:
+      # - "3003:8080" 
+    # environment:
+      # - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
+      # - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
+    # networks:
+      # - backend      
       
 networks:
   backend:

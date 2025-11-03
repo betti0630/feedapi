@@ -1,6 +1,5 @@
 using AttrectoTest.BlazorWasm;
 using AttrectoTest.BlazorWasm.Services.Base;
-using AttrectoTest.BlazorWasm.Services.IamBase;
 
 using Blazored.SessionStorage;
 
@@ -10,6 +9,7 @@ using FeedApp.BlazorWasm.Configuration;
 using FeedApp.BlazorWasm.Handlers;
 using FeedApp.BlazorWasm.Providers;
 using FeedApp.BlazorWasm.Services;
+using FeedApp.BlazorWasm.Services.IamBase;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
