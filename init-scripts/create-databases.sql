@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS attrecto_iam;
 CREATE DATABASE IF NOT EXISTS attrecto_feed;
+CREATE DATABASE IF NOT EXISTS noti;
 GRANT ALL PRIVILEGES ON attrecto_iam.* TO 'myuser'@'%';
 GRANT ALL PRIVILEGES ON attrecto_feed.* TO 'myuser'@'%';
+GRANT ALL PRIVILEGES ON noti.* TO 'myuser'@'%';
 FLUSH PRIVILEGES;
