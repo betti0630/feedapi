@@ -10,6 +10,7 @@ using FeedApp.BlazorWasm.Handlers;
 using FeedApp.BlazorWasm.Providers;
 using FeedApp.BlazorWasm.Services;
 using FeedApp.BlazorWasm.Services.IamBase;
+using FeedApp.BlazorWasm.Services.NotificationBase;
 
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -35,7 +36,9 @@ builder.Services.Configure<ApiSettings>(
 if (apiSettings != null) { 
     builder.Services.AddHttpClient<IAuthClient, AuthClient>(client => client.BaseAddress = new Uri(apiSettings.IamApiUrl))
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
-    builder.Services.AddHttpClient<IFeedsClient, FeedsClient>( client => client.BaseAddress = new Uri(apiSettings.FeedApiUrl))
+    builder.Services.AddHttpClient<INotificationsClient, NotificationsClient>(client => client.BaseAddress = apiSettings.NotificationUrl)
+        .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
+    builder.Services.AddHttpClient<IFeedsClient, FeedsClient>(client => client.BaseAddress = new Uri(apiSettings.FeedApiUrl))
         .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
 }
 

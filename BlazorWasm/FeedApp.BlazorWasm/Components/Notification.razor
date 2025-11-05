@@ -11,7 +11,7 @@
 <button @onclick="ToggleNotifications">
     <span class="icon-bell"></span>
     <span class="rounded-full bg-green-600 text-white text-xs px-1">
-        @messages.Count() (GRPC)
+        @messages.Where(m => !m.IsRead).Count() (GRPC)
     </span>
 </button>
     @if (isOpen)
@@ -26,7 +26,7 @@
                 {
                     @foreach (var msg in messages)
                     {
-                        <li class="p-3 hover:bg-gray-100 cursor-pointer text-sm">@msg.Message</li>
+                        <li class="p-3 hover:bg-gray-100 cursor-pointer text-sm">@($"{msg.Message} ({msg.Date})")</li>
                     }
                 }
             </ul>
