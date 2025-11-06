@@ -2,18 +2,21 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY Directory.Packages.props ./
+COPY nuget.config ./
 
-COPY ["AttrectoTest.BlazorWasm/AttrectoTest.BlazorWasm.csproj", "AttrectoTest.BlazorWasm/"]
-COPY ["AttrectoTest.Blazor.Shared/AttrectoTest.Blazor.Common.csproj" ,"AttrectoTest.Blazor.Shared/"]
+COPY ["FeedApp.BlazorWasm/FeedApp.BlazorWasm.csproj", "FeedApp.BlazorWasm/"]
+COPY ["FeedApp.Blazor.Common/FeedApp.Blazor.Common.csproj" ,"FeedApp.Blazor.Common/"]
 
-RUN dotnet restore "AttrectoTest.BlazorWasm/AttrectoTest.BlazorWasm.csproj"
+RUN dotnet restore "FeedApp.BlazorWasm/FeedApp.BlazorWasm.csproj"
 
 COPY . .
-WORKDIR "/src/AttrectoTest.BlazorWasm"
+WORKDIR "/src/FeedApp.BlazorWasm"
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 # Serve with nginx
 FROM nginx:alpine AS final
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
+COPY --from=build /app/publish/wwwroot/appsettings.Docker.json /usr/share/nginx/html/appsettings.json
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80

@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedApp.Blazor.Common", "..\FeedApp.Blazor.Common\FeedApp.Blazor.Common.csproj", "{ACB30D84-97F8-9F75-BC41-48048148716D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedApp.Blazor.Common", "FeedApp.Blazor.Common\FeedApp.Blazor.Common.csproj", "{ACB30D84-97F8-9F75-BC41-48048148716D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeedApp.BlazorWasm", "FeedApp.BlazorWasm\FeedApp.BlazorWasm.csproj", "{24E50FCD-D5C1-76B0-9848-2C9E9AAE904E}"
 EndProject

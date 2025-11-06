@@ -39,32 +39,33 @@ services:
       context: ./NotificationService
       dockerfile: Notification.Service/Dockerfile
     ports:
-      - "5003:8080" 
+      - "5003:8081" # http
+      - "5103:8080" # gRpc 
     depends_on:
       - mariadb
-      - iam_apiservice
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_notification;User=myuser;Password=mypassword;
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=noti;User=myuser;Password=mypassword;
       - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
     networks:
       - backend
 
-  # feed_apiservice:
-    # build:
-      # context: .
-      # dockerfile: AttrectoTest.ApiService/Dockerfile
-    # ports:
-      # - "5001:8080"
-    # depends_on:
-      # - mariadb
-      # - iam_apiservice
-    # environment:
-      # - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
-      # - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
-      # - AllowedOrigins__0=http://react_frontend:80
-      # - AllowedOrigins__1=http://localhost:3002
-    # networks:
-      # - backend
+  feed_apiservice:
+    build:
+      context: ./FeedService
+      dockerfile: FeedApp.Service/Dockerfile
+    ports:
+      - "5001:8080"
+    depends_on:
+      - mariadb
+      - iam_apiservice
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mariadb;Port=3306;Database=attrecto_feed;User=myuser;Password=mypassword;
+      - ApiSettings__IamBaseUrl=http://iam_apiservice:8080
+      - ApiSettings__NotificationUrl=http://notification_service:8080
+      - AllowedOrigins__0=http://react_frontend:80
+      - AllowedOrigins__1=http://localhost:3002
+    networks:
+      - backend
       
   # react_frontend:
     # build: ./WebApp/attrectoweb
@@ -75,16 +76,20 @@ services:
     # networks:
       # - backend
       
-  # blazor_wasm:
-    # build:
-      # context: .
-      # dockerfile: AttrectoTest.BlazorWasm/Dockerfile
-    # depends_on:
-      # - feed_apiservice
-    # ports:
-      # - "3002:80"
-    # networks:
-      # - backend
+  blazor_wasm:
+    build:
+      context: ./BlazorWasm
+      dockerfile: FeedApp.BlazorWasm/Dockerfile
+    depends_on:
+      - feed_apiservice
+    ports:
+      - "3002:80"
+    environment:
+      - ApiSettings__IamApiUrl=http://iam_apiservice:8080      
+      - ApiSettings__FeedApiUrl=http://feed_apiservice:8080      
+      - ApiSettings__NotificationUrl=http://notificaton_apiservice:8080      
+    networks:
+      - backend
       
   # blazor_server:
     # build:
